@@ -1,0 +1,17 @@
+build/
+__pycache__/
+*.py[cod]
+.DS_Store
+.vscode/
+
+# Local configuration and credentials
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Local development artifacts
+.venv/
+coverage/
+*.profraw

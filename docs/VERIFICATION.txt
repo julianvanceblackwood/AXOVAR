@@ -1,0 +1,10 @@
+Internal ctest changing into directory: /mnt/data/AXOVAR/build
+Test project /mnt/data/AXOVAR/build
+    Start 1: engine_tests
+1/2 Test #1: engine_tests .....................   Passed    0.71 sec
+    Start 2: api_tests
+2/2 Test #2: api_tests ........................   Passed    1.21 sec
+
+100% tests passed, 0 tests failed out of 2
+
+Total Test time (real) =   1.93 sec

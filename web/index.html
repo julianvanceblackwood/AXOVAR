@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0c1015" />
+  <title>AXOVAR | Financial Systems Intelligence</title>
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/app.js" defer></script>
+</head>
+<body>
+<div class="app">
+ <aside class="sidebar">
+   <div class="identity"><span class="mark">A<span class="mark-dot">.</span></span><span><strong>AXOVAR</strong><small>VANCE BLACKWOOD</small></span></div>
+   <div class="nav-caption">RESEARCH WORKSPACE</div>
+   <nav aria-label="Main navigation">
+    <button data-tab="overview" class="nav-btn active"><span>◈</span> Overview</button>
+    <button data-tab="evidence" class="nav-btn"><span>⌁</span> Evidence Lab</button>
+    <button data-tab="systems" class="nav-btn"><span>▤</span> Systems</button>
+   </nav>
+   <div class="nav-caption future">RESEARCH MODULES <small>ROADMAP</small></div>
+   <div class="locked">↗ Quant Research <span>G1</span></div>
+   <div class="locked">↗ Systemic Risk <span>G2</span></div>
+   <div class="locked">↗ Blockchain & Settlement <span>G3</span></div>
+   <div class="locked">↗ Hardware Assurance <span>G5</span></div>
+   <div class="sidebar-bottom"><div class="signal"><i></i> LOCAL RESEARCH ENGINE</div><div class="ver">G0 / BUILD 0.1.0</div></div>
+ </aside>
+ <main class="main">
+  <header class="topbar"><div class="bread">RESEARCH TERMINAL <span>/</span> <b id="crumb">OVERVIEW</b></div><div class="top-right"><span class="pill">SYNTHETIC DATA</span><span class="session">AXOVAR / G0</span></div></header>
+  <div class="main-content">
+    <div class="page-heading"><div><div class="eyebrow">FINANCIAL STATE & DECISION ASSURANCE</div><h1 id="page-title">Market Integrity Overview</h1><p id="page-subtitle">Evidence-constrained research in an adversarial market environment.</p></div><div class="heading-tag">RESEARCH • NOT LIVE TRADING</div></div>
+    <section class="control-bar" aria-label="Replay controls"><div class="select-wrap"><label for="scenario">SCENARIO</label><select id="scenario"><option value="NORMAL-001">NORMAL-001 / Standard conditions</option><option value="DEGRADED-001">DEGRADED-001 / Adversarial feed</option></select></div><div class="ctrl-divider"></div><button class="ctrl-btn" id="reset" title="Reset scenario">↺ Reset</button><button class="ctrl-btn" id="next" title="Process one event">→ Step</button><button class="ctrl-btn primary" id="run" title="Complete replay">▶ Run to end</button><div class="progress"><span>EVENT REPLAY</span><strong id="progress">0 / 0</strong><div class="progress-track"><div id="progress-fill"></div></div></div></section>
+    <div id="message" role="status" aria-live="polite"></div>
+    <section id="overview" class="tab-pane">
+      <div class="metric-grid"><article class="metric"><div class="metric-label">REFERENCE BTC / USD <span>◉</span></div><div class="metric-value" id="ref-price">—</div><div class="metric-note" id="ref-note">Derived from eligible independent sources</div></article><article class="metric"><div class="metric-label">VENUE DISAGREEMENT <span>⇵</span></div><div class="metric-value" id="divergence">—</div><div class="metric-note">150 bps integrity threshold</div></article><article class="metric"><div class="metric-label">INDEPENDENT HEALTHY SOURCES <span>◇</span></div><div class="metric-value" id="source-count">—</div><div class="metric-note">Minimum required: 2</div></article><article class="metric"><div class="metric-label">PROPOSED BTC EXPOSURE <span>◷</span></div><div class="metric-value" id="exposure">—</div><div class="metric-note">Limit: 75% after synthetic purchase</div></article></div>
+      <div class="dashboard-grid"><section class="panel market-panel"><div class="panel-header"><div><div class="panel-kicker">MARKET OBSERVATION</div><h2>Multi-Venue Price Reconstruction</h2></div><div class="panel-tag">BTC / USD</div></div><div class="chart-wrap"><svg id="chart" viewBox="0 0 780 272" preserveAspectRatio="none" role="img" aria-label="Chart showing observed BTC prices across venues"><text x="300" y="132" fill="#657283" font-size="13">Select a scenario and process market events</text></svg></div><div class="chart-footer"><span><i style="background:#e5ecec"></i> ATLAS</span><span><i style="background:#79a5cb"></i> BOREAL</span><span><i style="background:#c3a577"></i> CIRRUS</span><span class="chart-foot-right">SIMULATED MARKET OBSERVATIONS</span></div></section>
+      <section class="panel decision-panel"><div class="panel-header"><div><div class="panel-kicker">POLICY ENGINE</div><h2>Decision Assurance</h2></div><div class="panel-tag">AXV-POLICY-001</div></div><div class="decision-body"><div id="decision-state" class="decision-status">WAITING FOR EVIDENCE</div><p id="decision-reason">No market events have been processed yet.</p><div class="decision-separator"></div><div class="detail-row"><span>Proposed action</span><strong>BUY 0.1 BTC <em>/ SIMULATION</em></strong></div><div class="detail-row"><span>Financial exposure policy</span><strong>&le; 75%</strong></div><div class="detail-row"><span>Market divergence threshold</span><strong>&le; 150 bps</strong></div><div class="detail-row"><span>Independent evidence</span><strong>&ge; 2 sources</strong></div><div class="decision-separator"></div><div class="receipt-label">ACTIVE EVIDENCE RECEIPTS</div><div class="evidence-chips" id="receipt-evidence">No evidence</div></div></section></div>
+      <div class="bottom-grid"><section class="panel"><div class="panel-header"><div><div class="panel-kicker">SOURCE ATTESTATION</div><h2>Venue Health & Dependencies</h2></div><span class="panel-tag">INDEPENDENCE MATTERS</span></div><div class="table-wrap"><table><thead><tr><th>VENUE</th><th>LAST PRICE</th><th>UPSTREAM</th><th>HEALTH</th><th>EVIDENCE</th></tr></thead><tbody id="venue-table"><tr><td colspan="5" class="empty">No observations yet</td></tr></tbody></table></div></section><section class="panel"><div class="panel-header"><div><div class="panel-kicker">ADVERSARIAL SIGNALS</div><h2>Integrity Observations</h2></div><span class="panel-tag" id="alert-count">0 ALERTS</span></div><div id="alerts" class="alerts"><div class="empty">No integrity warnings observed</div></div></section></div>
+    </section>
+    <section id="evidence" class="tab-pane" hidden><div class="dashboard-grid"><section class="panel"><div class="panel-header"><div><div class="panel-kicker">APPEND-ONLY INPUT FIXTURE</div><h2>Raw Evidence Manifest</h2></div><span class="panel-tag">SHA-256</span></div><div class="pad"><div class="meta-title">ORIGINAL FIXTURE CONTENT HASH</div><code id="fixture-hash">—</code><p class="help">The hash verifies the local fixture bytes; it does not prove market-source authenticity or economic truth.</p><div class="meta-title">RAW RECORDS</div><div id="raw-records" class="raw-list">—</div></div></section><section class="panel"><div class="panel-header"><div><div class="panel-kicker">DECISION LINEAGE</div><h2>Evidence & Policy Receipt</h2></div><span class="panel-tag">DERIVED CLAIM</span></div><pre id="receipt-json" class="json-box"></pre></section></div></section>
+    <section id="systems" class="tab-pane" hidden><div class="dashboard-grid"><section class="panel"><div class="panel-header"><div><div class="panel-kicker">SYSTEM INTEGRITY</div><h2>Execution Environment</h2></div><span class="panel-tag">G0 RESEARCH</span></div><div class="pad"><div class="detail-row"><span>Financial logic</span><strong>C++20 core</strong></div><div class="detail-row"><span>API runtime</span><strong>Python standard library</strong></div><div class="detail-row"><span>Transport</span><strong>Loopback HTTP</strong></div><div class="detail-row"><span>Dataset mode</span><strong>SYNTHETIC FIXTURES</strong></div><div class="detail-row"><span>Trading connectivity</span><strong>DISABLED</strong></div><div class="detail-row"><span>Risk control</span><strong>Deterministic / fail-closed</strong></div></div></section><section class="panel"><div class="panel-header"><div><div class="panel-kicker">INTENTIONAL LIMITATIONS</div><h2>Verification Boundary</h2></div></div><div class="pad limitations">This is an executable Generation Zero vertical slice, not a live trading product. No production exchange connectivity, distributed storage, calibrated uncertainty set, real blockchain settlement, FPGA accelerator, or independent hardware authentication is claimed. Source health is a synthetic scenario input and upstream independence is declared rather than discovered.</div></section></div></section>
+  </div>
+ </main>
+</div>
+</body>
+</html>
