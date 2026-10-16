@@ -1,133 +1,197 @@
+<div align="center">
+
+![AXOVAR | Adversarial Financial Intelligence](assets/axovar-banner.jpg)
+
 # AXOVAR
 
-**Adversarial Financial Intelligence & Verifiable Systems Infrastructure**  
-**Vance Blackwood | Generation Zero | Research implementation**
+**ADVERSARIAL FINANCIAL INTELLIGENCE & VERIFIABLE SYSTEMS INFRASTRUCTURE**
 
-> What happens to a financial decision when the observations on which it depends become unreliable?
+*An evidence-constrained research system for financial decisions under unreliable market observations.*
 
-AXOVAR Generation Zero is an **executable, deterministic research vertical slice**. It demonstrates a controlled market-data integrity failure and a fail-closed simulated financial decision. It is not an exchange, trading bot, production risk management system, or financial recommendation engine.
+[![AXOVAR G0 verification](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml/badge.svg)](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml)
+![C++20](https://img.shields.io/badge/core-C%2B%2B20-253545?style=flat-square)
+![Research stage](https://img.shields.io/badge/stage-Generation%20Zero-253545?style=flat-square)
+![Simulation only](https://img.shields.io/badge/data-synthetic%20only-51412D?style=flat-square)
 
-## What works now
+[**Research Thesis**](#research-thesis) · [**Recorded Demonstration**](#recorded-demonstration) · [**Architecture**](#generation-zero-architecture) · [**Run Locally**](#run-locally) · [**Roadmap**](#research-direction)
 
-- C++20 engine with strict typed numeric parsing and validated synthetic market observations.
-- Multi-venue price reconstruction ordered by **receipt time** (not future event time).
-- Sequence gap detection, upstream-change signals, degraded/untrusted source exclusion and staleness checks.
-- One observation per **independent eligible upstream** used for the reference price. Independence is an explicit fixture assumption.
-- Cross-venue divergence measured in basis points; configurable policy is **not** yet implemented (values are compiled constants).
-- Synthetic portfolio assessment of a proposed **0.1 BTC** purchase, with a 75% post-trade BTC concentration ceiling.
-- Deterministic decision gate with `ALLOW_SIMULATION`, `DENY_SIMULATION`, or `INSUFFICIENT_EVIDENCE` states.
-- Decision receipts linking the latest venue evidence IDs to the policy output.
-- Python standard-library, **loopback-only** HTTP API and interactive dashboard driven by the actual C++ executable.
-- Original fixture bytes and SHA-256 fingerprints exposed in the evidence panel (a hash **does not prove external truth or authenticity**).
-- Two deterministic scenarios and automated C++ executable and API integration tests.
+</div>
 
-## Run on macOS / Linux
+---
 
-**Prerequisites:** CMake 3.20+, a C++20 compiler, Python 3.10+.
+## The problem
+
+**What happens to a financial decision when the information supporting it can no longer be trusted?**
+
+A price is not a market state. Two matching feeds are not necessarily two independent observations. A content hash does not prove the truth of a source. And a valid quantitative signal is not, by itself, authorization to act.
+
+Financial decision systems must contend with conflicting venues, incomplete event sequences, delayed observations, correlated upstream dependencies, uncertain source health and constraints on portfolio exposure. Under these conditions, choosing a plausible number is not the same as establishing a defensible conclusion.
+
+![The independent evidence problem: correlated sources may manufacture false confidence](assets/problem-map.svg)
+
+> **AXOVAR's central principle:** a financial decision must not inherit more certainty than its supporting evidence permits.
+
+## Recorded demonstration
+
+![Recorded AXOVAR Generation Zero dashboard replay: normal and degraded synthetic markets](assets/dashboard-replay.gif)
+
+<sub>Actual AXOVAR G0 dashboard rendering successive outputs from the compiled C++ research engine. This is a recorded replay of synthetic fixtures, **not** a live market feed or production trading terminal.</sub>
+
+The same candidate action is evaluated under two deliberately different information conditions:
+
+| Scenario | Evidence conditions | Final simulated decision |
+| :--- | :--- | :--- |
+| `NORMAL-001` | Three eligible, healthy, independently labelled upstreams; limited price disagreement | `ALLOW_SIMULATION` |
+| `DEGRADED-001` | Shared upstream dependency, degraded feeds, sequence gap and delayed observations | `INSUFFICIENT_EVIDENCE` |
+
+The change in outcome is not a trading strategy. It demonstrates that evidence sufficiency and financial constraints can be evaluated separately from the attractiveness of a hypothetical action.
+
+<details>
+<summary><strong>Static dashboard views</strong></summary>
+
+**Normal market**
+
+![Normal synthetic market decision](assets/dashboard-normal.png)
+
+**Degraded market**
+
+![Degraded synthetic market decision](assets/dashboard-degraded.png)
+
+</details>
+
+## Research thesis
+
+AXOVAR investigates **evidence-constrained market state reconstruction and decision assurance**: how to preserve the relationship between observations, derived financial state, assumptions and policy outcomes when sources are imperfect.
+
+Three distinctions govern the architecture:
+
+| Observation | What it establishes | What it does not establish |
+| :--- | :--- | :--- |
+| Multiple matching prices | Reported agreement among observations | Independence or economic truth |
+| SHA-256 fixture digest | Byte identity of the recorded fixture | Source authenticity or completeness |
+| Passing risk policy | The declared checks passed on eligible inputs | A safe or profitable real-world trade |
+
+**Unknown is a legitimate result.** If required observations are stale, incomplete or not independent, the engine may refuse to justify a simulated decision rather than silently substitute certainty.
+
+## What is implemented
+
+Generation Zero is an **executable research vertical slice**, not a completed institutional risk platform.
+
+| System | Verified G0 scope |
+| :--- | :--- |
+| **C++20 event core** | Strict synthetic CSV parsing, typed integer inputs and receipt-time ordering |
+| **Market reconstruction** | Latest per-venue observations and a baseline reference-price estimate |
+| **Source integrity** | Sequence-gap detection, staleness, explicit health labels and upstream deduplication |
+| **Quantitative policy** | Simulated 0.1 BTC purchase, 75% concentration ceiling and 150 bps divergence rule |
+| **Decision engine** | `ALLOW_SIMULATION`, `DENY_SIMULATION`, `INSUFFICIENT_EVIDENCE` |
+| **Evidence view** | Event IDs, original fixture bytes and API-computed SHA-256 fingerprints |
+| **Local research API** | Python standard-library HTTP service bound to `127.0.0.1` |
+| **Research dashboard** | Replay controls, market chart, venue health, integrity alerts and decision inspection |
+| **Verification** | Automated engine and API integration test groups through CTest and GitHub Actions |
+
+The reference price is an **arithmetic mean of one eligible price per declared upstream**. This is a controlled baseline, not a production-grade market price oracle. The upstream identity and health fields come from fixtures and are **not** independently authenticated.
+
+## Generation Zero architecture
+
+![Implemented AXOVAR Generation Zero architecture](assets/architecture.svg)
+
+The executable path is intentionally compact. A C++20 core processes synthetic scenarios and emits derived JSON state. A loopback Python adapter exposes that state to the local dashboard. Tests exercise the core and API behavior.
+
+**The principal trust boundary:** source assertions and fixture-defined independence must never be mistaken for independently established economic truth. See [architecture and limitations](docs/ARCHITECTURE.md).
+
+## Run locally
+
+**Requirements:** macOS or Linux, CMake 3.20+, C++20 compiler and Python 3.10+. No exchange keys, package installation, account connection or internet access are required for the application.
 
 ```bash
+# Clone the independent research repository
+git clone https://github.com/julianvanceblackwood/AXOVAR.git
+cd AXOVAR
+
+# Build, verify and launch the loopback dashboard
+chmod +x run.sh
 ./run.sh
 ```
 
-Open **http://127.0.0.1:8765**. The script configures the C++ project, builds the core, runs tests and launches the API and dashboard. No package installation, accounts, credentials, trading APIs or internet connection required.
+Open **http://127.0.0.1:8765** in your browser.
 
-Manual commands:
+For separate verification:
 
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --parallel
 ctest --test-dir build --output-on-failure
-python3 -m server.app
-```
 
-Run the core independently:
-
-```bash
 ./build/axovar_core --scenario scenarios/NORMAL-001.csv 9
 ./build/axovar_core --scenario scenarios/DEGRADED-001.csv 9
 ```
 
-The final argument selects the number of received events known to the analysis at that replay step.
+The last argument is the number of received events available at that replay step. Neither event time nor a later observation is allowed to grant knowledge retroactively.
 
-## Scenarios
+### Local API
 
-| Scenario | Design | Expected final decision |
-| --- | --- | --- |
-| `NORMAL-001` | Three independent, healthy sources, small price disagreement | `ALLOW_SIMULATION` |
-| `DEGRADED-001` | Two degraded venues change to the same upstream; sequence gap, 8% divergence, delayed third venue | `INSUFFICIENT_EVIDENCE` |
+| Method | Route | Purpose |
+| :--- | :--- | :--- |
+| GET | `/api/health` | Local service status |
+| GET | `/api/scenarios` | Available fixtures |
+| GET | `/api/state` | Current engine state and decision |
+| GET | `/api/raw` | Recorded fixture lines and hashes |
+| POST | `/api/replay/scenario` | Select an allowlisted scenario |
+| POST | `/api/replay/step` | Advance one received event |
+| POST | `/api/replay/reset` | Restart current scenario |
+| POST | `/api/replay/end` | Replay all received events |
 
-Both results concern a **research-only simulated action**. No order submission or real account integration exists.
+**Security boundary:** the service is for local research use only. It is loopback-bound, process-local and has no production multi-user authentication. Do not expose it to an untrusted network or connect real trading accounts.
 
-### Decision semantics
+## Research direction
 
-1. Require at least **two** eligible, fresh, gap-free, independent upstreams.
-2. If eligible sources are insufficient, return `INSUFFICIENT_EVIDENCE`.
-3. Otherwise, deny when observed cross-venue disagreement exceeds **150 basis points**.
-4. Otherwise, deny when post-trade BTC exposure exceeds **75%**.
-5. Only then allow the synthetic operation.
+The current implementation proves a limited end-to-end behavior. Future research is organized into independent engineering gates, each requiring tests or measurement before its status advances.
 
-For clarity, the reference-price estimator is simply the arithmetic mean of one fresh healthy venue price per unique upstream. This is a **baseline**, not a robust market price oracle. If a compromised source misreports itself as healthy and is assumed independent, the current policy can fail. This is an explicit research limitation.
+| Gate | Research boundary | State |
+| :--- | :--- | :--- |
+| **G0** | Deterministic market fixtures → integrity and concentration policy → explainable simulation receipt | **Implemented / tested** |
+| **G1** | Source-dependency semantics, robust market-state reconstruction and improved numeric assurance | Planned |
+| **G2** | Quantitative research, backtesting methodology, portfolio and systemic risk | Planned |
+| **G3** | Blockchain settlement uncertainty and cyber-financial incident reconstruction | Planned |
+| **G4** | Machine-checkable decision constraints and stronger replay evidence | Planned |
+| **G5** | Low-latency profiling and independently verified FPGA-oriented experiments | Planned |
 
-## API
+The broader program concerns market microstructure, correlated data failures, quantitative model validity, cross-ledger settlement, systemic contagion, defensive cybersecurity and hardware/software assurance. **These are research directions, not existing G0 features.** Full sequence: [ROADMAP](docs/ROADMAP.md).
 
-- `GET /api/health`
-- `GET /api/scenarios`
-- `GET /api/state`
-- `GET /api/raw`
-- `POST /api/replay/scenario` with `{"scenario":"NORMAL-001"}`
-- `POST /api/replay/step`
-- `POST /api/replay/reset`
-- `POST /api/replay/end`
+## Research portfolio alignment
 
-The server listens only on `127.0.0.1`. **Do not expose to the internet.** There is no multi-user authentication or production-grade rate limiting. State is process-local and shared among browser clients.
+AXOVAR develops alongside three independent research projects:
 
-## Architecture
+| Project | Relationship | Integration status |
+| :--- | :--- | :--- |
+| [KORDAXIS](https://github.com/julianvanceblackwood/KORDAXIS) | Evidence-native defensive reasoning, provenance and uncertainty | Conceptual alignment |
+| [ELENCHION](https://github.com/julianvanceblackwood/ELENCHION) | Evidence-bounded execution intelligence and observability limits | Research alignment |
+| [TEICHION](https://github.com/julianvanceblackwood/TEICHION) | Hardware-owned event sequencing and canonical record research | Future interface study |
 
-```text
-CSV scenario fixtures (original bytes)
-            |
-            v
-     C++20 core
-     | parsing / validation
-     | event receipt ordering
-     | venue state + source dependencies
-     | basic risk and evidence gates
-     v
-     JSON decision and evidence receipt
-            |
-            v
-  Python loopback HTTP adapter
-            |
-            v
-  JS/CSS offline-ready research dashboard
-```
+No integration or production-grade hardware security is claimed by this README.
 
-This initial release intentionally uses **vanilla JavaScript** rather than React to remain runnable with no external package installation. A React/TypeScript migration can be evaluated after core APIs stabilize. The infrastructure is a modular *seed*, not yet the complete modular monolith from the research directive.
+## Assurance boundaries
 
-## Verification
+AXOVAR G0 **does not** implement live trading, production exchange connectivity, authenticated external feeds, real blockchain settlement, a persistent evidence database, calibrated uncertainty sets, formal verification proofs, mature portfolio accounting, machine-learning models or an FPGA accelerator.
 
-Execute `ctest --test-dir build --output-on-failure`. See [architecture and limitations](docs/ARCHITECTURE.md) and [development roadmap](docs/ROADMAP.md).
+The toy valuation currently uses integer price inputs and `long double`-based derived exposure calculations. It is **not** a production ledger precision model. The decision receipt is not digitally signed. The simulated market evidence may be wrong even when its file hash is correct.
 
-## Non-claims
+Financial decisions remain research-only. **No real orders are submitted.**
 
-The initial slice does **not** implement: calibrated uncertainty sets, on-chain settlement, real-time exchange adapters, persistent raw evidence database, historical backtesting, real blockchain risk, machine-learning analytics, FPGA acceleration, cryptographic source authentication, actual upstream-independence discovery, formally verified financial decisions, multi-user operations, or production regulatory compliance.
-
-Financial arithmetic currently uses integer cents for input events and `long double` for a **toy valuation**; it is not a production ledger-grade precision policy. Raw SHA-256 verification occurs in the Python API and is separate from C++ decision semantics. Alerts do not independently prove source compromise.
-
-No live financial transactions are supported.
-
-## External engineering references
+## Engineering and governance references
 
 - [CPMI-IOSCO Principles for Financial Market Infrastructures](https://www.bis.org/committees/cpmi/pfmi/overview)
-- [CPMI-IOSCO Cyber resilience toolkit (consultative, September 2026)](https://www.bis.org/publications/cpmi-iosco-cyber-resilience-toolkit-practical-considerations-fmis)
-- [MAS Guidelines on AI Risk Management for FIs (issued October 2026)](https://www.mas.gov.sg/regulation/guidelines/guidelines-on-artificial-intelligence-risk-management-for-financial-institutions)
+- [Monetary Authority of Singapore](https://www.mas.gov.sg/) — financial technology and operational resilience reference material
+- [NIST AI Risk Management Framework](https://airc.nist.gov/) — relevant future model governance research
 
-These are research references, not claims of compliance or endorsement.
+These references are research context, not institutional affiliation, regulatory approval or compliance claims.
 
-## Portfolio relationship
+---
 
-- **KORDAXIS:** evidence-native reasoning and decision provenance (conceptual alignment).
-- **ELENCHION:** evidence-bounded execution intelligence and observability limits (research alignment).
-- **TEICHION:** hardware-owned event sequencing and canonical seal records (future interface research).
+<div align="center">
 
-No existing repository was modified or copied. Integration requires separate technical review and verification.
+**VANCE BLACKWOOD / RESEARCH SYSTEMS**
+
+*Build decisions that can withstand the failure of their own evidence.*
+
+</div>
