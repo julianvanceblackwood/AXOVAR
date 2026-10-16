@@ -68,7 +68,7 @@ function navigation(){for(const btn of document.querySelectorAll('[data-tab]'))b
  for(const b of document.querySelectorAll('[data-tab]'))b.classList.toggle('active',b===btn);
  for(const pane of document.querySelectorAll('.tab-pane'))pane.hidden=pane.id!==tab;
  $('crumb').textContent=tab.toUpperCase();
- $('page-title').textContent=({overview:'Market Integrity Overview',evidence:'Evidence & Decision Lineage',systems:'Execution Environment'})[tab];
+ $('page-title').textContent=({overview:'Market Integrity Overview',evidence:'Evidence & Decision Lineage',intelligence:'Intelligence Workspace',systems:'Execution Environment'})[tab];
  if(tab==='evidence')await refreshRaw();
 });}
 async function refreshRaw(){try{const raw=await request('/api/raw');$('fixture-hash').textContent=raw.fixture_sha256;

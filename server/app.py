@@ -11,10 +11,13 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit
 
+from server import intelligence
+
 ALLOWED = ("NORMAL-001", "DEGRADED-001")
 FILES = {"/": ("index.html", "text/html; charset=utf-8"),
          "/app.js": ("app.js", "text/javascript; charset=utf-8"),
-         "/style.css": ("style.css", "text/css; charset=utf-8")}
+         "/style.css": ("style.css", "text/css; charset=utf-8"),
+         "/intelligence.js": ("intelligence.js", "text/javascript; charset=utf-8")}
 
 
 @dataclass
@@ -69,6 +72,10 @@ def create_handler(root: Path, binary: Path, session: Session):
             if path == "/api/health":
                 self.output({"service": "AXOVAR", "stage": "Generation Zero", "status": "OK", "simulation_only": True})
                 return
+            if path == "/api/intelligence/status":
+                self.output({**intelligence.status(), "examples": list(intelligence.EXAMPLES),
+                             "read_only": True, "simulation_only": True})
+                return
             if path == "/api/scenarios":
                 self.output({"scenarios": [{"id": x, "description": "Normal market" if x == "NORMAL-001" else "Correlated degraded market evidence"} for x in ALLOWED]})
                 return
@@ -94,7 +101,8 @@ def create_handler(root: Path, binary: Path, session: Session):
 
         def do_POST(self):
             path = urlsplit(self.path).path
-            if path not in ("/api/replay/step", "/api/replay/reset", "/api/replay/end", "/api/replay/scenario"):
+            if path not in ("/api/replay/step", "/api/replay/reset", "/api/replay/end",
+                            "/api/replay/scenario", "/api/intelligence/ask"):
                 self.error(404, "route not found")
                 return
             origin = self.headers.get("Origin")
@@ -107,13 +115,27 @@ def create_handler(root: Path, binary: Path, session: Session):
             except ValueError:
                 self.error(400, "invalid content length")
                 return
-            if not 0 <= length <= 2048:
+            if not 0 <= length <= 4096:
                 self.error(413, "request body too large")
                 return
             try:
                 payload = json.loads(self.rfile.read(length)) if length else {}
                 if not isinstance(payload, dict):
                     raise ValueError("request must be an object")
+                if path == "/api/intelligence/ask":
+                    if self.headers.get("Content-Type", "").split(";")[0].strip().lower() != "application/json":
+                        self.error(415, "JSON content type required")
+                        return
+                    question = payload.get("question")
+                    if not isinstance(question, str) or not 2 <= len(question.strip()) <= 1000:
+                        raise ValueError("question must be between 2 and 1000 characters")
+                    if type(payload.get("use_model", True)) is not bool:
+                        raise ValueError("use_model must be boolean")
+                    with session.lock:
+                        scenario, step = session.scenario, session.step
+                    snapshot = self.data(scenario, step)
+                    self.output(intelligence.ask(question, snapshot, payload.get("use_model", True)))
+                    return
                 with session.lock:
                     if path == "/api/replay/scenario":
                         requested = payload.get("scenario")

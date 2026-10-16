@@ -13,7 +13,7 @@
 ![Research stage](https://img.shields.io/badge/stage-Generation%20Zero-253545?style=flat-square)
 ![Simulation only](https://img.shields.io/badge/data-synthetic%20only-51412D?style=flat-square)
 
-[**Research Thesis**](#research-thesis) · [**Recorded Demonstration**](#recorded-demonstration) · [**Architecture**](#generation-zero-architecture) · [**Run Locally**](#run-locally) · [**Roadmap**](#research-direction)
+[**Research Thesis**](#research-thesis) · [**Recorded Demonstration**](#recorded-demonstration) · [**Architecture**](#generation-zero-architecture) · [**Intelligence**](#axovar-intelligence) · [**Run Locally**](#run-locally) · [**Roadmap**](#research-direction)
 
 </div>
 
@@ -87,7 +87,8 @@ Generation Zero is an **executable research vertical slice**, not a completed in
 | **Evidence view** | Event IDs, original fixture bytes and API-computed SHA-256 fingerprints |
 | **Local research API** | Python standard-library HTTP service bound to `127.0.0.1` |
 | **Research dashboard** | Replay controls, market chart, venue health, integrity alerts and decision inspection |
-| **Verification** | Automated engine and API integration test groups through CTest and GitHub Actions |
+| **AXOVAR Intelligence** | Read-only evidence explanations, grounded scenario context and optional local Gemma 3 model Q&A |
+| **Verification** | Automated engine, API and Intelligence tests through CTest and GitHub Actions |
 
 The reference price is an **arithmetic mean of one eligible price per declared upstream**. This is a controlled baseline, not a production-grade market price oracle. The upstream identity and health fields come from fixtures and are **not** independently authenticated.
 
@@ -98,6 +99,27 @@ The reference price is an **arithmetic mean of one eligible price per declared u
 The executable path is intentionally compact. A C++20 core processes synthetic scenarios and emits derived JSON state. A loopback Python adapter exposes that state to the local dashboard. Tests exercise the core and API behavior.
 
 **The principal trust boundary:** source assertions and fixture-defined independence must never be mistaken for independently established economic truth. See [architecture and limitations](docs/ARCHITECTURE.md).
+
+## AXOVAR Intelligence
+
+**Research assistant for market evidence and technical questions.** The dashboard now includes an Intelligence workspace. It uses two deliberately separate components.
+
+- **Evidence-only mode** runs without downloads or external APIs. It explains the current synthetic scenario, policy decision, venue health, source independence assumptions and the limits of observed evidence using deterministic Python code. This is not a trained AI model.
+- **Local model mode** connects to an independently installed [Ollama](https://ollama.com/) server at `127.0.0.1:11434` and uses the open-weight `gemma3:4b` model for broader natural-language answers and explanations. This is an integrated third-party model, not a model trained by Vance Blackwood. The model is optional and is not included in this repository.
+
+To enable local model answers on your Mac, install Ollama using its official instructions, then run:
+
+```bash
+ollama pull gemma3:4b
+ollama serve   # only if the Ollama app or daemon is not already running
+./run.sh       # run separately from the AXOVAR project directory
+```
+
+Open `http://127.0.0.1:8765`, enter **Intelligence**, select the synthetic scenario and choose a question. If Ollama is unavailable, AXOVAR falls back to evidence-only explanations. It does not automatically download model weights or send scenario data to an internet-based model API.
+
+**Security and epistemic boundary:** a fixed local model endpoint, bounded question size, curated derived snapshot, no raw fixture transfer, no model tools, no shell access, no autonomous orders and no authority to change C++ risk-policy decisions. Model prose is unverified analysis. References to event IDs identify the underlying engine receipts but do not prove the model's interpretation. Prompt injection and hallucinations remain possible; the deterministic gate is authoritative. See [Intelligence design](docs/INTELLIGENCE.md).
+
+This release adds **research question answering**, not trained proprietary AI, learned market prediction, true causal inference, calibrated confidence or production-grade retrieval. Questions about external or current market conditions are not supported by the synthetic data. Some general technical questions require the optional local model.
 
 ## Run locally
 
@@ -136,6 +158,8 @@ The last argument is the number of received events available at that replay step
 | GET | `/api/scenarios` | Available fixtures |
 | GET | `/api/state` | Current engine state and decision |
 | GET | `/api/raw` | Recorded fixture lines and hashes |
+| GET | `/api/intelligence/status` | Local model availability and suggested research questions |
+| POST | `/api/intelligence/ask` | Read-only question with current derived replay state |
 | POST | `/api/replay/scenario` | Select an allowlisted scenario |
 | POST | `/api/replay/step` | Advance one received event |
 | POST | `/api/replay/reset` | Restart current scenario |
@@ -172,7 +196,7 @@ No integration or production-grade hardware security is claimed by this README.
 
 ## Assurance boundaries
 
-AXOVAR G0 **does not** implement live trading, production exchange connectivity, authenticated external feeds, real blockchain settlement, a persistent evidence database, calibrated uncertainty sets, formal verification proofs, mature portfolio accounting, machine-learning models or an FPGA accelerator.
+AXOVAR G0 **does not** implement live trading, production exchange connectivity, authenticated external feeds, real blockchain settlement, a persistent evidence database, calibrated uncertainty sets, formal verification proofs, mature portfolio accounting, a proprietary trained language model or an FPGA accelerator.
 
 The toy valuation currently uses integer price inputs and `long double`-based derived exposure calculations. It is **not** a production ledger precision model. The decision receipt is not digitally signed. The simulated market evidence may be wrong even when its file hash is correct.
 
