@@ -15,3 +15,4 @@ add_test(NAME engine_tests COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/
 add_test(NAME api_tests COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tests/test_api.py" "$<TARGET_FILE:axovar_core>" "${CMAKE_SOURCE_DIR}")
 add_test(NAME intelligence_tests COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tests/test_intelligence.py" "$<TARGET_FILE:axovar_core>" "${CMAKE_SOURCE_DIR}")
 add_test(NAME audit_tests COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tests/test_audit.py" "$<TARGET_FILE:axovar_core>" "${CMAKE_SOURCE_DIR}")
+add_test(NAME portfolio_tests COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tests/test_portfolio.py" "$<TARGET_FILE:axovar_core>" "${CMAKE_SOURCE_DIR}")
