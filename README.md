@@ -17,6 +17,10 @@
 
 </div>
 
+**First visit?** [Run the research demo](docs/START_HERE.md) · [Review the evidence](docs/EXTERNAL_EVALUATION.md) · [Examine the tests](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml) · [Discuss a reproducible issue](https://github.com/julianvanceblackwood/AXOVAR/issues/3)
+
+AXOVAR is a locally executable study of **market-data reliability, explainable decision constraints and synthetic portfolio risk**. It has a compiled C++20 market replay, a versioned decision audit and a separate portfolio accounting and stress-test experiment. You can run the tests without an exchange account or financial credentials. There are no live trades, authenticated external price feeds or calibrated risk forecasts.
+
 | Research boundary | Implemented and verified | Not yet established |
 | :--- | :--- | :--- |
 | **Market evidence** | C++20 receipt-time replay, declared-upstream checks and fail-closed synthetic policy | Authenticated market feeds and external source independence |

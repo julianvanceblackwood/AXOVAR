@@ -1,24 +1,28 @@
-# External Evaluation Brief
+# Independent technical evaluation
 
-**Status:** Generation Zero research demonstrator. Synthetic data and simulation only.
+**Status:** locally reproducible synthetic research, with implemented G0 replay, an initial G1 decision audit and an initial G2 portfolio-risk laboratory. No real trading or production certification is claimed.
 
-## The decision problem
+## What AXOVAR examines
 
-When market observations are delayed, contradictory, stale or not independent, a financial system can calculate a plausible price while lacking sufficient evidence to justify an action. AXOVAR examines whether evidence checks and financial policy can remain separate and inspectable.
+When market observations are delayed, stale, contradictory or share an upstream dependency, a plausible reference price does not necessarily justify a financial decision. AXOVAR separates source eligibility, stated risk policy and the ability to reproduce the resulting synthetic decision.
 
-## What can be evaluated today
+A separate portfolio module examines whether synthetic ledger events produce consistent cash, FIFO cost and marked equity, and how constructed return shocks affect that book.
 
-- A C++20 engine parses controlled market fixtures and derives a research-only state.
-- Synthetic normal and degraded scenarios exercise source-health, staleness, sequence-gap and declared upstream-independence checks.
-- A simulated purchase is evaluated against explicit divergence and concentration rules.
-- A local dashboard exposes state, evidence references and simulated decision outcomes.
-- Automated engine and API checks are documented in the main README.
+## Available for independent reproduction
 
-Start with [the recorded demonstration](../README.md#recorded-demonstration), [local verification instructions](../README.md#run-locally) and [architecture](ARCHITECTURE.md). The local research API is bound to loopback; do not expose it publicly.
+| Boundary | Inspect | Reproducible questions |
+| --- | --- | --- |
+| G0 market replay | `core/main.cpp`, `scenarios/NORMAL-001.csv`, `scenarios/DEGRADED-001.csv` | Do healthy and degraded evidence conditions produce defensible different outcomes? |
+| G1 decision audit | `docs/DECISION_AUDIT.md`, `server/audit.py`, `tests/test_audit.py` | Are upstream representatives deterministic? Do unevaluated checks remain explicit? Can the receipt be recomputed? |
+| G2 portfolio accounting and shocks | `docs/PORTFOLIO_RISK.md`, `server/portfolio.py`, `tests/test_portfolio.py` | Does the FIFO cost basis reconcile? Does an independent arithmetic oracle agree with synthetic stress and tail results? |
 
-### Minimal independent check
+There is a [short first-run guide](START_HERE.md) and a [recorded dashboard replay](../README.md#recorded-demonstration).
+
+## Reproduction
 
 ```bash
+git clone https://github.com/julianvanceblackwood/AXOVAR.git
+cd AXOVAR
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 cmake --build build --parallel
 ctest --test-dir build --output-on-failure
@@ -26,22 +30,28 @@ ctest --test-dir build --output-on-failure
 ./build/axovar_core --scenario scenarios/DEGRADED-001.csv 9
 ```
 
-Compare the recorded inputs, the eligible observations, the derived decision and its stated reasons. Record the environment, revision and any mismatch. An expected demonstration is not a guarantee that every environment reproduces it.
+The tests include a local API harness; no internet account or exchange key is required. The web dashboard is loopback-bound. The audit and portfolio API outputs are deterministic under the tested environment, but their hashes are not signatures or trusted attestations.
 
-## Questions worth testing
+## What would make a review valuable?
 
-1. Can duplicate upstream dependency be mistaken for independent confirmation?
-2. Does delayed or missing information change what the engine is allowed to conclude?
-3. Are receipt-time constraints respected when event timestamps disagree?
-4. Which outputs can be reproduced from preserved fixture inputs?
-5. Where does the toy exposure calculation diverge from production accounting requirements?
+1. A minimal fixture showing an incorrect result or an unexamined assumption.
+2. A comparison with an independent mathematical implementation and the exact precision used.
+3. An analysis of source dependence, receipt-time ordering or false confidence.
+4. A criticism of the synthetic return generator and its VaR / Expected Shortfall interpretation.
+5. A negative test for input validation, authorization boundaries or unexpected changes across versions.
 
-## Boundaries
+Please identify the commit SHA, environment, test input, intended invariant and observed behavior. [Source-dependency research question](https://github.com/julianvanceblackwood/AXOVAR/issues/3) is one existing starting point. For other nonsensitive findings, use [Issues](https://github.com/julianvanceblackwood/AXOVAR/issues).
 
-There is no real exchange connectivity, real-order execution, authenticated market data, calibrated forecasting, production ledger precision or production suitability claim. The optional local language model does not authorize financial decisions.
+## Assurance boundaries
 
-## Useful external input
+The current implementation has no live market feeds, order routing, custody, client portfolio data, liquidity execution model, margin engine, audited security controls, authenticated upstream source identities or calibrated predictive risk forecasts. G0/G1 market replay and G2 portfolio research have independent synthetic inputs, not a shared live financial account.
 
-Reproducible bug reports, adversarial synthetic fixtures, alternative source-independence models, numeric-assurance reviews and controlled evaluation proposals are welcome. Please identify the commit or revision, the tested scenario, expected behavior, observed behavior and supporting evidence.
+The optional local language model is an explanatory tool, not an input to deterministic authorization. Portfolio VaR and Expected Shortfall use *constructed* finite shock samples and are not investment results or regulatory measures.
 
-Technical discussion: use repository issues for non-sensitive findings. For private or commercial discussions, use the contact route on the [research profile](https://github.com/julianvanceblackwood). Public repository access does not, by itself, establish an open-source license or commercial reuse rights. No customer, deployment, sponsor or institutional partnership is implied by this document.
+## Collaboration and rights
+
+Constructive technical review and bounded research proposals are welcome. Private correspondence: [julianvanceblackwood@gmail.com](mailto:julianvanceblackwood@gmail.com).
+
+This public repository does not currently declare an open-source license. Public readability alone is not permission for redistribution, modification or commercial use. No existing customers, sponsors, financing, certifications, institutional affiliation or external production deployment are claimed.
+
+[Project README](../README.md) · [Getting started](START_HERE.md) · [Product evidence gates](PRODUCT_GATES.md)
