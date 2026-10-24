@@ -13,7 +13,7 @@
 ![Research stage](https://img.shields.io/badge/stage-Generation%20Zero-253545?style=flat-square)
 ![Simulation only](https://img.shields.io/badge/data-synthetic%20only-51412D?style=flat-square)
 
-[**Research Thesis**](#research-thesis) · [**Recorded Demonstration**](#recorded-demonstration) · [**Architecture**](#generation-zero-architecture) · [**Intelligence**](#axovar-intelligence) · [**Run Locally**](#run-locally) · [**Roadmap**](#research-direction)
+[**External Evaluation**](docs/EXTERNAL_EVALUATION.md) · [**Research Thesis**](#research-thesis) · [**Recorded Demonstration**](#recorded-demonstration) · [**Architecture**](#generation-zero-architecture) · [**Intelligence**](#axovar-intelligence) · [**Run Locally**](#run-locally) · [**Roadmap**](#research-direction)
 
 </div>
 
