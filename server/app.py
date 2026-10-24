@@ -11,7 +11,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from server import intelligence
+from server import audit, intelligence
 
 ALLOWED = ("NORMAL-001", "DEGRADED-001")
 FILES = {"/": ("index.html", "text/html; charset=utf-8"),
@@ -86,6 +86,20 @@ def create_handler(root: Path, binary: Path, session: Session):
                     self.output(self.data(scenario, step))
                 except (subprocess.SubprocessError, ValueError, OSError) as exc:
                     self.error(500, f"research engine failed: {type(exc).__name__}")
+                return
+            if path == "/api/audit/receipt":
+                with session.lock:
+                    scenario, step = session.scenario, session.step
+                try:
+                    path = root / "scenarios" / (scenario + ".csv")
+                    before = path.read_bytes()
+                    snapshot = self.data(scenario, step)
+                    after = path.read_bytes()
+                    if before != after:
+                        raise ValueError("fixture changed during replay")
+                    self.output(audit.build_receipt(snapshot, before))
+                except (subprocess.SubprocessError, OSError, ValueError, KeyError, TypeError):
+                    self.error(500, "audit receipt unavailable")
                 return
             if path == "/api/raw":
                 with session.lock:

@@ -1,15 +1,23 @@
-name: AXOVAR G0 verification
+name: AXOVAR verification
 on:
   push:
   pull_request:
 jobs:
   build-test:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        compiler: [g++, clang++]
+    env:
+      CXX: ${{ matrix.compiler }}
     steps:
       - uses: actions/checkout@v4
       - name: Configure
         run: cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
       - name: Build
         run: cmake --build build --parallel
-      - name: Unit and API integration tests
+      - name: Python compile check
+        run: python3 -m compileall -q server tests
+      - name: Engine and API integration tests
         run: ctest --test-dir build --output-on-failure

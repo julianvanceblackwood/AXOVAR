@@ -59,7 +59,31 @@
         </aside>
       </div>
     </section>
-    <section id="evidence" class="tab-pane" hidden><div class="dashboard-grid"><section class="panel"><div class="panel-header"><div><div class="panel-kicker">APPEND-ONLY INPUT FIXTURE</div><h2>Raw Evidence Manifest</h2></div><span class="panel-tag">SHA-256</span></div><div class="pad"><div class="meta-title">ORIGINAL FIXTURE CONTENT HASH</div><code id="fixture-hash">—</code><p class="help">The hash verifies the local fixture bytes; it does not prove market-source authenticity or economic truth.</p><div class="meta-title">RAW RECORDS</div><div id="raw-records" class="raw-list">—</div></div></section><section class="panel"><div class="panel-header"><div><div class="panel-kicker">DECISION LINEAGE</div><h2>Evidence & Policy Receipt</h2></div><span class="panel-tag">DERIVED CLAIM</span></div><pre id="receipt-json" class="json-box"></pre></section></div></section>
+    <section id="evidence" class="tab-pane" hidden>
+      <div class="dashboard-grid">
+        <section class="panel">
+          <div class="panel-header"><div><div class="panel-kicker">ORIGINAL INPUT FIXTURE</div><h2>Raw Evidence Manifest</h2></div><span class="panel-tag">SHA-256</span></div>
+          <div class="pad">
+            <div class="meta-title">FIXTURE CONTENT HASH</div>
+            <code id="fixture-hash">—</code>
+            <p class="help">The hash identifies local bytes. It does not authenticate market sources or prove economic truth.</p>
+            <div class="meta-title">RAW RECORDS</div><div id="raw-records" class="raw-list">—</div>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="panel-header"><div><div class="panel-kicker">DECISION LINEAGE</div><h2>Evidence and Policy</h2></div><span class="panel-tag">SYNTHETIC</span></div>
+          <div class="pad">
+            <div class="meta-title">CANONICAL AUDIT SHA-256</div>
+            <code id="audit-digest">—</code>
+            <p class="help">A reproducible integrity digest, not a signature, external attestation or permission to trade.</p>
+            <div class="meta-title">POLICY CHECKS</div>
+            <div id="audit-checks" class="raw-list">No replay evaluated</div>
+            <div class="meta-title">AUDIT RECEIPT</div>
+            <pre id="receipt-json" class="json-box"></pre>
+          </div>
+        </section>
+      </div>
+    </section>
     <section id="systems" class="tab-pane" hidden><div class="dashboard-grid"><section class="panel"><div class="panel-header"><div><div class="panel-kicker">SYSTEM INTEGRITY</div><h2>Execution Environment</h2></div><span class="panel-tag">G0 RESEARCH</span></div><div class="pad"><div class="detail-row"><span>Financial logic</span><strong>C++20 core</strong></div><div class="detail-row"><span>API runtime</span><strong>Python standard library</strong></div><div class="detail-row"><span>Transport</span><strong>Loopback HTTP</strong></div><div class="detail-row"><span>Dataset mode</span><strong>SYNTHETIC FIXTURES</strong></div><div class="detail-row"><span>Trading connectivity</span><strong>DISABLED</strong></div><div class="detail-row"><span>Risk control</span><strong>Deterministic / fail-closed</strong></div></div></section><section class="panel"><div class="panel-header"><div><div class="panel-kicker">INTENTIONAL LIMITATIONS</div><h2>Verification Boundary</h2></div></div><div class="pad limitations">This is an executable Generation Zero vertical slice, not a live trading product. No production exchange connectivity, distributed storage, calibrated uncertainty set, real blockchain settlement, FPGA accelerator, or independent hardware authentication is claimed. Source health is a synthetic scenario input and upstream independence is declared rather than discovered.</div></section></div></section>
   </div>
  </main>
