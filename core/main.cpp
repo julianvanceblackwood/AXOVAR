@@ -201,15 +201,15 @@ std::string json(const std::vector<Event>& events, std::size_t step, const std::
     const auto check_status=[](bool evaluated,bool pass) {
         return evaluated ? (pass ? "PASS" : "FAIL") : "NOT_EVALUATED";
     };
-    j<<"{\\\"id\\\":\\\"INDEPENDENT_SOURCES\\\",\\\"status\\\":"<<escape(check_status(true,sufficient_sources))
-     <<",\\\"observed\\\":"<<reference_sources.size()<<",\\\"minimum\\\":2},"
-     <<"{\\\"id\\\":\\\"VENUE_DIVERGENCE\\\",\\\"status\\\":"
+    j<<"{\"id\":\"INDEPENDENT_SOURCES\",\"status\":"<<escape(check_status(true,sufficient_sources))
+     <<",\"observed\":"<<reference_sources.size()<<",\"minimum\":2},"
+     <<"{\"id\":\"VENUE_DIVERGENCE\",\"status\":"
      <<escape(check_status(divergence_measurable,disagreement<=150.0L))
-     <<",\\\"observed_bps\\\":"<<disagreement<<",\\\"maximum_bps\\\":150},"
-     <<"{\\\"id\\\":\\\"CONCENTRATION\\\",\\\"status\\\":"
+     <<",\"observed_bps\":"<<disagreement<<",\"maximum_bps\":150},"
+     <<"{\"id\":\"CONCENTRATION\",\"status\":"
      <<escape(check_status(sufficient_sources,exposure<=0.75L))
-     <<",\\\"observed_pct\\\":"<<(exposure*100.0L)<<",\\\"maximum_pct\\\":75}";
-    j<<"],\\\"alerts\\\":[";
+     <<",\"observed_pct\":"<<(exposure*100.0L)<<",\"maximum_pct\":75}";
+    j<<"],\"alerts\":[";
     for(std::size_t i=0;i<alerts.size();++i){if(i)j<<",";j<<escape(alerts[i]);}
     j<<"],\"decision\":{\"result\":"<<escape(decision)<<",\"reason\":"<<escape(explanation)
      <<",\"policy\":\"AXV-POLICY-001\",\"required_independent_sources\":2,\"max_disagreement_bps\":150,\"max_post_trade_exposure_pct\":75"
