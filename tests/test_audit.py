@@ -87,7 +87,7 @@ class PolicyTests(unittest.TestCase):
                 received = 100 + i * 10
                 rows.append(f"E{i},{received},{received},{venue},{upstream},1,{cents},OK")
                 chosen[upstream] = (venue, cents)
-            state = evaluate("\\n".join(rows) + "\\n")
+            state = evaluate("\n".join(rows) + "\n")
             selected = {v["name"] for v in state["venues"] if v["reference_selected"]}
             self.assertEqual(selected, {v for v, cents in chosen.values()})
             self.assertEqual(state["metrics"]["independent_healthy_sources"], len(chosen))
