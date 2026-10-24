@@ -187,7 +187,8 @@ std::string json(const std::vector<Event>& events, std::size_t step, const std::
                             representative->second->name==name;
         j<<"{\"name\":"<<escape(name)<<",\"upstream\":"<<escape(v.upstream)
          <<",\"health\":"<<escape(is_stale?"STALE":v.health)<<",\"price\":"<<static_cast<long double>(v.price)/100.0L
-         <<",\"sequence\":"<<v.sequence<<",\"gaps\":"<<v.gaps<<",\"eligible\":"<<(valid?"true":"false")
+         <<",\"sequence\":"<<v.sequence<<",\"receive_ms\":"<<v.receive_ms
+         <<",\"event_ms\":"<<v.event_ms<<",\"gaps\":"<<v.gaps<<",\"eligible\":"<<(valid?"true":"false")
          <<",\"reference_selected\":"<<(selected?"true":"false")
          <<",\"evidence\":"<<escape(v.evidence)<<"}";
     }
