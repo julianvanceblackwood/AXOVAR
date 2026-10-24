@@ -4,22 +4,24 @@
 
 # AXOVAR
 
-**ADVERSARIAL FINANCIAL INTELLIGENCE & VERIFIABLE SYSTEMS INFRASTRUCTURE**
+**MARKET EVIDENCE / DECISION ASSURANCE / PORTFOLIO RISK**
 
-*An evidence-constrained research system for financial decisions under unreliable market observations.*
+*A reproducible financial systems research environment for market integrity and synthetic portfolio risk.*
 
-[![AXOVAR G0 verification](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml/badge.svg)](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml)
+[![AXOVAR verification](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml/badge.svg)](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml)
 ![C++20](https://img.shields.io/badge/core-C%2B%2B20-253545?style=flat-square)
-![Research stage](https://img.shields.io/badge/stage-Generation%20Zero-253545?style=flat-square)
+![Research stage](https://img.shields.io/badge/stage-G0%20to%20G2%20research-253545?style=flat-square)
 ![Simulation only](https://img.shields.io/badge/data-synthetic%20only-51412D?style=flat-square)
 
-[**External Evaluation**](docs/EXTERNAL_EVALUATION.md) · [**Research Thesis**](#research-thesis) · [**Recorded Demonstration**](#recorded-demonstration) · [**Architecture**](#generation-zero-architecture) · [**Intelligence**](#axovar-intelligence) · [**Run Locally**](#run-locally) · [**Roadmap**](#research-direction)
+[**Portfolio Risk**](#portfolio-risk-laboratory) · [**Run Locally**](#run-locally) · [**Recorded Demo**](#recorded-demonstration) · [**Audit Contract**](docs/DECISION_AUDIT.md) · [**Risk Mathematics**](docs/PORTFOLIO_RISK.md) · [**Engineering Roadmap**](#research-direction)
 
 </div>
 
-| Market question | Implemented research slice | Outside the current claim |
+| Research boundary | Implemented and verified | Not yet established |
 | :--- | :--- | :--- |
-| Can a decision survive degraded market evidence? | C++20 synthetic-market replay, source integrity checks, risk policy and local dashboard | Live trading, authenticated exchange feeds and production risk approval |
+| **Market evidence** | C++20 receipt-time replay, declared-upstream checks and fail-closed synthetic policy | Authenticated market feeds and external source independence |
+| **Decision assurance** | Versioned audit records, structured policy checks, reproducible local receipt hashing | Signed independent attestation and production access control |
+| **Portfolio risk** | FIFO ledger replay, integer-cent accounting, synthetic stress valuation and empirical shock-tail risk | Live positions, calibrated forecasts, liquidity or margin risk engines |
 
 ---
 
@@ -74,6 +76,27 @@ The change in outcome is not a trading strategy. It demonstrates that evidence s
 
 </details>
 
+## Portfolio risk laboratory
+
+AXOVAR now includes a separate **Generation Two research slice** for synthetic portfolio accounting and risk. It is available inside the local dashboard under **Portfolio Risk** and as a read-only [portfolio report endpoint](#local-api).
+
+The module replays an ordered ledger with USD cash flows, BTC and ETH purchases, sales and fees. It maintains FIFO acquisition lots, calculates realized and unrealized P&L in integer cents, marks current positions and enforces a strict accounting reconciliation.
+
+It then calculates deterministic price-shock P&L and a 95% empirical VaR and Expected Shortfall using **60 constructed, one-period shock observations**. These numbers are mathematical demonstrations, not forecasts of market losses or regulatory risk capital.
+
+| Independent check | Synthetic fixture result |
+| :--- | ---: |
+| Cash after transactions and withdrawal | $137,632.50 |
+| Marked portfolio equity | $197,932.50 |
+| Net profit / loss relative to net deposits | +$2,932.50 |
+| Realized FIFO profit / loss | +$193.00 |
+| Accounting reconciliation difference | $0.00 |
+| BTC -30%, ETH -45% stress impact | -$19,260.00 |
+
+These values are expected test vectors from a *fabricated fixture*. They are not a client portfolio, market backtest, reported return or trading performance metric. The risk endpoint is independent from the separate G0/G1 market replay; values in the two workspaces must not be interpreted as one live portfolio.
+
+**Technical reference:** [portfolio accounting and risk contract](docs/PORTFOLIO_RISK.md) · [implementation gates](docs/PRODUCT_GATES.md) · [executable tests](tests/test_portfolio.py).
+
 ## Research thesis
 
 AXOVAR investigates **evidence-constrained market state reconstruction and decision assurance**: how to preserve the relationship between observations, derived financial state, assumptions and policy outcomes when sources are imperfect.
@@ -103,7 +126,8 @@ Generation Zero is an **executable research vertical slice**, not a completed in
 | **Local research API** | Python standard-library HTTP service bound to `127.0.0.1` |
 | **Research dashboard** | Replay controls, market chart, venue health, integrity alerts and decision inspection |
 | **AXOVAR Intelligence** | Read-only evidence explanations, grounded scenario context and optional local Gemma 3 model Q&A |
-| **Verification** | Automated engine, API and Intelligence tests through CTest and GitHub Actions |
+| **Portfolio risk research** | Exact-cent synthetic ledger, FIFO accounting, shock P&L, empirical tail risk and reconciliation |
+| **Verification** | Engine, API, Intelligence, audit and portfolio suites through CTest and GitHub Actions |
 
 The reference price is an **arithmetic mean of one eligible price per declared upstream**. This is a controlled baseline, not a production-grade market price oracle. The upstream identity and health fields come from fixtures and are **not** independently authenticated.
 
@@ -189,6 +213,8 @@ The last argument is the number of received events available at that replay step
 | GET | `/api/scenarios` | Available fixtures |
 | GET | `/api/state` | Current engine state and decision |
 | GET | `/api/raw` | Recorded fixture lines and hashes |
+| GET | `/api/audit/receipt` | G1 synthetic decision audit record |
+| GET | `/api/risk/portfolio` | Read-only G2 synthetic portfolio and risk report |
 | GET | `/api/intelligence/status` | Local model availability and suggested research questions |
 | POST | `/api/intelligence/ask` | Read-only question with current derived replay state |
 | POST | `/api/replay/scenario` | Select an allowlisted scenario |
@@ -205,31 +231,19 @@ The current implementation proves a limited end-to-end behavior. Future research
 | Gate | Research boundary | State |
 | :--- | :--- | :--- |
 | **G0** | Deterministic market fixtures → integrity and concentration policy → explainable simulation receipt | **Implemented / tested** |
-| **G1** | Source-dependency semantics, robust market-state reconstruction and improved numeric assurance | Planned |
-| **G2** | Quantitative research, backtesting methodology, portfolio and systemic risk | Planned |
+| **G1** | Reproducible source selection and decision audit | First slice implemented, broader numeric assurance pending |
+| **G2** | FIFO synthetic portfolio, shock stress testing and empirical tail risk | First slice implemented, systemic risk and real data pending |
 | **G3** | Blockchain settlement uncertainty and cyber-financial incident reconstruction | Planned |
 | **G4** | Machine-checkable decision constraints and stronger replay evidence | Planned |
 | **G5** | Low-latency profiling and independently verified FPGA-oriented experiments | Planned |
 
 The broader program concerns market microstructure, correlated data failures, quantitative model validity, cross-ledger settlement, systemic contagion, defensive cybersecurity and hardware/software assurance. **These are research directions, not existing G0 features.** Full sequence: [ROADMAP](docs/ROADMAP.md).
 
-## Research portfolio alignment
-
-AXOVAR develops alongside three independent research projects:
-
-| Project | Relationship | Integration status |
-| :--- | :--- | :--- |
-| [KORDAXIS](https://github.com/julianvanceblackwood/KORDAXIS) | Evidence-native defensive reasoning, provenance and uncertainty | Conceptual alignment |
-| [ELENCHION](https://github.com/julianvanceblackwood/ELENCHION) | Evidence-bounded execution intelligence and observability limits | Research alignment |
-| [TEICHION](https://github.com/julianvanceblackwood/TEICHION) | Hardware-owned event sequencing and canonical record research | Future interface study |
-
-No integration or production-grade hardware security is claimed by this README.
-
 ## Assurance boundaries
 
-AXOVAR G0 **does not** implement live trading, production exchange connectivity, authenticated external feeds, real blockchain settlement, a persistent evidence database, calibrated uncertainty sets, formal verification proofs, mature portfolio accounting, a proprietary trained language model or an FPGA accelerator.
+AXOVAR does not implement live trading, production exchange connectivity, authenticated external feeds, real blockchain settlement, a persistent evidence database, calibrated uncertainty sets, formal verification proofs, production portfolio custody or accounting, a proprietary trained language model or an FPGA accelerator. The new portfolio module uses fixed synthetic positions and engineered shock vectors.
 
-The toy valuation currently uses integer price inputs and `long double`-based derived exposure calculations. It is **not** a production ledger precision model. The decision receipt is not digitally signed. The simulated market evidence may be wrong even when its file hash is correct.
+The G0/G1 market replay uses integer price inputs and `long double` for derived exposure, while the separate G2 synthetic portfolio uses integer-cent money and decimal rounding for notional valuations. **Neither constitutes an integrated production accounting system.** The decision receipt is not digitally signed. The simulated market evidence may be wrong even when its file hash is correct.
 
 Financial decisions remain research-only. **No real orders are submitted.**
 

@@ -1,0 +1,515 @@
+{
+  "schema": "AXV-RISK-001",
+  "base_currency": "USD",
+  "events": [
+    {
+      "id": "C001",
+      "sequence": 1,
+      "kind": "CASH_IN",
+      "amount_cents": 20000000
+    },
+    {
+      "id": "B001",
+      "sequence": 2,
+      "kind": "BUY",
+      "asset": "BTC",
+      "quantity_units": 50000000,
+      "price_cents": 10000000,
+      "fee_cents": 5000
+    },
+    {
+      "id": "B002",
+      "sequence": 3,
+      "kind": "BUY",
+      "asset": "ETH",
+      "quantity_units": 400000000,
+      "price_cents": 250000,
+      "fee_cents": 1200
+    },
+    {
+      "id": "S001",
+      "sequence": 4,
+      "kind": "SELL",
+      "asset": "ETH",
+      "quantity_units": 100000000,
+      "price_cents": 270000,
+      "fee_cents": 400
+    },
+    {
+      "id": "F001",
+      "sequence": 5,
+      "kind": "FEE",
+      "amount_cents": 150
+    },
+    {
+      "id": "W001",
+      "sequence": 6,
+      "kind": "CASH_OUT",
+      "amount_cents": 500000
+    }
+  ],
+  "marks_cents": {
+    "BTC": 10500000,
+    "ETH": 260000
+  },
+  "stresses": [
+    {
+      "id": "RISK_OFF",
+      "shocks_bps": {
+        "BTC": -3000,
+        "ETH": -4500
+      }
+    },
+    {
+      "id": "LIQUIDITY_SHOCK_PROXY",
+      "shocks_bps": {
+        "BTC": -1200,
+        "ETH": -2800
+      }
+    },
+    {
+      "id": "DIVERGENCE",
+      "shocks_bps": {
+        "BTC": -900,
+        "ETH": 1100
+      }
+    },
+    {
+      "id": "UPSIDE",
+      "shocks_bps": {
+        "BTC": 1500,
+        "ETH": 2200
+      }
+    },
+    {
+      "id": "FULL_ASSET_LOSS",
+      "shocks_bps": {
+        "BTC": -10000,
+        "ETH": -10000
+      }
+    }
+  ],
+  "history": [
+    {
+      "id": "H001",
+      "returns_bps": {
+        "BTC": -3200,
+        "ETH": -4500
+      }
+    },
+    {
+      "id": "H002",
+      "returns_bps": {
+        "BTC": -2800,
+        "ETH": -3400
+      }
+    },
+    {
+      "id": "H003",
+      "returns_bps": {
+        "BTC": -2200,
+        "ETH": -3200
+      }
+    },
+    {
+      "id": "H004",
+      "returns_bps": {
+        "BTC": -550,
+        "ETH": -1054
+      }
+    },
+    {
+      "id": "H005",
+      "returns_bps": {
+        "BTC": -377,
+        "ETH": -761
+      }
+    },
+    {
+      "id": "H006",
+      "returns_bps": {
+        "BTC": -204,
+        "ETH": -468
+      }
+    },
+    {
+      "id": "H007",
+      "returns_bps": {
+        "BTC": -31,
+        "ETH": -175
+      }
+    },
+    {
+      "id": "H008",
+      "returns_bps": {
+        "BTC": 142,
+        "ETH": 118
+      }
+    },
+    {
+      "id": "H009",
+      "returns_bps": {
+        "BTC": 315,
+        "ETH": 411
+      }
+    },
+    {
+      "id": "H010",
+      "returns_bps": {
+        "BTC": 488,
+        "ETH": 704
+      }
+    },
+    {
+      "id": "H011",
+      "returns_bps": {
+        "BTC": 661,
+        "ETH": 997
+      }
+    },
+    {
+      "id": "H012",
+      "returns_bps": {
+        "BTC": 834,
+        "ETH": 1290
+      }
+    },
+    {
+      "id": "H013",
+      "returns_bps": {
+        "BTC": 1007,
+        "ETH": 1583
+      }
+    },
+    {
+      "id": "H014",
+      "returns_bps": {
+        "BTC": 1180,
+        "ETH": -1825
+      }
+    },
+    {
+      "id": "H015",
+      "returns_bps": {
+        "BTC": -948,
+        "ETH": -1532
+      }
+    },
+    {
+      "id": "H016",
+      "returns_bps": {
+        "BTC": -775,
+        "ETH": -1239
+      }
+    },
+    {
+      "id": "H017",
+      "returns_bps": {
+        "BTC": -602,
+        "ETH": -946
+      }
+    },
+    {
+      "id": "H018",
+      "returns_bps": {
+        "BTC": -429,
+        "ETH": -653
+      }
+    },
+    {
+      "id": "H019",
+      "returns_bps": {
+        "BTC": -256,
+        "ETH": -360
+      }
+    },
+    {
+      "id": "H020",
+      "returns_bps": {
+        "BTC": -83,
+        "ETH": -67
+      }
+    },
+    {
+      "id": "H021",
+      "returns_bps": {
+        "BTC": 90,
+        "ETH": 226
+      }
+    },
+    {
+      "id": "H022",
+      "returns_bps": {
+        "BTC": 263,
+        "ETH": 519
+      }
+    },
+    {
+      "id": "H023",
+      "returns_bps": {
+        "BTC": 436,
+        "ETH": 812
+      }
+    },
+    {
+      "id": "H024",
+      "returns_bps": {
+        "BTC": 609,
+        "ETH": 1105
+      }
+    },
+    {
+      "id": "H025",
+      "returns_bps": {
+        "BTC": 782,
+        "ETH": 1398
+      }
+    },
+    {
+      "id": "H026",
+      "returns_bps": {
+        "BTC": 955,
+        "ETH": 1691
+      }
+    },
+    {
+      "id": "H027",
+      "returns_bps": {
+        "BTC": 1128,
+        "ETH": -1717
+      }
+    },
+    {
+      "id": "H028",
+      "returns_bps": {
+        "BTC": -1000,
+        "ETH": -1424
+      }
+    },
+    {
+      "id": "H029",
+      "returns_bps": {
+        "BTC": -827,
+        "ETH": -1131
+      }
+    },
+    {
+      "id": "H030",
+      "returns_bps": {
+        "BTC": -654,
+        "ETH": -838
+      }
+    },
+    {
+      "id": "H031",
+      "returns_bps": {
+        "BTC": -481,
+        "ETH": -545
+      }
+    },
+    {
+      "id": "H032",
+      "returns_bps": {
+        "BTC": -308,
+        "ETH": -252
+      }
+    },
+    {
+      "id": "H033",
+      "returns_bps": {
+        "BTC": -135,
+        "ETH": 41
+      }
+    },
+    {
+      "id": "H034",
+      "returns_bps": {
+        "BTC": 38,
+        "ETH": 334
+      }
+    },
+    {
+      "id": "H035",
+      "returns_bps": {
+        "BTC": 211,
+        "ETH": 627
+      }
+    },
+    {
+      "id": "H036",
+      "returns_bps": {
+        "BTC": 384,
+        "ETH": 920
+      }
+    },
+    {
+      "id": "H037",
+      "returns_bps": {
+        "BTC": 557,
+        "ETH": 1213
+      }
+    },
+    {
+      "id": "H038",
+      "returns_bps": {
+        "BTC": 730,
+        "ETH": 1506
+      }
+    },
+    {
+      "id": "H039",
+      "returns_bps": {
+        "BTC": 903,
+        "ETH": -1902
+      }
+    },
+    {
+      "id": "H040",
+      "returns_bps": {
+        "BTC": 1076,
+        "ETH": -1609
+      }
+    },
+    {
+      "id": "H041",
+      "returns_bps": {
+        "BTC": -1052,
+        "ETH": -1316
+      }
+    },
+    {
+      "id": "H042",
+      "returns_bps": {
+        "BTC": -879,
+        "ETH": -1023
+      }
+    },
+    {
+      "id": "H043",
+      "returns_bps": {
+        "BTC": -706,
+        "ETH": -730
+      }
+    },
+    {
+      "id": "H044",
+      "returns_bps": {
+        "BTC": -533,
+        "ETH": -437
+      }
+    },
+    {
+      "id": "H045",
+      "returns_bps": {
+        "BTC": -360,
+        "ETH": -144
+      }
+    },
+    {
+      "id": "H046",
+      "returns_bps": {
+        "BTC": -187,
+        "ETH": 149
+      }
+    },
+    {
+      "id": "H047",
+      "returns_bps": {
+        "BTC": -14,
+        "ETH": 442
+      }
+    },
+    {
+      "id": "H048",
+      "returns_bps": {
+        "BTC": 159,
+        "ETH": 735
+      }
+    },
+    {
+      "id": "H049",
+      "returns_bps": {
+        "BTC": 332,
+        "ETH": 1028
+      }
+    },
+    {
+      "id": "H050",
+      "returns_bps": {
+        "BTC": 505,
+        "ETH": 1321
+      }
+    },
+    {
+      "id": "H051",
+      "returns_bps": {
+        "BTC": 678,
+        "ETH": 1614
+      }
+    },
+    {
+      "id": "H052",
+      "returns_bps": {
+        "BTC": 851,
+        "ETH": -1794
+      }
+    },
+    {
+      "id": "H053",
+      "returns_bps": {
+        "BTC": 1024,
+        "ETH": -1501
+      }
+    },
+    {
+      "id": "H054",
+      "returns_bps": {
+        "BTC": 1197,
+        "ETH": -1208
+      }
+    },
+    {
+      "id": "H055",
+      "returns_bps": {
+        "BTC": -931,
+        "ETH": -915
+      }
+    },
+    {
+      "id": "H056",
+      "returns_bps": {
+        "BTC": -758,
+        "ETH": -622
+      }
+    },
+    {
+      "id": "H057",
+      "returns_bps": {
+        "BTC": -585,
+        "ETH": -329
+      }
+    },
+    {
+      "id": "H058",
+      "returns_bps": {
+        "BTC": -412,
+        "ETH": -36
+      }
+    },
+    {
+      "id": "H059",
+      "returns_bps": {
+        "BTC": -239,
+        "ETH": 257
+      }
+    },
+    {
+      "id": "H060",
+      "returns_bps": {
+        "BTC": -66,
+        "ETH": 550
+      }
+    }
+  ],
+  "confidence_bps": 9500
+}

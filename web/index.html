@@ -18,17 +18,18 @@
     <button data-tab="overview" class="nav-btn active"><span>◈</span> Overview</button>
     <button data-tab="intelligence" class="nav-btn"><span>✦</span> Intelligence</button>
     <button data-tab="evidence" class="nav-btn"><span>⌁</span> Evidence Lab</button>
+    <button data-tab="risk" class="nav-btn"><span>▥</span> Portfolio Risk</button>
     <button data-tab="systems" class="nav-btn"><span>▤</span> Systems</button>
    </nav>
    <div class="nav-caption future">RESEARCH MODULES <small>ROADMAP</small></div>
    <div class="locked">↗ Quant Research <span>G1</span></div>
-   <div class="locked">↗ Systemic Risk <span>G2</span></div>
+   <div class="locked">↗ Systemic Dependencies <span>G2 NEXT</span></div>
    <div class="locked">↗ Blockchain & Settlement <span>G3</span></div>
    <div class="locked">↗ Hardware Assurance <span>G5</span></div>
-   <div class="sidebar-bottom"><div class="signal"><i></i> LOCAL RESEARCH ENGINE</div><div class="ver">G0 / BUILD 0.1.0</div></div>
+   <div class="sidebar-bottom"><div class="signal"><i></i> LOCAL RESEARCH ENGINE</div><div class="ver">G2 RESEARCH SLICE / SYNTHETIC</div></div>
  </aside>
  <main class="main">
-  <header class="topbar"><div class="bread">RESEARCH TERMINAL <span>/</span> <b id="crumb">OVERVIEW</b></div><div class="top-right"><span class="pill">SYNTHETIC DATA</span><span class="session">AXOVAR / G0</span></div></header>
+  <header class="topbar"><div class="bread">RESEARCH TERMINAL <span>/</span> <b id="crumb">OVERVIEW</b></div><div class="top-right"><span class="pill">SYNTHETIC DATA</span><span class="session">AXOVAR / G2 RESEARCH</span></div></header>
   <div class="main-content">
     <div class="page-heading"><div><div class="eyebrow">FINANCIAL STATE & DECISION ASSURANCE</div><h1 id="page-title">Market Integrity Overview</h1><p id="page-subtitle">Evidence-constrained research in an adversarial market environment.</p></div><div class="heading-tag">RESEARCH • NOT LIVE TRADING</div></div>
     <section class="control-bar" aria-label="Replay controls"><div class="select-wrap"><label for="scenario">SCENARIO</label><select id="scenario"><option value="NORMAL-001">NORMAL-001 / Standard conditions</option><option value="DEGRADED-001">DEGRADED-001 / Adversarial feed</option></select></div><div class="ctrl-divider"></div><button class="ctrl-btn" id="reset" title="Reset scenario">↺ Reset</button><button class="ctrl-btn" id="next" title="Process one event">→ Step</button><button class="ctrl-btn primary" id="run" title="Complete replay">▶ Run to end</button><div class="progress"><span>EVENT REPLAY</span><strong id="progress">0 / 0</strong><div class="progress-track"><div id="progress-fill"></div></div></div></section>
@@ -82,6 +83,28 @@
             <pre id="receipt-json" class="json-box"></pre>
           </div>
         </section>
+      </div>
+    </section>
+    <section id="risk" class="tab-pane" hidden>
+      <div class="panel">
+        <div class="panel-header"><div><div class="panel-kicker">GENERATION TWO / CONTROLLED RESEARCH</div><h2>Portfolio Risk Laboratory</h2></div><span class="panel-tag">FIXED SYNTHETIC FIXTURE</span></div>
+        <div class="pad">
+          <p class="help">Independent of market replay. The ledger, portfolio marks and return vectors are fixed local synthetic examples. No orders, real customer positions or calibrated forecasts.</p>
+          <div class="metric-grid">
+            <article class="metric"><div class="metric-label">PORTFOLIO EQUITY</div><div class="metric-value" id="risk-equity">—</div><div class="metric-note">Cash plus marked holdings</div></article>
+            <article class="metric"><div class="metric-label">NET PROFIT / LOSS</div><div class="metric-value" id="risk-pnl">—</div><div class="metric-note">Equity less net contributions</div></article>
+            <article class="metric"><div class="metric-label">95% SYNTHETIC VAR</div><div class="metric-value" id="risk-var">—</div><div class="metric-note">One hypothetical interval</div></article>
+            <article class="metric"><div class="metric-label">95% EXPECTED SHORTFALL</div><div class="metric-value" id="risk-es">—</div><div class="metric-note">Worst synthetic shock observations</div></article>
+          </div>
+          <div class="detail-row"><span>Accounting reconciliation</span><strong id="risk-reconcile">—</strong></div>
+          <div class="detail-row"><span>Ledger events and return observations</span><strong id="risk-count">—</strong></div>
+          <div class="meta-title">PORTFOLIO HOLDINGS</div>
+          <div class="table-wrap"><table><thead><tr><th>ASSET</th><th>QUANTITY</th><th>MARK</th><th>MARKET VALUE</th><th>UNREALIZED PNL</th><th>EXPOSURE</th></tr></thead><tbody id="risk-holdings"><tr><td colspan="6">Loading</td></tr></tbody></table></div>
+          <div class="meta-title">STRESS RESULTS</div>
+          <div class="table-wrap"><table><thead><tr><th>SCENARIO</th><th>SHOCK BTC / ETH</th><th>PNL IMPACT</th><th>STRESSED EQUITY</th></tr></thead><tbody id="risk-stresses"><tr><td colspan="4">Loading</td></tr></tbody></table></div>
+          <div class="meta-title">REPORT RECEIPT SHA-256</div><code id="risk-digest">—</code>
+          <p class="help">The integrity hash is not a signature. Returns are synthetic and the estimated VaR and expected shortfall are not forecasts, regulatory capital metrics or live trading controls.</p>
+        </div>
       </div>
     </section>
     <section id="systems" class="tab-pane" hidden><div class="dashboard-grid"><section class="panel"><div class="panel-header"><div><div class="panel-kicker">SYSTEM INTEGRITY</div><h2>Execution Environment</h2></div><span class="panel-tag">G0 RESEARCH</span></div><div class="pad"><div class="detail-row"><span>Financial logic</span><strong>C++20 core</strong></div><div class="detail-row"><span>API runtime</span><strong>Python standard library</strong></div><div class="detail-row"><span>Transport</span><strong>Loopback HTTP</strong></div><div class="detail-row"><span>Dataset mode</span><strong>SYNTHETIC FIXTURES</strong></div><div class="detail-row"><span>Trading connectivity</span><strong>DISABLED</strong></div><div class="detail-row"><span>Risk control</span><strong>Deterministic / fail-closed</strong></div></div></section><section class="panel"><div class="panel-header"><div><div class="panel-kicker">INTENTIONAL LIMITATIONS</div><h2>Verification Boundary</h2></div></div><div class="pad limitations">This is an executable Generation Zero vertical slice, not a live trading product. No production exchange connectivity, distributed storage, calibrated uncertainty set, real blockchain settlement, FPGA accelerator, or independent hardware authentication is claimed. Source health is a synthetic scenario input and upstream independence is declared rather than discovered.</div></section></div></section>

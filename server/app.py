@@ -11,7 +11,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from server import audit, intelligence
+from server import audit, intelligence, portfolio
 
 ALLOWED = ("NORMAL-001", "DEGRADED-001")
 FILES = {"/": ("index.html", "text/html; charset=utf-8"),
@@ -78,6 +78,13 @@ def create_handler(root: Path, binary: Path, session: Session):
                 return
             if path == "/api/scenarios":
                 self.output({"scenarios": [{"id": x, "description": "Normal market" if x == "NORMAL-001" else "Correlated degraded market evidence"} for x in ALLOWED]})
+                return
+            if path == "/api/risk/portfolio":
+                try:
+                    report = portfolio.load_fixture(root / "scenarios" / "PORTFOLIO-001.json")
+                    self.output(report)
+                except (OSError, ValueError, TypeError, KeyError):
+                    self.error(500, "synthetic portfolio report unavailable")
                 return
             if path == "/api/state":
                 with session.lock:

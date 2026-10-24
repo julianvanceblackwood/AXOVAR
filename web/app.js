@@ -63,13 +63,41 @@ function renderChart(events) {
  elem('text',{x:left,y:H-5,fill:'#748697','font-size':10},`RECEIVE TIME ${minT} ms`);
  elem('text',{x:W-right-120,y:H-5,fill:'#748697','font-size':10},`${maxT} ms`);
 }
+const moneyCents=(cents)=>Number.isSafeInteger(cents)
+ ? new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(cents/100) : '—';
+const signedMoney=(cents)=>Number.isSafeInteger(cents)
+ ? (cents>0?'+':'')+moneyCents(cents) : '—';
+function riskView(s){
+ const a=s.accounting, h=s.historical_risk;
+ $('risk-equity').textContent=moneyCents(a.equity_cents);
+ $('risk-pnl').textContent=signedMoney(a.net_pnl_cents);
+ $('risk-var').textContent=moneyCents(h.var_cents);
+ $('risk-es').textContent=moneyCents(h.expected_shortfall_cents);
+ $('risk-reconcile').textContent=a.reconciliation_delta_cents===0?'BALANCED':'CHECK FAILED';
+ $('risk-count').textContent=s.event_count+' events / '+h.observation_count+' synthetic periods';
+ $('risk-digest').textContent=s.receipt_sha256;
+ $('risk-holdings').innerHTML=s.holdings.length?s.holdings.map(p=>
+  `<tr><td>${esc(p.asset)}</td><td>${esc((p.quantity_units/s.quantity_scale).toFixed(8))}</td><td>${esc(moneyCents(p.mark_price_cents))}</td><td>${esc(moneyCents(p.market_value_cents))}</td><td>${esc(signedMoney(p.unrealized_pnl_cents))}</td><td>${esc((p.exposure_bps/100).toFixed(2))}%</td></tr>`
+ ).join(''):'<tr><td colspan="6">No open positions</td></tr>';
+ $('risk-stresses').innerHTML=s.stresses.map(row=>{
+  const shocks=row.shocks_bps,legend=['BTC','ETH'].map(a=>`${a} ${(shocks[a]/100).toFixed(1)}%`).join(' / ');
+  return `<tr><td>${esc(row.id.replaceAll('_',' '))}</td><td>${esc(legend)}</td><td>${esc(signedMoney(row.pnl_cents))}</td><td>${esc(moneyCents(row.equity_cents))}</td></tr>`;
+ }).join('');
+}
+async function refreshRisk(){
+ try{
+  riskView(await request('/api/risk/portfolio'));
+  showError('');
+ }catch(e){showError('Portfolio risk report unavailable: '+e.message);}
+}
 function navigation(){for(const btn of document.querySelectorAll('[data-tab]'))btn.addEventListener('click',async()=>{
  const tab=btn.dataset.tab;
  for(const b of document.querySelectorAll('[data-tab]'))b.classList.toggle('active',b===btn);
  for(const pane of document.querySelectorAll('.tab-pane'))pane.hidden=pane.id!==tab;
  $('crumb').textContent=tab.toUpperCase();
- $('page-title').textContent=({overview:'Market Integrity Overview',evidence:'Evidence & Decision Lineage',intelligence:'Intelligence Workspace',systems:'Execution Environment'})[tab];
+ $('page-title').textContent=({overview:'Market Integrity Overview',evidence:'Evidence & Decision Lineage',intelligence:'Intelligence Workspace',risk:'Portfolio Risk Laboratory',systems:'Execution Environment'})[tab];
  if(tab==='evidence')await refreshRaw();
+ if(tab==='risk')await refreshRisk();
 });}
 async function refreshRaw(){
  try{
