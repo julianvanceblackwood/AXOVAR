@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1360" height="620" viewBox="0 0 1360 620" role="img" aria-label="AXOVAR implementation and research-stage schematic">
+ <defs><linearGradient id="b" x1="0" x2="1" y1="0" y2="1"><stop stop-color="#0B101A"/><stop offset=".55" stop-color="#132033"/><stop offset="1" stop-color="#0B101B"/></linearGradient><pattern id="grid" width="25" height="25" patternUnits="userSpaceOnUse"><path d="M25 0H0V25" stroke="#607E9A" stroke-opacity=".08" fill="none"/></pattern></defs>
+ <rect width="1360" height="620" fill="url(#b)"/><rect width="1360" height="620" fill="url(#grid)"/>
+ <path d="M24 24H1336V596H24Z" fill="none" stroke="#69C5E9" stroke-opacity=".3"/>
+ <text x="54" y="72" font-family="Arial,sans-serif" font-size="32" font-weight="600" fill="#F3F7FA">MARKET STATE / POLICY GATE</text>
+ <path d="M55 94H1305" stroke="#E4B16B" stroke-opacity=".5" stroke-width="2"/>
+ <text x="54" y="127" font-family="Arial,sans-serif" font-size="17" fill="#AFC2D1">Synthetic research pipeline; source labels are fixture assertions, not authenticated external truth.</text>
+ <path d="M434 235 H470" stroke="#69C5E9" opacity=".65" stroke-width="2" fill="none" stroke-dasharray="5 4"/><path d="M850 235 H886" stroke="#69C5E9" opacity=".65" stroke-width="2" fill="none" stroke-dasharray="5 4"/><path d="M434 417 H470" stroke="#69C5E9" opacity=".65" stroke-width="2" fill="none" stroke-dasharray="5 4"/><path d="M850 417 H886" stroke="#69C5E9" opacity=".65" stroke-width="2" fill="none" stroke-dasharray="5 4"/><path d="M1229 312V329H80V340" fill="none" stroke="#69C5E9" opacity=".48" stroke-width="2" stroke-dasharray="4 8"/><g><rect x="54" y="160" width="380" height="148" rx="14" fill="#101C2B" stroke="#E4B16B" stroke-opacity=".75" stroke-width="1.5" />
+ <rect x="71" y="180" width="5" height="19" rx="2" fill="#E4B16B"/>
+ <text x="88" y="194" font-family="monospace" font-size="15" letter-spacing="1.7" fill="#69C5E9">01 / INPUT</text>
+ <text x="73" y="235" font-family="Arial,sans-serif" font-size="21" font-weight="600" fill="#F2F7FA">Synthetic market fixtures</text>
+ <text x="73" y="267" font-family="Arial,sans-serif" font-size="15" fill="#A7BDCC">C++20 parser and receipt ordering</text>
+ <text x="409" y="190" text-anchor="end" font-family="monospace" font-size="11" letter-spacing=".8" fill="#E4B16B">IMPLEMENTED</text>
+ <path d="M74 284h340" stroke="#69C5E9" opacity=".25"/></g><g><rect x="470" y="160" width="380" height="148" rx="14" fill="#101C2B" stroke="#E4B16B" stroke-opacity=".75" stroke-width="1.5" />
+ <rect x="487" y="180" width="5" height="19" rx="2" fill="#E4B16B"/>
+ <text x="504" y="194" font-family="monospace" font-size="15" letter-spacing="1.7" fill="#69C5E9">02 / INTEGRITY</text>
+ <text x="489" y="235" font-family="Arial,sans-serif" font-size="21" font-weight="600" fill="#F2F7FA">Staleness and sequence gaps</text>
+ <text x="489" y="267" font-family="Arial,sans-serif" font-size="15" fill="#A7BDCC">Declared venue health and timing</text>
+ <text x="825" y="190" text-anchor="end" font-family="monospace" font-size="11" letter-spacing=".8" fill="#E4B16B">IMPLEMENTED</text>
+ <path d="M490 284h340" stroke="#69C5E9" opacity=".25"/></g><g><rect x="886" y="160" width="380" height="148" rx="14" fill="#101C2B" stroke="#E4B16B" stroke-opacity=".75" stroke-width="1.5" />
+ <rect x="903" y="180" width="5" height="19" rx="2" fill="#E4B16B"/>
+ <text x="920" y="194" font-family="monospace" font-size="15" letter-spacing="1.7" fill="#69C5E9">03 / SOURCE MODEL</text>
+ <text x="905" y="235" font-family="Arial,sans-serif" font-size="21" font-weight="600" fill="#F2F7FA">Upstream dependency checks</text>
+ <text x="905" y="267" font-family="Arial,sans-serif" font-size="15" fill="#A7BDCC">Baseline from eligible observations</text>
+ <text x="1241" y="190" text-anchor="end" font-family="monospace" font-size="11" letter-spacing=".8" fill="#E4B16B">IMPLEMENTED</text>
+ <path d="M906 284h340" stroke="#69C5E9" opacity=".25"/></g><g><rect x="54" y="342" width="380" height="148" rx="14" fill="#101C2B" stroke="#E4B16B" stroke-opacity=".75" stroke-width="1.5" />
+ <rect x="71" y="362" width="5" height="19" rx="2" fill="#E4B16B"/>
+ <text x="88" y="376" font-family="monospace" font-size="15" letter-spacing="1.7" fill="#69C5E9">04 / POLICY</text>
+ <text x="73" y="417" font-family="Arial,sans-serif" font-size="21" font-weight="600" fill="#F2F7FA">Concentration and divergence</text>
+ <text x="73" y="449" font-family="Arial,sans-serif" font-size="15" fill="#A7BDCC">Synthetic decision constraints</text>
+ <text x="409" y="372" text-anchor="end" font-family="monospace" font-size="11" letter-spacing=".8" fill="#E4B16B">IMPLEMENTED</text>
+ <path d="M74 466h340" stroke="#69C5E9" opacity=".25"/></g><g><rect x="470" y="342" width="380" height="148" rx="14" fill="#101C2B" stroke="#E4B16B" stroke-opacity=".75" stroke-width="1.5" />
+ <rect x="487" y="362" width="5" height="19" rx="2" fill="#E4B16B"/>
+ <text x="504" y="376" font-family="monospace" font-size="15" letter-spacing="1.7" fill="#69C5E9">05 / RECEIPT</text>
+ <text x="489" y="417" font-family="Arial,sans-serif" font-size="21" font-weight="600" fill="#F2F7FA">Allow / deny / insufficient</text>
+ <text x="489" y="449" font-family="Arial,sans-serif" font-size="15" fill="#A7BDCC">Local replay and explanations</text>
+ <text x="825" y="372" text-anchor="end" font-family="monospace" font-size="11" letter-spacing=".8" fill="#E4B16B">IMPLEMENTED</text>
+ <path d="M490 466h340" stroke="#69C5E9" opacity=".25"/></g><g><rect x="886" y="342" width="380" height="148" rx="14" fill="#101C2B" stroke="#54718A" stroke-opacity=".45" stroke-width="1.5" stroke-dasharray="8 7"/>
+ <rect x="903" y="362" width="5" height="19" rx="2" fill="#69C5E9"/>
+ <text x="920" y="376" font-family="monospace" font-size="15" letter-spacing="1.7" fill="#69C5E9">06 / FUTURE</text>
+ <text x="905" y="417" font-family="Arial,sans-serif" font-size="21" font-weight="600" fill="#F2F7FA">Authenticated live feeds</text>
+ <text x="905" y="449" font-family="Arial,sans-serif" font-size="15" fill="#A7BDCC">Production ledger and execution</text>
+ <text x="1241" y="372" text-anchor="end" font-family="monospace" font-size="11" letter-spacing=".8" fill="#91A5B5">NOT IMPLEMENTED</text>
+ <path d="M906 466h340" stroke="#69C5E9" opacity=".25"/></g>
+ <text x="55" y="562" font-family="monospace" font-size="13" letter-spacing="1.5" fill="#E4B16B">MODEL THE BOUNDARY. PROVE THE CLAIM. DOCUMENT THE UNKNOWN.</text>
+ <text x="1306" y="562" text-anchor="end" font-family="monospace" font-size="12" fill="#94A9BB">SCHEMATIC · SEE SOURCE FOR VERIFICATION</text>
+ </svg>
