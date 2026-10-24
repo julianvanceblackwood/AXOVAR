@@ -107,6 +107,12 @@ Generation Zero is an **executable research vertical slice**, not a completed in
 
 The reference price is an **arithmetic mean of one eligible price per declared upstream**. This is a controlled baseline, not a production-grade market price oracle. The upstream identity and health fields come from fixtures and are **not** independently authenticated.
 
+## Verifiable capability map
+
+![AXOVAR capability-scoped technical architecture with implemented synthetic research and unimplemented production boundaries](assets/technical-map.svg)
+
+*Research architecture schematic. Implemented, external and future capabilities are labeled; it is not a production-system certification.*
+
 ## Generation Zero architecture
 
 ![Implemented AXOVAR Generation Zero architecture](assets/architecture.svg)
