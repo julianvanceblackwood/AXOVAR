@@ -113,6 +113,14 @@ The reference price is an **arithmetic mean of one eligible price per declared u
 
 *Research architecture schematic. Implemented, external and future capabilities are labeled; it is not a production-system certification.*
 
+## Decision audit
+
+The current development branch begins Generation One with a reproducible decision audit. The synthetic core now reports each policy check as `PASS`, `FAIL` or `NOT_EVALUATED` and shows which eligible venue was selected to represent each declared upstream dependency.
+
+A read-only `/api/audit/receipt` endpoint returns a versioned policy snapshot with its fixture SHA-256, selected evidence identifiers and a canonical SHA-256 digest. The audit record is reproducible on the tested runtime, but it is neither signed nor a guarantee of financial or external data correctness.
+
+The Evidence Lab shows the current audit digest and policy checks. See [decision audit contract](docs/DECISION_AUDIT.md) for the canonical representation, source selection rules, exact limits, regression cases and unresolved assurance work.
+
 ## Generation Zero architecture
 
 ![Implemented AXOVAR Generation Zero architecture](assets/architecture.svg)
