@@ -48,7 +48,7 @@ Try to make the engine arrive at an unjustified conclusion using **synthetic inp
 - Does the portfolio's cash, FIFO cost and marked equity still reconcile after partial sales or fees?
 - Can a controlled change in the fixture be detected by its published digest?
 
-When reporting a finding, include the commit SHA, operating system, compiler version, fixture, steps, expected outcome and observed outcome. The [source-dependency review issue](../issues/3) is a concrete starting point. For other reproducible issues, use [GitHub Issues](../issues). Do not publish credentials or confidential customer data.
+When reporting a finding, include the commit SHA, operating system, compiler version, fixture, steps, expected outcome and observed outcome. The [source-dependency review issue](https://github.com/julianvanceblackwood/AXOVAR/issues/3) is a concrete starting point. For other reproducible issues, use [GitHub Issues](https://github.com/julianvanceblackwood/AXOVAR/issues). Do not publish credentials or confidential customer data.
 
 ## Boundaries and collaboration
 
