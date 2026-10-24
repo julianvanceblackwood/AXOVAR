@@ -15,7 +15,7 @@ async function refresh() {try{state=await request('/api/state');render(state);sh
 async function change(path,payload={}) {
  if(busy)return;
  busy=true; document.querySelectorAll('.ctrl-btn').forEach(b=>b.disabled=true);
- try{state=await request(path,payload);render(state);showError('');}
+ try{state=await request(path,payload);render(state);if(!$('evidence').hidden)await refreshRaw();showError('');}
  catch(e){showError(e.message);}
  finally{busy=false;document.querySelectorAll('.ctrl-btn').forEach(b=>b.disabled=false);}
 }
@@ -71,10 +71,19 @@ function navigation(){for(const btn of document.querySelectorAll('[data-tab]'))b
  $('page-title').textContent=({overview:'Market Integrity Overview',evidence:'Evidence & Decision Lineage',intelligence:'Intelligence Workspace',systems:'Execution Environment'})[tab];
  if(tab==='evidence')await refreshRaw();
 });}
-async function refreshRaw(){try{const raw=await request('/api/raw');$('fixture-hash').textContent=raw.fixture_sha256;
- $('raw-records').innerHTML=raw.records.map(r=>`<div class="raw-record">${esc(r.raw)}<br><span style="color:#697f91">SHA-256 ${esc(r.sha256)}</span></div>`).join('');
-}catch(e){showError(e.message);}}
-$('scenario').addEventListener('change',async(e)=>{await change('/api/replay/scenario',{scenario:e.target.value});if(!$('evidence').hidden)await refreshRaw();});
+async function refreshRaw(){
+ try{
+  const [raw,audit]=await Promise.all([request('/api/raw'),request('/api/audit/receipt')]);
+  $('fixture-hash').textContent=raw.fixture_sha256;
+  $('raw-records').innerHTML=raw.records.map(r=>`<div class="raw-record">${esc(r.raw)}<br><span style="color:#697f91">SHA-256 ${esc(r.sha256)}</span></div>`).join('');
+  $('audit-digest').textContent=audit.sha256;
+  $('audit-checks').innerHTML=audit.receipt.policy.checks.map(check=>
+   `<div class="detail-row"><span>${esc(check.id.replaceAll('_',' '))}</span><strong>${esc(check.status)}</strong></div>`
+  ).join('');
+  $('receipt-json').textContent=JSON.stringify(audit.receipt,null,2);
+ }catch(e){showError(e.message);}
+}
+$('scenario').addEventListener('change',async(e)=>{await change('/api/replay/scenario',{scenario:e.target.value});});
 $('next').addEventListener('click',()=>change('/api/replay/step'));
 $('reset').addEventListener('click',()=>change('/api/replay/reset'));
 $('run').addEventListener('click',()=>change('/api/replay/end'));
