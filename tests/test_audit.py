@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import hashlib
 import json
+import random
+from decimal import Decimal
 import subprocess
 import sys
 import tempfile
@@ -72,6 +74,27 @@ class PolicyTests(unittest.TestCase):
         self.assertEqual(checks["INDEPENDENT_SOURCES"]["status"], "FAIL")
         self.assertEqual(checks["VENUE_DIVERGENCE"]["status"], "NOT_EVALUATED")
         self.assertEqual(checks["CONCENTRATION"]["status"], "NOT_EVALUATED")
+
+    def test_seeded_upstream_reference_against_decimal_oracle(self):
+        for seed in range(32):
+            rng = random.Random(seed)
+            rows = []
+            chosen = {}
+            for i in range(6):
+                venue = f"V{i}"
+                upstream = rng.choice(("U0", "U1", "U2"))
+                cents = rng.randint(8000000, 12000000)
+                received = 100 + i * 10
+                rows.append(f"E{i},{received},{received},{venue},{upstream},1,{cents},OK")
+                chosen[upstream] = (venue, cents)
+            state = evaluate("\\n".join(rows) + "\\n")
+            selected = {v["name"] for v in state["venues"] if v["reference_selected"]}
+            self.assertEqual(selected, {v for v, cents in chosen.values()})
+            self.assertEqual(state["metrics"]["independent_healthy_sources"], len(chosen))
+            expected = (sum(Decimal(cents) for _, cents in chosen.values())
+                        / Decimal(100) / Decimal(len(chosen)))
+            self.assertAlmostEqual(state["metrics"]["reference_price"], float(expected),
+                                   places=3, msg=f"seed={seed}")
 
     def test_sequence_boundary_does_not_overflow(self):
         state = evaluate(
