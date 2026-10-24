@@ -8,7 +8,7 @@ from __future__ import annotations
 import hashlib
 import json
 import re
-from decimal import Decimal, ROUND_HALF_EVEN
+from decimal import Decimal, ROUND_HALF_EVEN, localcontext
 from pathlib import Path
 
 SCHEMA = "AXV-RISK-001"
@@ -48,8 +48,11 @@ def _identifier(value, context):
 
 
 def _round_cents(numerator, denominator=SCALE):
-    return int((Decimal(numerator) / Decimal(denominator)).to_integral_value(
-        rounding=ROUND_HALF_EVEN))
+    # The maximum validated operand product exceeds Decimal's default precision.
+    with localcontext() as context:
+        context.prec = 60
+        return int((Decimal(numerator) / Decimal(denominator)).to_integral_value(
+            rounding=ROUND_HALF_EVEN))
 
 
 def _money(quantity_units, price_cents):
@@ -199,8 +202,8 @@ def evaluate(document, raw=b""):
         total_market_value += value
         total_basis += basis
     equity = cash + total_market_value
-    if equity <= 0:
-        raise RiskError("nonpositive portfolio equity")
+    if equity <= 0 or equity > MAX_INT:
+        raise RiskError("portfolio equity outside supported range")
     for position in positions:
         position["exposure_bps"] = _round_cents(
             position["market_value_cents"] * 10_000, equity)
@@ -220,6 +223,8 @@ def evaluate(document, raw=b""):
             stressed += _shocked_value(quantity_by_asset[asset],
                                        marks[asset], basis_points)
         stressed_equity = cash + stressed
+        if stressed_equity < 0 or stressed_equity > MAX_INT:
+            raise RiskError("stressed equity outside supported range")
         pnl = stressed_equity - equity
         return {
             "equity_cents": stressed_equity, "pnl_cents": pnl,
@@ -273,7 +278,7 @@ def evaluate(document, raw=b""):
         "holdings": positions,
         "stresses": scenario_rows,
         "historical_risk": {
-            "method": "equally weighted nearest-rank one-period historical simulation",
+            "method": "nearest-rank loss quantile on constructed one-period shocks",
             "confidence_bps": confidence, "observation_count": len(history),
             "tail_observations": tail_count,
             "var_cents": var_cents,
