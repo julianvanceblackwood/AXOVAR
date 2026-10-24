@@ -13,7 +13,7 @@
 ![Research stage](https://img.shields.io/badge/stage-Generation%20Zero-253545?style=flat-square)
 ![Simulation only](https://img.shields.io/badge/data-synthetic%20only-51412D?style=flat-square)
 
-[**Research Thesis**](#research-thesis) · [**Recorded Demonstration**](#recorded-demonstration) · [**Architecture**](#generation-zero-architecture) · [**Intelligence**](#axovar-intelligence) · [**Run Locally**](#run-locally) · [**Roadmap**](#research-direction)
+[**External Evaluation**](docs/EXTERNAL_EVALUATION.md) · [**Research Thesis**](#research-thesis) · [**Recorded Demonstration**](#recorded-demonstration) · [**Architecture**](#generation-zero-architecture) · [**Intelligence**](#axovar-intelligence) · [**Run Locally**](#run-locally) · [**Roadmap**](#research-direction)
 
 </div>
 
@@ -30,6 +30,12 @@ Financial decision systems must contend with conflicting venues, incomplete even
 ![The independent evidence problem: correlated sources may manufacture false confidence](assets/problem-map.svg)
 
 > **AXOVAR's central principle:** a financial decision must not inherit more certainty than its supporting evidence permits.
+
+## Research flow at a glance
+
+![Animated research flow for AXOVAR: market observations, evidence checks and a simulated decision gate](assets/research-flow.gif)
+
+*Conceptual animation of the research pipeline, not live market telemetry or production trading.* For the current implementation, see [Generation Zero architecture](#generation-zero-architecture) and the [external evaluation brief](docs/EXTERNAL_EVALUATION.md).
 
 ## Recorded demonstration
 
