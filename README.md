@@ -121,6 +121,8 @@ A read-only `/api/audit/receipt` endpoint returns a versioned policy snapshot wi
 
 The Evidence Lab shows the current audit digest and policy checks. See [decision audit contract](docs/DECISION_AUDIT.md) for the canonical representation, source selection rules, exact limits, regression cases and unresolved assurance work.
 
+The technical steps required before any institution-facing product or financing claim are tracked separately in [product engineering gates](docs/PRODUCT_GATES.md).
+
 ## Generation Zero architecture
 
 ![Implemented AXOVAR Generation Zero architecture](assets/architecture.svg)
