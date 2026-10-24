@@ -10,6 +10,14 @@ AXOVAR is an evidence-constrained financial decision research system. The goal i
 
 **Core value to validate:** Existing tooling often reports a numerical risk indicator without preserving the evidence, source dependencies, input cutoffs and policy semantics needed to investigate an adverse decision later. AXOVAR should make those dependencies and the reasons for abstention independently reproducible. This is a hypothesis, not a validated customer claim.
 
+## G2 accounting and risk research status
+
+The research repository now contains an independent long-only, USD-denominated synthetic portfolio replay with FIFO cost lots, fixed-unit quantity scale, exact-cent cash accounting, stress revaluation and quantile-style tail metrics over constructed shock samples. It has an explicit financial reconciliation invariant and repeatable fixture-based tests.
+
+This supports **research demonstrations only**. It does not satisfy data provenance, real-world statistical calibration, independent price discovery, margin, collateral, liquidity, secure user accounts, client segregation or regulatory obligations. In particular, the numerical VaR values are not operational limits or regulatory capital estimates.
+
+The G2 risk module and the original G0/G1 market replay use separate fixtures and do not represent one common trading book. See [portfolio risk arithmetic](PORTFOLIO_RISK.md) and [the development roadmap](ROADMAP.md).
+
 ## Engineering acceptance gates
 
 | Gate | Deliverable | Exit evidence |
@@ -23,7 +31,7 @@ AXOVAR is an evidence-constrained financial decision research system. The goal i
 | G. Controlled pilot | One approved workflow with an accountable design partner | Written pilot scope, lawful data use, usage observations and incident handling |
 | H. Commercial proof | Evidence of repeat use and willingness to pay | Recorded interviews, pilot retention and commercial decisions. No invented traction |
 
-Current G0 establishes a local synthetic research path. The first G1 audit tranche addresses part of B and the reproducibility portion of C. It does **not** satisfy the remaining gates.
+Current G0 establishes a local synthetic research path. The first G1 audit tranche addresses part of B and the reproducibility portion of C. The initial G2 risk model adds tested synthetic ledger and stress arithmetic without completing any production acceptance gate. It does **not** satisfy the remaining gates.
 
 ## Non-negotiable boundaries
 
