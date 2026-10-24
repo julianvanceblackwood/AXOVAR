@@ -31,6 +31,12 @@ Financial decision systems must contend with conflicting venues, incomplete even
 
 > **AXOVAR's central principle:** a financial decision must not inherit more certainty than its supporting evidence permits.
 
+## Research flow at a glance
+
+![Animated research flow for AXOVAR: market observations, evidence checks and a simulated decision gate](assets/research-flow.gif)
+
+*Conceptual animation of the research pipeline, not live market telemetry or production trading.* For the current implementation, see [Generation Zero architecture](#generation-zero-architecture) and the [external evaluation brief](docs/EXTERNAL_EVALUATION.md).
+
 ## Recorded demonstration
 
 ![Recorded AXOVAR Generation Zero dashboard replay: normal and degraded synthetic markets](assets/dashboard-replay.gif)
