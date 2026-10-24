@@ -19,5 +19,9 @@ jobs:
         run: cmake --build build --parallel
       - name: Python compile check
         run: python3 -m compileall -q server tests
+      - name: Browser script syntax
+        run: |
+          node --check web/app.js
+          node --check web/intelligence.js
       - name: Engine and API integration tests
         run: ctest --test-dir build --output-on-failure
