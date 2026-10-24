@@ -91,9 +91,13 @@ def create_handler(root: Path, binary: Path, session: Session):
                 with session.lock:
                     scenario, step = session.scenario, session.step
                 try:
+                    path = root / "scenarios" / (scenario + ".csv")
+                    before = path.read_bytes()
                     snapshot = self.data(scenario, step)
-                    fixture = (root / "scenarios" / (scenario + ".csv")).read_bytes()
-                    self.output(audit.build_receipt(snapshot, fixture))
+                    after = path.read_bytes()
+                    if before != after:
+                        raise ValueError("fixture changed during replay")
+                    self.output(audit.build_receipt(snapshot, before))
                 except (subprocess.SubprocessError, OSError, ValueError, KeyError, TypeError):
                     self.error(500, "audit receipt unavailable")
                 return
