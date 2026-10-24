@@ -2,7 +2,7 @@
 
 ## G0 — executable vertical slice
 
-C++ engine, synthetic fixtures, independent upstream baseline, risk gate, replay, loopback dashboard, executable tests. This is the only implemented gate.
+C++ engine, synthetic fixtures, independent upstream baseline, risk gate, replay, loopback dashboard, executable tests. This was the original full vertical slice; parts of G1 and G2 are now implemented separately.
 
 ## G1 — quantitative and temporal reliability
 
@@ -14,7 +14,11 @@ Canonical binary or versioned event formats, robust numeric precision, configura
 
 ## G2 — quantitative risk and systemic dependencies
 
-Add real risk statistics with known units and horizons, portfolio event sourcing, stress testing, liquidity constraints, margin and collateral simulation, contagion network experiments.
+**Implemented first research slice:** deterministic replay of a synthetic USD portfolio ledger with FIFO acquisition lots, integer-cent accounting, long-only positions and independent reconciliation. The module exposes price-shock P&L, constructed one-period return samples and descriptive 95% empirical VaR and Expected Shortfall. Its API is read-only and separate from the G0/G1 market replay. See [risk methodology and arithmetic](PORTFOLIO_RISK.md) and [portfolio acceptance tests](../tests/test_portfolio.py).
+
+**Unfinished G2 gates:** authenticated position and price ingestion, cross-module event sourcing, calibrated statistical risk with real data licenses, duration/horizon semantics, volatility and correlation estimation, liquidity constraints, margin and collateral simulation, portfolio factor attribution and contagion network experiments.
+
+The new shock samples are deliberately fabricated for regression testing and must not be described as live data, historical realized returns or investment results.
 
 ## G3 — defensive execution and settlement
 
