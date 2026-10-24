@@ -29,6 +29,8 @@ def build_receipt(state: dict[str, Any], fixture: bytes) -> dict[str, Any]:
             "selected": v["reference_selected"],
             "health": v["health"],
             "gaps": v["gaps"],
+            "event_ms": v["event_ms"],
+            "receive_ms": v["receive_ms"],
         }
         for v in state["venues"]
     ]
