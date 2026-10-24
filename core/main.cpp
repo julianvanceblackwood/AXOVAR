@@ -5,6 +5,7 @@
 #include <fstream>
 #include <iomanip>
 #include <iostream>
+#include <limits>
 #include <map>
 #include <optional>
 #include <set>
@@ -102,7 +103,8 @@ std::string json(const std::vector<Event>& events, std::size_t step, const std::
                 alerts.push_back("REPEATED_OR_REORDERED_SEQUENCE:"+e.venue+":"+e.id);
                 continue;
             }
-            if (e.sequence > it->second.sequence+1) {
+            if (it->second.sequence < std::numeric_limits<std::int64_t>::max() &&
+                e.sequence > it->second.sequence + 1) {
                 alerts.push_back("SEQUENCE_GAP:"+e.venue+":"+e.id);
                 it->second.gaps++;
             }
@@ -112,8 +114,10 @@ std::string json(const std::vector<Event>& events, std::size_t step, const std::
         venues[e.venue]=v;
         if (e.health != "OK") alerts.push_back("DEGRADED_SOURCE:"+e.venue+":"+e.id);
     }
-    std::set<std::string> trusted_upstreams;
-    std::int64_t low_all=INT64_MAX,high_all=0;
+    // One representative per declared upstream. Use the latest accepted receipt
+    // rather than venue-name order to select the reference observation.
+    std::map<std::string, const Venue*> reference_sources;
+    std::int64_t low_all=std::numeric_limits<std::int64_t>::max(),high_all=0;
     std::vector<std::int64_t> trusted;
     int degraded=0, stale=0;
     for (const auto& [name,v] : venues) {
@@ -121,11 +125,21 @@ std::string json(const std::vector<Event>& events, std::size_t step, const std::
         const bool is_stale=(knowledge_ms-v.receive_ms > 2500);
         if (is_stale) {stale++; alerts.push_back("STALE_SOURCE:"+name);}
         if (v.health=="OK" && !is_stale && v.gaps==0) {
-            if(trusted_upstreams.insert(v.upstream).second) trusted.push_back(v.price);
-            else alerts.push_back("SHARED_UPSTREAM:"+v.upstream);
+            const auto [source, inserted] = reference_sources.emplace(v.upstream, &v);
+            if (!inserted) {
+                alerts.push_back("SHARED_UPSTREAM:"+v.upstream);
+                const Venue* selected = source->second;
+                if (v.receive_ms > selected->receive_ms ||
+                    (v.receive_ms == selected->receive_ms && v.name < selected->name))
+                    source->second = &v;
+            }
         } else degraded++;
     }
-    // Reference price is the average of one healthy fresh observation per independent upstream.
+    for (const auto& [upstream, representative] : reference_sources) {
+        (void)upstream;
+        trusted.push_back(representative->price);
+    }
+    // Reference price is the average of one healthy fresh observation per declared upstream.
     long double consensus=0;
     for(auto p:trusted) consensus+=static_cast<long double>(p);
     if(!trusted.empty()) consensus/=trusted.size();
@@ -137,7 +151,7 @@ std::string json(const std::vector<Event>& events, std::size_t step, const std::
     const long double p=consensus/100.0L;
     const long double exposure=consensus>0 ? (0.6L*p)/(0.5L*p+35000.0L) : 0.0L;
     std::string decision, explanation;
-    if (trusted_upstreams.size() < 2) {
+    if (reference_sources.size() < 2) {
         decision="INSUFFICIENT_EVIDENCE";
         explanation="At least two fresh, gap-free, independent healthy upstreams are required.";
     } else if (disagreement>150) {
@@ -168,16 +182,34 @@ std::string json(const std::vector<Event>& events, std::size_t step, const std::
         first=false;
         const bool is_stale=knowledge_ms-v.receive_ms>2500;
         const bool valid=v.health=="OK" && !is_stale && v.gaps==0;
+        const auto representative=reference_sources.find(v.upstream);
+        const bool selected=valid && representative!=reference_sources.end() &&
+                            representative->second->name==name;
         j<<"{\"name\":"<<escape(name)<<",\"upstream\":"<<escape(v.upstream)
          <<",\"health\":"<<escape(is_stale?"STALE":v.health)<<",\"price\":"<<static_cast<long double>(v.price)/100.0L
          <<",\"sequence\":"<<v.sequence<<",\"gaps\":"<<v.gaps<<",\"eligible\":"<<(valid?"true":"false")
+         <<",\"reference_selected\":"<<(selected?"true":"false")
          <<",\"evidence\":"<<escape(v.evidence)<<"}";
     }
-    j<<"],\"metrics\":{\"independent_healthy_sources\":"<<trusted_upstreams.size()
+    j<<"],\"metrics\":{\"independent_healthy_sources\":"<<reference_sources.size()
      <<",\"degraded_venues\":"<<degraded<<",\"stale_venues\":"<<stale
      <<",\"reference_price\":"<<p<<",\"venue_disagreement_bps\":"<<disagreement
      <<",\"btc_position\":0.5,\"usd_cash\":35000.0,\"candidate_btc_buy\":0.1"
-     <<",\"post_trade_btc_exposure_pct\":"<<(exposure*100.0L)<<"},\"alerts\":[";
+     <<",\"post_trade_btc_exposure_pct\":"<<(exposure*100.0L)<<"},\"checks\":[";
+    const bool sufficient_sources=reference_sources.size()>=2;
+    const bool divergence_measurable=venues.size()>=2;
+    const auto check_status=[](bool evaluated,bool pass) {
+        return evaluated ? (pass ? "PASS" : "FAIL") : "NOT_EVALUATED";
+    };
+    j<<"{\\\"id\\\":\\\"INDEPENDENT_SOURCES\\\",\\\"status\\\":"<<escape(check_status(true,sufficient_sources))
+     <<",\\\"observed\\\":"<<reference_sources.size()<<",\\\"minimum\\\":2},"
+     <<"{\\\"id\\\":\\\"VENUE_DIVERGENCE\\\",\\\"status\\\":"
+     <<escape(check_status(divergence_measurable,disagreement<=150.0L))
+     <<",\\\"observed_bps\\\":"<<disagreement<<",\\\"maximum_bps\\\":150},"
+     <<"{\\\"id\\\":\\\"CONCENTRATION\\\",\\\"status\\\":"
+     <<escape(check_status(sufficient_sources,exposure<=0.75L))
+     <<",\\\"observed_pct\\\":"<<(exposure*100.0L)<<",\\\"maximum_pct\\\":75}";
+    j<<"],\\\"alerts\\\":[";
     for(std::size_t i=0;i<alerts.size();++i){if(i)j<<",";j<<escape(alerts[i]);}
     j<<"],\"decision\":{\"result\":"<<escape(decision)<<",\"reason\":"<<escape(explanation)
      <<",\"policy\":\"AXV-POLICY-001\",\"required_independent_sources\":2,\"max_disagreement_bps\":150,\"max_post_trade_exposure_pct\":75"
