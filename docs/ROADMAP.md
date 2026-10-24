@@ -6,7 +6,11 @@ C++ engine, synthetic fixtures, independent upstream baseline, risk gate, replay
 
 ## G1 — quantitative and temporal reliability
 
-Add canonical binary or versioned event formats, robust numeric precision, configurable policies, asynchronous source health, explicit clock domains, gap recovery, deterministic raw persistence, mathematical reference tests, multi-source estimator experiments and strong baseline comparisons.
+**First implemented slice: deterministic source selection and decision audit.** The core selects one latest eligible receipt per declared upstream with a deterministic tie rule, exposes the policy gate statuses, and publishes a read-only canonical audit payload with a SHA-256 checksum. Automated tests cover same-fixture reproduction and boundary cases. See [decision audit contract](DECISION_AUDIT.md).
+
+**Still required for G1 completion:**
+
+Canonical binary or versioned event formats, robust numeric precision, configurable policies, asynchronous source health, explicit clock domains, gap recovery, deterministic raw persistence, mathematical reference tests, multi-source estimator experiments and strong baseline comparisons.
 
 ## G2 — quantitative risk and systemic dependencies
 
