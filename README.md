@@ -1,6 +1,6 @@
 <div align="center">
 
-![AXOVAR | Adversarial Financial Intelligence](assets/axovar-banner.jpg)
+<img src="assets/research-hero.svg" width="100%" alt="AXOVAR: market observation, verification, risk policy and simulated decision research schematic." />
 
 # AXOVAR
 
@@ -17,6 +17,10 @@
 
 </div>
 
+| Market question | Implemented research slice | Outside the current claim |
+| :--- | :--- | :--- |
+| Can a decision survive degraded market evidence? | C++20 synthetic-market replay, source integrity checks, risk policy and local dashboard | Live trading, authenticated exchange feeds and production risk approval |
+
 ---
 
 ## The problem
@@ -31,11 +35,16 @@ Financial decision systems must contend with conflicting venues, incomplete even
 
 > **AXOVAR's central principle:** a financial decision must not inherit more certainty than its supporting evidence permits.
 
-## Research flow at a glance
+## Visual research walkthrough
 
-![Animated research flow for AXOVAR: market observations, evidence checks and a simulated decision gate](assets/research-flow.gif)
+<details>
+<summary><strong>Research pipeline animation (conceptual)</strong></summary>
 
-*Conceptual animation of the research pipeline, not live market telemetry or production trading.* For the current implementation, see [Generation Zero architecture](#generation-zero-architecture) and the [external evaluation brief](docs/EXTERNAL_EVALUATION.md).
+![AXOVAR conceptual market evidence and policy-flow animation](assets/research-flow.gif)
+
+The animation is an explanation of the model, not live market telemetry. The actual current demonstration is shown below.
+
+</details>
 
 ## Recorded demonstration
 
