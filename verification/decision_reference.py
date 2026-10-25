@@ -194,3 +194,23 @@ def verify(envelope: dict, fixture: bytes) -> dict:
     except (VerificationError, KeyError, TypeError, ValueError, OverflowError, ZeroDivisionError) as exc:
         errors.append("invalid or incomplete policy contract: " + type(exc).__name__)
     return {"valid": not errors, "errors": errors}
+
+def main() -> int:
+    """Validate a downloaded audit response without importing the AXOVAR server."""
+    import argparse
+    from pathlib import Path
+    parser = argparse.ArgumentParser(description="Verify an AXOVAR synthetic decision receipt")
+    parser.add_argument("--receipt", type=Path, required=True)
+    parser.add_argument("--fixture", type=Path, required=True)
+    args = parser.parse_args()
+    try:
+        envelope = json.loads(args.receipt.read_text(encoding="utf-8"))
+        result = verify(envelope, args.fixture.read_bytes())
+    except (OSError, ValueError, UnicodeError) as exc:
+        result = {"valid": False, "errors": ["unable to load evidence: " + type(exc).__name__]}
+    print(json.dumps(result, sort_keys=True))
+    return 0 if result["valid"] else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
