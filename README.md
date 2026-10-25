@@ -1,5 +1,7 @@
 <div align="center">
 
+<sub>VANCE BLACKWOOD CAPITAL / RESEARCH SYSTEMS</sub>
+
 <img src="assets/research-hero.svg" width="100%" alt="AXOVAR: market observation, verification, risk policy and simulated decision research schematic." />
 
 # AXOVAR
@@ -286,7 +288,7 @@ These references are research context, not institutional affiliation, regulatory
 
 <div align="center">
 
-**VANCE BLACKWOOD / RESEARCH SYSTEMS**
+**VANCE BLACKWOOD CAPITAL / RESEARCH SYSTEMS**
 
 *Build decisions that can withstand the failure of their own evidence.*
 
