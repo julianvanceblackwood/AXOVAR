@@ -182,6 +182,37 @@ def verify(envelope: dict, fixture: bytes) -> dict:
                            for item in policy["checks"]}
         if observed_checks != expected["checks"] or len(policy["checks"]) != len(CHECK_IDS):
             errors.append("policy check mismatch")
+        check_rows = {item["id"]: item for item in policy["checks"]}
+        if check_rows.get("INDEPENDENT_SOURCES") != {
+            "id": "INDEPENDENT_SOURCES", "status": expected["checks"]["INDEPENDENT_SOURCES"],
+            "observed": expected["source_count"], "minimum": 2,
+        }:
+            errors.append("source threshold fields mismatch")
+        divergence_row = check_rows.get("VENUE_DIVERGENCE", {})
+        if (divergence_row.get("maximum_bps") != 150 or
+            set(divergence_row) != {"id", "status", "observed_bps", "maximum_bps"} or
+            type(divergence_row.get("observed_bps")) not in (int, float) or
+            abs(Fraction(divergence_row["observed_bps"]) - expected["divergence_bps"]) > Fraction(1, 20000)):
+            errors.append("divergence check fields mismatch")
+        exposure_row = check_rows.get("CONCENTRATION", {})
+        if (exposure_row.get("maximum_pct") != 75 or
+            set(exposure_row) != {"id", "status", "observed_pct", "maximum_pct"} or
+            type(exposure_row.get("observed_pct")) not in (int, float) or
+            abs(Fraction(exposure_row["observed_pct"]) - expected["exposure_pct"]) > Fraction(1, 20000)):
+            errors.append("concentration check fields mismatch")
+        reason = ("At least two fresh, gap-free, independent healthy upstreams are required."
+                  if expected["source_count"] < 2 else
+                  "Cross-venue disagreement exceeds the 150 bps market-integrity limit."
+                  if expected["divergence_bps"] > 150 else
+                  "Proposed BTC exposure exceeds the 75% portfolio concentration limit."
+                  if expected["exposure_pct"] > 75 else
+                  "Independent source and configured financial policy checks passed.")
+        if policy.get("reason") != reason or policy.get("id") != "AXV-POLICY-001":
+            errors.append("policy explanation mismatch")
+        if (policy.get("required_independent_sources", 2) != 2 or
+            policy.get("max_disagreement_bps", 150) != 150 or
+            policy.get("max_post_trade_exposure_pct", 75) != 75):
+            errors.append("policy threshold metadata mismatch")
         metrics = payload["metrics"]
         if metrics.get("independent_healthy_sources") != expected["source_count"]:
             errors.append("source count mismatch")
