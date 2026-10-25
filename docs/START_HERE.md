@@ -1,4 +1,8 @@
-# Start with AXOVAR
+# AXOVAR
+
+VANCE BLACKWOOD CAPITAL / RESEARCH SYSTEMS
+
+A reproducible research program in market evidence, risk and decision assurance.
 
 AXOVAR is an independent financial systems research project. It asks a practical question: **what should a decision system do when the market evidence behind a proposed action is incomplete, delayed or dependent on the same source?**
 
