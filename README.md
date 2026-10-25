@@ -12,10 +12,10 @@
 
 [![AXOVAR verification](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml/badge.svg)](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml)
 ![C++20](https://img.shields.io/badge/core-C%2B%2B20-253545?style=flat-square)
-![Research stage](https://img.shields.io/badge/stage-G0%20to%20G3%20research-253545?style=flat-square)
+![Research stage](https://img.shields.io/badge/stage-G0%20to%20G4%20research-253545?style=flat-square)
 ![Simulation only](https://img.shields.io/badge/data-synthetic%20only-51412D?style=flat-square)
 
-[**Run Locally**](#run-locally) · [**Portfolio Risk**](#portfolio-risk-laboratory) · [**Settlement Research**](#settlement-and-incident-reconstruction) · [**Decision Audit**](docs/DECISION_AUDIT.md) · [**Technical Roadmap**](#research-direction)
+[**Run Locally**](#run-locally) · [**Portfolio Risk**](#portfolio-risk-laboratory) · [**Settlement Research**](#settlement-and-incident-reconstruction) · [**Decision Audit**](docs/DECISION_AUDIT.md) · [**Independent Verification**](#independent-policy-verification) · [**Technical Roadmap**](#research-direction)
 
 </div>
 
@@ -145,7 +145,7 @@ The following are implemented research components, not a completed institutional
 | :--- | :--- |
 | **C++20 event core** | Strict synthetic CSV parsing, typed integer inputs and receipt-time ordering |
 | **Market reconstruction** | Latest per-venue observations and a baseline reference-price estimate |
-| **Source integrity** | Sequence-gap detection, staleness, explicit health labels and upstream deduplication |
+| **Source integrity** | Sequence gaps, staleness, upstream deduplication and persistent identity-drift quarantine |
 | **Quantitative policy** | Simulated 0.1 BTC purchase, 75% concentration ceiling and 150 bps divergence rule |
 | **Decision engine** | `ALLOW_SIMULATION`, `DENY_SIMULATION`, `INSUFFICIENT_EVIDENCE` |
 | **Evidence view** | Event IDs, original fixture bytes and API-computed SHA-256 fingerprints |
@@ -154,8 +154,8 @@ The following are implemented research components, not a completed institutional
 | **AXOVAR Intelligence** | Read-only evidence explanations, grounded scenario context and optional local Gemma 3 model Q&A |
 | **Portfolio risk research** | Exact-cent synthetic ledger, FIFO accounting, shock P&L, empirical tail risk and reconciliation |
 | **Settlement replay** | Synthetic block depth, bounded reorg validation, counterparty hold, causally linked evidence trace |
-
-| **Verification** | Engine, API, Intelligence, audit, portfolio and settlement tests through CTest and GitHub Actions |
+| **Independent policy verifier** | Exact-rational G4 reference, receipt v2 checks, adversarial bounded regressions |
+| **Verification** | Engine, API, Intelligence, audit, portfolio, settlement and G4 verification tests through CTest and GitHub Actions |
 
 The reference price is an **arithmetic mean of one eligible price per declared upstream**. This is a controlled baseline, not a production-grade market price oracle. The upstream identity and health fields come from fixtures and are **not** independently authenticated.
 
@@ -174,6 +174,22 @@ A read-only `/api/audit/receipt` endpoint returns a versioned policy snapshot wi
 The Evidence Lab shows the current audit digest and policy checks. See [decision audit contract](docs/DECISION_AUDIT.md) for the canonical representation, source selection rules, exact limits, regression cases and unresolved assurance work.
 
 The technical steps required before any institution-facing product or financing claim are tracked separately in [product engineering gates](docs/PRODUCT_GATES.md).
+
+## Independent policy verification
+
+Generation Four introduces an independent reference check for the synthetic market policy. It reads the original CSV fixture, reconstructs received events and eligible upstreams using exact rational arithmetic, and checks the decision against the engine's `AXV-AUDIT-002` receipt. The verifier does not import the replay engine or the receipt producer.
+
+A reported change to a venue's declared upstream is now an explicit source-identity failure. The affected venue remains ineligible for the remainder of the replay, even if later fixture records again claim healthy status. This addresses an earlier gap between an integrity warning and the decision gate.
+
+The local checker also tests source selection, missing evidence, the 150 bps divergence boundary, the 75% concentration boundary and configured policy metadata. It rejects altered decisions or source classifications even when someone recomputes the receipt hash. That establishes consistency *with the supplied synthetic fixture*, not authenticity of an exchange or a mathematical proof of all possible executions.
+
+```bash
+# With the local dashboard running on the normal scenario
+curl --fail --silent http://127.0.0.1:8765/api/audit/receipt > receipt.json
+python3 -m verification.decision_reference --receipt receipt.json --fixture scenarios/NORMAL-001.csv
+```
+
+The command exits with an error on invalid evidence and prints an independent verification result. See [G4 verification contract](docs/G4_VERIFICATION.md) and [executable adversarial tests](tests/test_g4.py).
 
 ## Generation Zero architecture
 
@@ -263,7 +279,7 @@ The current implementation proves a limited end-to-end behavior. Future research
 | **G1** | Reproducible source selection and decision audit | First slice implemented, broader numeric assurance pending |
 | **G2** | FIFO synthetic portfolio, shock stress testing and empirical tail risk | First slice implemented, systemic risk and real data pending |
 | **G3** | Synthetic chain reorgs, reversible confirmation policy and counterparty holds | First slice implemented, external adapters and real finality model pending |
-| **G4** | Machine-checkable decision constraints and stronger replay evidence | Planned |
+| **G4** | Independent reference, source drift quarantine and versioned receipt verification | First slice implemented; formal model checking and trusted attestations pending |
 | **G5** | Low-latency profiling and independently verified FPGA-oriented experiments | Planned |
 
 Future research includes authenticated evidence, real network models, cross-domain settlement, systemic contagion, defensive cybersecurity and independently verified performance. These are **planned directions**, not demonstrated production capabilities. Full sequence: [ROADMAP](docs/ROADMAP.md).
@@ -272,7 +288,7 @@ Future research includes authenticated evidence, real network models, cross-doma
 
 AXOVAR does not implement live trading, production exchange connectivity, authenticated external feeds, real blockchain settlement, a persistent evidence database, calibrated uncertainty sets, formal verification proofs, production portfolio custody or accounting, a proprietary trained language model or an FPGA accelerator. The G2 module uses fixed synthetic positions and engineered shock vectors. The G3 module uses invented transaction IDs, asserted chain branches and simulated counterparty notices. Confirmation thresholds are reversible and do not prove settlement finality.
 
-The G0/G1 market replay uses integer price inputs and `long double` for derived exposure, while the separate G2 synthetic portfolio uses integer-cent money and decimal rounding for notional valuations. **Neither constitutes an integrated production accounting system.** The decision receipt is not digitally signed. The simulated market evidence may be wrong even when its file hash is correct.
+The G0/G1 market replay uses integer price inputs and `long double` for derived exposure, while the separate G2 synthetic portfolio uses integer-cent money and decimal rounding for notional valuations. **Neither constitutes an integrated production accounting system.** The decision receipt is not digitally signed, and bounded differential tests are not a formal proof. The simulated market evidence may be wrong even when its file hash is correct.
 
 Financial decisions remain research-only. **No real orders are submitted.**
 
