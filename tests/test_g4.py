@@ -125,6 +125,35 @@ class IndependentOracleTests(unittest.TestCase):
         envelope["sha256"] = hashlib.sha256(encoded).hexdigest()
         self.assertIn("source eligibility or provenance mismatch", verify(envelope, raw)["errors"])
 
+    def test_rehashed_policy_threshold_or_rationale_forgery(self):
+        rows = ["A1,100,100,ALPHA,U1,1,10000000,OK",
+                "B1,101,101,BRAVO,U2,1,10000100,OK"]
+        for field in ("max_disagreement_bps", "reason", "observed_bps"):
+            with self.subTest(field=field):
+                raw, _, envelope = evaluate_rows(rows)
+                policy = envelope["receipt"]["policy"]
+                if field == "observed_bps":
+                    policy["checks"][1]["observed_bps"] = 0.125
+                elif field == "reason":
+                    policy["reason"] = "An unrelated decision claim."
+                else:
+                    policy[field] = 800
+                encoded = json.dumps(envelope["receipt"], sort_keys=True,
+                                     separators=(",", ":"), ensure_ascii=True,
+                                     allow_nan=False).encode("ascii")
+                envelope["sha256"] = hashlib.sha256(encoded).hexdigest()
+                self.assertFalse(verify(envelope, raw)["valid"])
+
+    def test_empty_and_malformed_receipt_fail_without_authority(self):
+        rows = ["A1,100,100,ALPHA,U1,1,10000000,OK"]
+        raw, _, envelope = evaluate_rows(rows)
+        for invalid in (None, {}, {"receipt": None},
+                        {"receipt": {"schema": "AXV-AUDIT-002"}}):
+            with self.subTest(invalid=str(invalid)[:32]):
+                self.assertFalse(verify(invalid, raw)["valid"])
+        envelope["signed"] = True
+        self.assertFalse(verify(envelope, raw)["valid"])
+
     def test_fixture_mismatch_is_detected(self):
         raw, _, receipt = evaluate_rows(
             ["A1,100,100,ALPHA,U1,1,10000000,OK",
