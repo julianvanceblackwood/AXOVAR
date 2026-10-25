@@ -90,14 +90,58 @@ async function refreshRisk(){
   showError('');
  }catch(e){showError('Portfolio risk report unavailable: '+e.message);}
 }
+let settlementReport=null;
+function renderSettlement(){
+ if(!settlementReport)return;
+ const idx=Number($('settlement-step').value);
+ const row=settlementReport.timeline[idx];
+ if(!row)return;
+ const states=row.states;
+ const events=settlementReport.timeline.slice(0,idx+1);
+ const ids=new Set(events.map(e=>e.event_id));
+ const incidents=settlementReport.incidents.filter(e=>ids.has(e.event_id));
+ $('settlement-height').textContent=String(row.height);
+ $('settlement-threshold').textContent=String(settlementReport.policy.confirmations_required);
+ $('settlement-ready').textContent=String(states.filter(s=>s.review_gate==='REVIEW_ELIGIBLE').length);
+ $('settlement-incidents').textContent=String(incidents.length);
+ $('settlement-intents').innerHTML=states.length?states.map(s=>
+  `<tr><td><strong>${esc(s.intent_id)}</strong><br><small>${esc(s.execution_ref)}</small></td><td>${esc(s.counterparty)} / ${esc(s.counterparty_state)}</td><td>${esc(s.chain_state.replaceAll('_',' '))}</td><td>${s.confirmations}</td><td>${esc(s.review_gate.replaceAll('_',' '))}</td></tr>`
+ ).join(''):'<tr><td colspan="5">No simulated intents yet</td></tr>';
+ $('settlement-events').innerHTML=incidents.length?incidents.map(x=>
+  `<div class="raw-record"><strong>${esc(x.event_id)} / ${esc(x.kind.replaceAll('_',' '))}</strong>${x.intent_id?' / '+esc(x.intent_id):''}${x.counterparty?' / '+esc(x.counterparty):''}</div>`
+ ).join(''):'<div class="empty">No incidents at the selected replay step</div>';
+ $('settlement-trace').textContent=settlementReport.event_trace[idx].evidence_hash;
+ $('settlement-digest').textContent=settlementReport.receipt_sha256;
+}
+async function refreshSettlement(){
+ try{
+  if(!settlementReport){
+   settlementReport=await request('/api/settlement');
+   const selector=$('settlement-step');
+   selector.replaceChildren();
+   for(let i=0;i<settlementReport.timeline.length;i++){
+    const event=settlementReport.timeline[i];
+    const option=document.createElement('option');
+    option.value=String(i);
+    option.textContent=`${event.seq} / ${event.kind.replaceAll('_',' ')} / ${event.event_id}`;
+    selector.appendChild(option);
+   }
+   selector.value=String(settlementReport.timeline.length-1);
+  }
+  renderSettlement();
+  showError('');
+ }catch(e){showError('Settlement replay unavailable: '+e.message);}
+}
+$('settlement-step').addEventListener('change',renderSettlement);
 function navigation(){for(const btn of document.querySelectorAll('[data-tab]'))btn.addEventListener('click',async()=>{
  const tab=btn.dataset.tab;
  for(const b of document.querySelectorAll('[data-tab]'))b.classList.toggle('active',b===btn);
  for(const pane of document.querySelectorAll('.tab-pane'))pane.hidden=pane.id!==tab;
  $('crumb').textContent=tab.toUpperCase();
- $('page-title').textContent=({overview:'Market Integrity Overview',evidence:'Evidence & Decision Lineage',intelligence:'Intelligence Workspace',risk:'Portfolio Risk Laboratory',systems:'Execution Environment'})[tab];
+ $('page-title').textContent=({overview:'Market Integrity Overview',evidence:'Evidence & Decision Lineage',intelligence:'Intelligence Workspace',risk:'Portfolio Risk Laboratory',settlement:'Settlement Reconstruction',systems:'Execution Environment'})[tab];
  if(tab==='evidence')await refreshRaw();
  if(tab==='risk')await refreshRisk();
+ if(tab==='settlement')await refreshSettlement();
 });}
 async function refreshRaw(){
  try{

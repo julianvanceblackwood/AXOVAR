@@ -11,7 +11,7 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from server import audit, intelligence, portfolio
+from server import audit, intelligence, portfolio, settlement
 
 ALLOWED = ("NORMAL-001", "DEGRADED-001")
 FILES = {"/": ("index.html", "text/html; charset=utf-8"),
@@ -85,6 +85,13 @@ def create_handler(root: Path, binary: Path, session: Session):
                     self.output(report)
                 except (OSError, ValueError, TypeError, KeyError):
                     self.error(500, "synthetic portfolio report unavailable")
+                return
+            if path == "/api/settlement":
+                try:
+                    report = settlement.load_fixture(root / "scenarios" / "SETTLEMENT-001.json")
+                    self.output(report)
+                except (OSError, ValueError, TypeError, KeyError):
+                    self.error(500, "synthetic settlement report unavailable")
                 return
             if path == "/api/state":
                 with session.lock:

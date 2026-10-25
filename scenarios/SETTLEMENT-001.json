@@ -1,0 +1,150 @@
+{
+  "schema": "AXV-SETTLEMENT-001",
+  "network": "AXV-SIMNET",
+  "policy": {
+    "confirmations_required": 3,
+    "max_reorg_depth": 4
+  },
+  "events": [
+    {
+      "id": "E001",
+      "seq": 1,
+      "received_ms": 100,
+      "kind": "INTENT",
+      "intent_id": "I_BTC",
+      "txid": "9999999999999999999999999999999999999999999999999999999999999999",
+      "counterparty": "CUSTODIAN_A",
+      "asset": "BTC",
+      "amount_cents": 500000,
+      "execution_ref": "EXEC_BTC_A"
+    },
+    {
+      "id": "E002",
+      "seq": 2,
+      "received_ms": 200,
+      "kind": "INTENT",
+      "intent_id": "I_ETH",
+      "txid": "8888888888888888888888888888888888888888888888888888888888888888",
+      "counterparty": "CUSTODIAN_B",
+      "asset": "ETH",
+      "amount_cents": 220000,
+      "execution_ref": "EXEC_ETH_B"
+    },
+    {
+      "id": "E003",
+      "seq": 3,
+      "received_ms": 300,
+      "kind": "BLOCK",
+      "block": {
+        "hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "parent": "0000000000000000000000000000000000000000000000000000000000000000",
+        "height": 1,
+        "txids": [
+          "9999999999999999999999999999999999999999999999999999999999999999"
+        ]
+      }
+    },
+    {
+      "id": "E004",
+      "seq": 4,
+      "received_ms": 400,
+      "kind": "BLOCK",
+      "block": {
+        "hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "parent": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "height": 2,
+        "txids": []
+      }
+    },
+    {
+      "id": "E005",
+      "seq": 5,
+      "received_ms": 500,
+      "kind": "BLOCK",
+      "block": {
+        "hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "parent": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "height": 3,
+        "txids": [
+          "8888888888888888888888888888888888888888888888888888888888888888"
+        ]
+      }
+    },
+    {
+      "id": "E006",
+      "seq": 6,
+      "received_ms": 600,
+      "kind": "COUNTERPARTY",
+      "counterparty": "CUSTODIAN_A",
+      "state": "HALT"
+    },
+    {
+      "id": "E007",
+      "seq": 7,
+      "received_ms": 700,
+      "kind": "REORG",
+      "ancestor": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "replacement": [
+        {
+          "hash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "parent": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+          "height": 2,
+          "txids": []
+        },
+        {
+          "hash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+          "parent": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+          "height": 3,
+          "txids": [
+            "8888888888888888888888888888888888888888888888888888888888888888"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "E008",
+      "seq": 8,
+      "received_ms": 800,
+      "kind": "COUNTERPARTY",
+      "counterparty": "CUSTODIAN_A",
+      "state": "CLEAR"
+    },
+    {
+      "id": "E009",
+      "seq": 9,
+      "received_ms": 900,
+      "kind": "REORG",
+      "ancestor": "0000000000000000000000000000000000000000000000000000000000000000",
+      "replacement": [
+        {
+          "hash": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "parent": "0000000000000000000000000000000000000000000000000000000000000000",
+          "height": 1,
+          "txids": [
+            "8888888888888888888888888888888888888888888888888888888888888888"
+          ]
+        },
+        {
+          "hash": "1111111111111111111111111111111111111111111111111111111111111111",
+          "parent": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+          "height": 2,
+          "txids": []
+        },
+        {
+          "hash": "2222222222222222222222222222222222222222222222222222222222222222",
+          "parent": "1111111111111111111111111111111111111111111111111111111111111111",
+          "height": 3,
+          "txids": []
+        }
+      ]
+    },
+    {
+      "id": "E010",
+      "seq": 10,
+      "received_ms": 1000,
+      "kind": "COUNTERPARTY",
+      "counterparty": "CUSTODIAN_B",
+      "state": "HALT"
+    }
+  ]
+}

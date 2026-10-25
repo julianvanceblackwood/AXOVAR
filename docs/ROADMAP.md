@@ -22,7 +22,9 @@ The new shock samples are deliberately fabricated for regression testing and mus
 
 ## G3 — defensive execution and settlement
 
-Add provenance-aware local execution traces, on-chain read-only adapters, simulated settlement finality, counterparty assumptions and cross-domain incident reconstruction. Include a separate threat model for each adapter.
+**Implemented first research slice:** versioned synthetic settlement intents with simulated execution references, read-only canonical block reconstruction, bounded fork replacement, reversible confirmation-depth policy, independent counterparty hold states and an incident timeline. Each fixture event participates in a deterministic hash-linked evidence trace. The local API provides a reproducible report without wallet keys, RPC calls, broadcast transactions or execution authority. See [settlement contract and threat boundaries](SETTLEMENT_RESEARCH.md).
+
+**Unfinished G3 gates:** actual read-only chain adapters, externally authenticated chain state, real consensus/finality semantics by network, licensed counterparty data, cross-domain settlement and portfolio reconciliation, durable evidence storage and incident recovery under independent verification. The local policy threshold does not establish economic or legal finality.
 
 ## G4 — formally checkable decisions
 

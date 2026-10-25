@@ -19,17 +19,17 @@
     <button data-tab="intelligence" class="nav-btn"><span>✦</span> Intelligence</button>
     <button data-tab="evidence" class="nav-btn"><span>⌁</span> Evidence Lab</button>
     <button data-tab="risk" class="nav-btn"><span>▥</span> Portfolio Risk</button>
+    <button data-tab="settlement" class="nav-btn"><span>▣</span> Settlement Research</button>
     <button data-tab="systems" class="nav-btn"><span>▤</span> Systems</button>
    </nav>
    <div class="nav-caption future">RESEARCH MODULES <small>ROADMAP</small></div>
    <div class="locked">↗ Quant Research <span>G1</span></div>
    <div class="locked">↗ Systemic Dependencies <span>G2 NEXT</span></div>
-   <div class="locked">↗ Blockchain & Settlement <span>G3</span></div>
    <div class="locked">↗ Hardware Assurance <span>G5</span></div>
-   <div class="sidebar-bottom"><div class="signal"><i></i> LOCAL RESEARCH ENGINE</div><div class="ver">G2 RESEARCH SLICE / SYNTHETIC</div></div>
+   <div class="sidebar-bottom"><div class="signal"><i></i> LOCAL RESEARCH ENGINE</div><div class="ver">G3 RESEARCH SLICE / SYNTHETIC</div></div>
  </aside>
  <main class="main">
-  <header class="topbar"><div class="bread">RESEARCH TERMINAL <span>/</span> <b id="crumb">OVERVIEW</b></div><div class="top-right"><span class="pill">SYNTHETIC DATA</span><span class="session">AXOVAR / G2 RESEARCH</span></div></header>
+  <header class="topbar"><div class="bread">RESEARCH TERMINAL <span>/</span> <b id="crumb">OVERVIEW</b></div><div class="top-right"><span class="pill">SYNTHETIC DATA</span><span class="session">AXOVAR / G3 RESEARCH</span></div></header>
   <div class="main-content">
     <div class="page-heading"><div><div class="eyebrow">FINANCIAL STATE & DECISION ASSURANCE</div><h1 id="page-title">Market Integrity Overview</h1><p id="page-subtitle">Evidence-constrained research in an adversarial market environment.</p></div><div class="heading-tag">RESEARCH • NOT LIVE TRADING</div></div>
     <section class="control-bar" aria-label="Replay controls"><div class="select-wrap"><label for="scenario">SCENARIO</label><select id="scenario"><option value="NORMAL-001">NORMAL-001 / Standard conditions</option><option value="DEGRADED-001">DEGRADED-001 / Adversarial feed</option></select></div><div class="ctrl-divider"></div><button class="ctrl-btn" id="reset" title="Reset scenario">↺ Reset</button><button class="ctrl-btn" id="next" title="Process one event">→ Step</button><button class="ctrl-btn primary" id="run" title="Complete replay">▶ Run to end</button><div class="progress"><span>EVENT REPLAY</span><strong id="progress">0 / 0</strong><div class="progress-track"><div id="progress-fill"></div></div></div></section>
@@ -106,6 +106,28 @@
           <p class="help">The integrity hash is not a signature. Returns are synthetic and the estimated VaR and expected shortfall are not forecasts, regulatory capital metrics or live trading controls.</p>
         </div>
       </div>
+    </section>
+    <section id="settlement" class="tab-pane" hidden>
+      <section class="panel">
+        <div class="panel-header"><div><div class="panel-kicker">GENERATION THREE / SIMULATED EVENTS</div><h2>Settlement and Incident Reconstruction</h2></div><span class="panel-tag">NO CHAIN CONNECTION</span></div>
+        <div class="pad">
+          <p class="help">Deterministic local fixture. Transaction identifiers, block links and counterparty notices are synthetic assertions, not observations from a blockchain. Depth-based confirmations may be reversed by a reorganization. Review eligibility never authorizes a transfer.</p>
+          <div class="detail-row"><label for="settlement-step">REPLAY EVENT</label><select id="settlement-step" aria-label="Settlement replay event"><option value="">Loading</option></select></div>
+          <div class="metric-grid">
+            <article class="metric"><div class="metric-label">CANONICAL HEIGHT</div><div class="metric-value" id="settlement-height">—</div><div class="metric-note">Synthetic chain depth</div></article>
+            <article class="metric"><div class="metric-label">CONFIRMATION THRESHOLD</div><div class="metric-value" id="settlement-threshold">—</div><div class="metric-note">Reversible depth policy</div></article>
+            <article class="metric"><div class="metric-label">REVIEW ELIGIBLE</div><div class="metric-value" id="settlement-ready">—</div><div class="metric-note">No transfer authority</div></article>
+            <article class="metric"><div class="metric-label">INCIDENTS TO STEP</div><div class="metric-value" id="settlement-incidents">—</div><div class="metric-note">Reorg, holds and reversals</div></article>
+          </div>
+          <div class="meta-title">INTENT AND FINALITY RECONSTRUCTION</div>
+          <div class="table-wrap"><table><thead><tr><th>INTENT / EXECUTION</th><th>COUNTERPARTY</th><th>CHAIN STATE</th><th>CONFIRMATIONS</th><th>REVIEW GATE</th></tr></thead><tbody id="settlement-intents"><tr><td colspan="5">Loading</td></tr></tbody></table></div>
+          <div class="meta-title">INCIDENT TIMELINE</div>
+          <div class="raw-list" id="settlement-events">Loading</div>
+          <div class="meta-title">EVIDENCE TRACE HEAD SHA-256</div><code id="settlement-trace">—</code>
+          <div class="meta-title">REPORT SHA-256</div><code id="settlement-digest">—</code>
+          <p class="help">Event hashes link records inside the local synthetic fixture; neither the trace nor the report hash proves external authenticity, independent finality or custody compliance.</p>
+        </div>
+      </section>
     </section>
     <section id="systems" class="tab-pane" hidden><div class="dashboard-grid"><section class="panel"><div class="panel-header"><div><div class="panel-kicker">SYSTEM INTEGRITY</div><h2>Execution Environment</h2></div><span class="panel-tag">G0 RESEARCH</span></div><div class="pad"><div class="detail-row"><span>Financial logic</span><strong>C++20 core</strong></div><div class="detail-row"><span>API runtime</span><strong>Python standard library</strong></div><div class="detail-row"><span>Transport</span><strong>Loopback HTTP</strong></div><div class="detail-row"><span>Dataset mode</span><strong>SYNTHETIC FIXTURES</strong></div><div class="detail-row"><span>Trading connectivity</span><strong>DISABLED</strong></div><div class="detail-row"><span>Risk control</span><strong>Deterministic / fail-closed</strong></div></div></section><section class="panel"><div class="panel-header"><div><div class="panel-kicker">INTENTIONAL LIMITATIONS</div><h2>Verification Boundary</h2></div></div><div class="pad limitations">This is an executable Generation Zero vertical slice, not a live trading product. No production exchange connectivity, distributed storage, calibrated uncertainty set, real blockchain settlement, FPGA accelerator, or independent hardware authentication is claimed. Source health is a synthetic scenario input and upstream independence is declared rather than discovered.</div></section></div></section>
   </div>

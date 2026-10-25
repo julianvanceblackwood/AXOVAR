@@ -4,28 +4,29 @@
 
 # AXOVAR
 
-**MARKET EVIDENCE / DECISION ASSURANCE / PORTFOLIO RISK**
+**MARKET EVIDENCE / PORTFOLIO RISK / SETTLEMENT ASSURANCE**
 
-*A reproducible financial systems research environment for market integrity and synthetic portfolio risk.*
+*An executable research system for understanding financial decisions when evidence, risk and settlement state can change.*
 
 [![AXOVAR verification](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml/badge.svg)](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml)
 ![C++20](https://img.shields.io/badge/core-C%2B%2B20-253545?style=flat-square)
-![Research stage](https://img.shields.io/badge/stage-G0%20to%20G2%20research-253545?style=flat-square)
+![Research stage](https://img.shields.io/badge/stage-G0%20to%20G3%20research-253545?style=flat-square)
 ![Simulation only](https://img.shields.io/badge/data-synthetic%20only-51412D?style=flat-square)
 
-[**Portfolio Risk**](#portfolio-risk-laboratory) · [**Run Locally**](#run-locally) · [**Recorded Demo**](#recorded-demonstration) · [**Audit Contract**](docs/DECISION_AUDIT.md) · [**Risk Mathematics**](docs/PORTFOLIO_RISK.md) · [**Engineering Roadmap**](#research-direction)
+[**Run Locally**](#run-locally) · [**Portfolio Risk**](#portfolio-risk-laboratory) · [**Settlement Research**](#settlement-and-incident-reconstruction) · [**Decision Audit**](docs/DECISION_AUDIT.md) · [**Technical Roadmap**](#research-direction)
 
 </div>
 
 **First visit?** [Run the research demo](docs/START_HERE.md) · [Review the evidence](docs/EXTERNAL_EVALUATION.md) · [Examine the tests](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml) · [Discuss a reproducible issue](https://github.com/julianvanceblackwood/AXOVAR/issues/3)
 
-AXOVAR is a locally executable study of **market-data reliability, explainable decision constraints and synthetic portfolio risk**. It has a compiled C++20 market replay, a versioned decision audit and a separate portfolio accounting and stress-test experiment. You can run the tests without an exchange account or financial credentials. There are no live trades, authenticated external price feeds or calibrated risk forecasts.
+AXOVAR is a locally executable research platform for **market-data reliability, explainable decision constraints, portfolio risk and reversible settlement state**. Its current boundaries are a C++20 market replay, a deterministic decision audit, exact-cent synthetic portfolio accounting and a separate synthetic blockchain-reorganization experiment. Everything runs without an exchange account, wallet or financial credentials. There is no live trading, authenticated blockchain feed or production settlement capability.
 
 | Research boundary | Implemented and verified | Not yet established |
 | :--- | :--- | :--- |
 | **Market evidence** | C++20 receipt-time replay, declared-upstream checks and fail-closed synthetic policy | Authenticated market feeds and external source independence |
 | **Decision assurance** | Versioned audit records, structured policy checks, reproducible local receipt hashing | Signed independent attestation and production access control |
 | **Portfolio risk** | FIFO ledger replay, integer-cent accounting, synthetic stress valuation and empirical shock-tail risk | Live positions, calibrated forecasts, liquidity or margin risk engines |
+| **Settlement research** | Synthetic confirmation-depth replay, fork replacement, counterparty holds and hash-linked event trace | Node consensus verification, irreversible finality, live custody or broadcasts |
 
 ---
 
@@ -101,6 +102,25 @@ These values are expected test vectors from a *fabricated fixture*. They are not
 
 **Technical reference:** [portfolio accounting and risk contract](docs/PORTFOLIO_RISK.md) · [implementation gates](docs/PRODUCT_GATES.md) · [executable tests](tests/test_portfolio.py).
 
+## Settlement and incident reconstruction
+
+Generation Three adds a **separate read-only settlement experiment** that reconstructs the history of simulated blockchain transaction intents, canonical blocks, reorganizations and counterparty interruptions. It is accessible through the **Settlement Research** dashboard tab and the `GET /api/settlement` endpoint.
+
+The included ten-event scenario deliberately crosses a critical boundary: a simulated BTC transaction reaches three confirmations, then a later fork removes its inclusion. The system records the loss of its previously confirmed status, rather than presenting the earlier decision as irreversible. The experiment also demonstrates a counterparty halt that overrides otherwise sufficient confirmations.
+
+| Observation | Reconstructed conclusion |
+| :--- | :--- |
+| 3 canonical confirmations | `POLICY_CONFIRMED`, an explicitly reversible depth rule |
+| Confirmed transaction with counterparty `HALT` | `HOLD`, no review eligibility |
+| Reorganization removes previously confirmed inclusion | `REORGED_OUT` and `CONFIRMATION_REVOKED` incident |
+| Confirmed inclusion and counterparty `CLEAR` | `REVIEW_ELIGIBLE`, not transfer authorization |
+
+Each synthetic event has an ordered receipt, linked evidence digest and optional simulated execution reference. The complete report has a reproducible SHA-256 fingerprint. Neither hash authenticates a block producer, verifies network consensus or proves economic settlement.
+
+**Inspect:** [G3 settlement contract](docs/SETTLEMENT_RESEARCH.md) · [synthetic event fixture](scenarios/SETTLEMENT-001.json) · [G3 adversarial regression tests](tests/test_settlement.py).
+
+This module is independent from the G0/G1 market fixtures and G2 synthetic portfolio. No real trade order, wallet key, blockchain RPC call or money transfer is involved.
+
 ## Research thesis
 
 AXOVAR investigates **evidence-constrained market state reconstruction and decision assurance**: how to preserve the relationship between observations, derived financial state, assumptions and policy outcomes when sources are imperfect.
@@ -117,9 +137,9 @@ Three distinctions govern the architecture:
 
 ## What is implemented
 
-Generation Zero is an **executable research vertical slice**, not a completed institutional risk platform.
+The following are implemented research components, not a completed institutional risk or settlement platform.
 
-| System | Verified G0 scope |
+| System | Executable scope |
 | :--- | :--- |
 | **C++20 event core** | Strict synthetic CSV parsing, typed integer inputs and receipt-time ordering |
 | **Market reconstruction** | Latest per-venue observations and a baseline reference-price estimate |
@@ -131,7 +151,9 @@ Generation Zero is an **executable research vertical slice**, not a completed in
 | **Research dashboard** | Replay controls, market chart, venue health, integrity alerts and decision inspection |
 | **AXOVAR Intelligence** | Read-only evidence explanations, grounded scenario context and optional local Gemma 3 model Q&A |
 | **Portfolio risk research** | Exact-cent synthetic ledger, FIFO accounting, shock P&L, empirical tail risk and reconciliation |
-| **Verification** | Engine, API, Intelligence, audit and portfolio suites through CTest and GitHub Actions |
+| **Settlement replay** | Synthetic block depth, bounded reorg validation, counterparty hold, causally linked evidence trace |
+
+| **Verification** | Engine, API, Intelligence, audit, portfolio and settlement tests through CTest and GitHub Actions |
 
 The reference price is an **arithmetic mean of one eligible price per declared upstream**. This is a controlled baseline, not a production-grade market price oracle. The upstream identity and health fields come from fixtures and are **not** independently authenticated.
 
@@ -143,7 +165,7 @@ The reference price is an **arithmetic mean of one eligible price per declared u
 
 ## Decision audit
 
-The current development branch begins Generation One with a reproducible decision audit. The synthetic core now reports each policy check as `PASS`, `FAIL` or `NOT_EVALUATED` and shows which eligible venue was selected to represent each declared upstream dependency.
+The Generation One decision audit provides reproducible local policy traces. The synthetic core now reports each policy check as `PASS`, `FAIL` or `NOT_EVALUATED` and shows which eligible venue was selected to represent each declared upstream dependency.
 
 A read-only `/api/audit/receipt` endpoint returns a versioned policy snapshot with its fixture SHA-256, selected evidence identifiers and a canonical SHA-256 digest. The audit record is reproducible on the tested runtime, but it is neither signed nor a guarantee of financial or external data correctness.
 
@@ -219,6 +241,7 @@ The last argument is the number of received events available at that replay step
 | GET | `/api/raw` | Recorded fixture lines and hashes |
 | GET | `/api/audit/receipt` | G1 synthetic decision audit record |
 | GET | `/api/risk/portfolio` | Read-only G2 synthetic portfolio and risk report |
+| GET | `/api/settlement` | G3 synthetic chain, incident and finality timeline |
 | GET | `/api/intelligence/status` | Local model availability and suggested research questions |
 | POST | `/api/intelligence/ask` | Read-only question with current derived replay state |
 | POST | `/api/replay/scenario` | Select an allowlisted scenario |
@@ -237,15 +260,15 @@ The current implementation proves a limited end-to-end behavior. Future research
 | **G0** | Deterministic market fixtures → integrity and concentration policy → explainable simulation receipt | **Implemented / tested** |
 | **G1** | Reproducible source selection and decision audit | First slice implemented, broader numeric assurance pending |
 | **G2** | FIFO synthetic portfolio, shock stress testing and empirical tail risk | First slice implemented, systemic risk and real data pending |
-| **G3** | Blockchain settlement uncertainty and cyber-financial incident reconstruction | Planned |
+| **G3** | Synthetic chain reorgs, reversible confirmation policy and counterparty holds | First slice implemented, external adapters and real finality model pending |
 | **G4** | Machine-checkable decision constraints and stronger replay evidence | Planned |
 | **G5** | Low-latency profiling and independently verified FPGA-oriented experiments | Planned |
 
-The broader program concerns market microstructure, correlated data failures, quantitative model validity, cross-ledger settlement, systemic contagion, defensive cybersecurity and hardware/software assurance. **These are research directions, not existing G0 features.** Full sequence: [ROADMAP](docs/ROADMAP.md).
+Future research includes authenticated evidence, real network models, cross-domain settlement, systemic contagion, defensive cybersecurity and independently verified performance. These are **planned directions**, not demonstrated production capabilities. Full sequence: [ROADMAP](docs/ROADMAP.md).
 
 ## Assurance boundaries
 
-AXOVAR does not implement live trading, production exchange connectivity, authenticated external feeds, real blockchain settlement, a persistent evidence database, calibrated uncertainty sets, formal verification proofs, production portfolio custody or accounting, a proprietary trained language model or an FPGA accelerator. The new portfolio module uses fixed synthetic positions and engineered shock vectors.
+AXOVAR does not implement live trading, production exchange connectivity, authenticated external feeds, real blockchain settlement, a persistent evidence database, calibrated uncertainty sets, formal verification proofs, production portfolio custody or accounting, a proprietary trained language model or an FPGA accelerator. The G2 module uses fixed synthetic positions and engineered shock vectors. The G3 module uses invented transaction IDs, asserted chain branches and simulated counterparty notices. Confirmation thresholds are reversible and do not prove settlement finality.
 
 The G0/G1 market replay uses integer price inputs and `long double` for derived exposure, while the separate G2 synthetic portfolio uses integer-cent money and decimal rounding for notional valuations. **Neither constitutes an integrated production accounting system.** The decision receipt is not digitally signed. The simulated market evidence may be wrong even when its file hash is correct.
 

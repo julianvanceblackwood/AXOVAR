@@ -18,6 +18,12 @@ This supports **research demonstrations only**. It does not satisfy data provena
 
 The G2 risk module and the original G0/G1 market replay use separate fixtures and do not represent one common trading book. See [portfolio risk arithmetic](PORTFOLIO_RISK.md) and [the development roadmap](ROADMAP.md).
 
+## G3 settlement research status
+
+A separate synthetic settlement experiment reconstructs transaction-intent records, canonical block inclusion, bounded reorganizations and counterparty interruptions. The state machine captures a confirmation-policy reversal and maintains a hash-linked local event trace. This addresses reproducibility and investigation *within the fixture's trust boundary only*.
+
+The G3 engine does not validate a real chain, operate an external node, possess keys, submit transactions or enforce institutional settlement decisions. Its synthetic execution references are not brokerage or custody orders. Actual cross-domain risk reconciliation, authenticated sources and formal finality policy remain outside the current capability. See [settlement research](SETTLEMENT_RESEARCH.md).
+
 ## Engineering acceptance gates
 
 | Gate | Deliverable | Exit evidence |
@@ -31,7 +37,7 @@ The G2 risk module and the original G0/G1 market replay use separate fixtures an
 | G. Controlled pilot | One approved workflow with an accountable design partner | Written pilot scope, lawful data use, usage observations and incident handling |
 | H. Commercial proof | Evidence of repeat use and willingness to pay | Recorded interviews, pilot retention and commercial decisions. No invented traction |
 
-Current G0 establishes a local synthetic research path. The first G1 audit tranche addresses part of B and the reproducibility portion of C. The initial G2 risk model adds tested synthetic ledger and stress arithmetic without completing any production acceptance gate. It does **not** satisfy the remaining gates.
+Current G0 establishes a local synthetic research path. The first G1 audit tranche addresses part of B and the reproducibility portion of C. The initial G2 risk model adds tested synthetic ledger and stress arithmetic without completing any production acceptance gate. The first G3 reconstruction also remains synthetic and does not complete an institutional acceptance gate. It does **not** satisfy the remaining gates.
 
 ## Non-negotiable boundaries
 
