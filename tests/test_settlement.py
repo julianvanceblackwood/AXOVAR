@@ -74,6 +74,22 @@ class SettlementTests(unittest.TestCase):
         altered["events"][-1]["received_ms"] += 1
         self.assertNotEqual(reported_digest, evaluate(altered)["receipt_sha256"])
 
+    def test_linked_execution_evidence_trace(self):
+        report = load_fixture(FIXTURE)
+        events = base()["events"]
+        previous = GENESIS
+        for event, trace in zip(events, report["event_trace"]):
+            canonical = json.dumps(event, sort_keys=True, separators=(",", ":"),
+                                   ensure_ascii=True, allow_nan=False).encode("ascii")
+            expected = hashlib.sha256(bytes.fromhex(previous) + canonical).hexdigest()
+            self.assertEqual(trace["previous_hash"], previous)
+            self.assertEqual(trace["evidence_hash"], expected)
+            self.assertEqual(trace["source"], "synthetic_fixture")
+            previous = expected
+        self.assertEqual(report["trace_head"], previous)
+        self.assertEqual(snapshot(report, 4, "I_BTC")["execution_ref"], "EXEC_BTC_A")
+        self.assertEqual(snapshot(report, 8, "I_ETH")["execution_ref"], "EXEC_ETH_B")
+
     def test_reject_invalid_ancestor_links_and_duplicate_inclusions(self):
         for label in ("unknown_ancestor", "wrong_height", "broken_parent", "double_inclusion",
                       "noncanonical_reorg", "reused_block_hash", "oversized_reorg"):
