@@ -105,6 +105,7 @@ def _states(intents: dict, chain: list[dict], orphaned: set[str],
                 and counterparty == "CLEAR" else "HOLD")
         result.append({
             "intent_id": intent["intent_id"],
+            "execution_ref": intent["execution_ref"],
             "txid": intent["txid"],
             "asset": intent["asset"],
             "amount_cents": intent["amount_cents"],
@@ -137,6 +138,8 @@ def evaluate(document: dict, raw_bytes: bytes = b"") -> dict:
     orphaned = set()
     seen_blocks = set()
     seen_event_ids = set()
+    trace = []
+    trace_head = GENESIS
     timeline = []
     incidents = []
     last_seq, last_received = 0, -1
@@ -154,11 +157,19 @@ def evaluate(document: dict, raw_bytes: bytes = b"") -> dict:
         seen_event_ids.add(identifier)
         last_seq, last_received = sequence, received
         before = _states(intents, chain, orphaned, counterparties, required)
+        event_bytes = json.dumps(event, sort_keys=True, separators=(",", ":"),
+                                 ensure_ascii=True, allow_nan=False).encode("ascii")
+        event_hash = hashlib.sha256(bytes.fromhex(trace_head) + event_bytes).hexdigest()
+        trace.append({"event_id": identifier, "seq": sequence, "kind": kind,
+                      "previous_hash": trace_head, "evidence_hash": event_hash,
+                      "source": "synthetic_fixture"})
+        trace_head = event_hash
 
         if kind == "INTENT":
-            _object(event, base_fields | {"intent_id", "txid", "counterparty",
+            _object(event, base_fields | {"intent_id", "execution_ref", "txid", "counterparty",
                                            "asset", "amount_cents"}, "intent")
             intent_id = _code(event["intent_id"], "intent identifier")
+            execution_ref = _code(event["execution_ref"], "simulated execution reference")
             txid = _hash(event["txid"], "transaction ID")
             cp = _code(event["counterparty"], "counterparty")
             asset = _code(event["asset"], "asset")
@@ -167,7 +178,7 @@ def evaluate(document: dict, raw_bytes: bytes = b"") -> dict:
             if len(intents) >= MAX_INTENTS:
                 raise SettlementError("too many intents")
             amount = _integer(event["amount_cents"], "simulated USD amount", 1)
-            intents[intent_id] = {"intent_id": intent_id, "txid": txid,
+            intents[intent_id] = {"intent_id": intent_id, "execution_ref": execution_ref, "txid": txid,
                                    "counterparty": cp, "asset": asset, "amount_cents": amount}
             counterparties.setdefault(cp, "CLEAR")
             txids.add(txid)
@@ -239,7 +250,7 @@ def evaluate(document: dict, raw_bytes: bytes = b"") -> dict:
                 })
         timeline.append({
             "event_id": identifier, "seq": sequence, "kind": kind,
-            "received_ms": received,
+            "evidence_hash": event_hash, "received_ms": received,
             "tip": chain[-1]["hash"] if chain else GENESIS,
             "height": len(chain), "states": after,
         })
@@ -251,7 +262,8 @@ def evaluate(document: dict, raw_bytes: bytes = b"") -> dict:
         "policy": {"confirmations_required": required, "max_reorg_depth": max_reorg,
                    "finality_semantics": "reversible depth heuristic only"},
         "fixture_sha256": hashlib.sha256(raw_bytes).hexdigest(),
-        "event_count": len(timeline), "active_chain": chain,
+        "event_count": len(timeline), "trace_head": trace_head,
+        "event_trace": trace, "active_chain": chain,
         "intents": final["states"], "timeline": timeline, "incidents": incidents,
         "trust_limits": [
             "Synthetic block identifiers are fixture claims and are not verified consensus",
