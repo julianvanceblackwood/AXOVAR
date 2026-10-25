@@ -26,6 +26,12 @@ A separate synthetic settlement experiment reconstructs transaction-intent recor
 
 The G3 engine does not validate a real chain, operate an external node, possess keys, submit transactions or enforce institutional settlement decisions. Its synthetic execution references are not brokerage or custody orders. Actual cross-domain risk reconciliation, authenticated sources and formal finality policy remain outside the current capability. See [settlement research](SETTLEMENT_RESEARCH.md).
 
+## G4 independent policy reference
+
+The Generation Four work introduces a second implementation of the synthetic G1 market policy in exact rational arithmetic. It detects source-dependency changes that were previously warned about but not excluded from reference-price eligibility, validates the newer AXV-AUDIT-002 receipt and exercises finite adverse-state matrices. This is a measurable reduction in the possibility of an unjustified simulation allow decision.
+
+It does not make the fixture sources authentic, establish a mathematical proof of the whole C++ system, or satisfy signed receipts, client access controls or cross-platform reproducibility. See [G4 verification](G4_VERIFICATION.md).
+
 ## Engineering acceptance gates
 
 | Gate | Deliverable | Exit evidence |
