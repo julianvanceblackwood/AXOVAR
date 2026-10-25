@@ -1,5 +1,7 @@
 # Independent technical evaluation
 
+VANCE BLACKWOOD CAPITAL / RESEARCH SYSTEMS
+
 **Status:** locally reproducible synthetic research, with implemented G0 replay, an initial G1 decision audit and an initial G2 portfolio-risk laboratory. No real trading or production certification is claimed.
 
 ## What AXOVAR examines

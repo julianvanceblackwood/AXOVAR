@@ -8,7 +8,7 @@ import hashlib
 import json
 from typing import Any
 
-SCHEMA = "AXV-AUDIT-001"
+SCHEMA = "AXV-AUDIT-002"
 
 
 def canonical_bytes(value: dict[str, Any]) -> bytes:
@@ -29,6 +29,7 @@ def build_receipt(state: dict[str, Any], fixture: bytes) -> dict[str, Any]:
             "selected": v["reference_selected"],
             "health": v["health"],
             "gaps": v["gaps"],
+            "dependency_changed": v["dependency_changed"],
             "event_ms": v["event_ms"],
             "receive_ms": v["receive_ms"],
         }
@@ -46,6 +47,9 @@ def build_receipt(state: dict[str, Any], fixture: bytes) -> dict[str, Any]:
         "source_selection": source_selection,
         "policy": {
             "id": decision["policy"],
+            "required_independent_sources": decision["required_independent_sources"],
+            "max_disagreement_bps": decision["max_disagreement_bps"],
+            "max_post_trade_exposure_pct": decision["max_post_trade_exposure_pct"],
             "result": decision["result"],
             "reason": decision["reason"],
             "checks": state["checks"],

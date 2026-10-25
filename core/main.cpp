@@ -87,6 +87,7 @@ struct Venue {
     std::string name, upstream, health, evidence;
     std::int64_t price{}, sequence{}, event_ms{}, receive_ms{};
     int gaps{};
+    bool dependency_changed{};
 };
 
 std::string json(const std::vector<Event>& events, std::size_t step, const std::string& scenario) {
@@ -109,8 +110,13 @@ std::string json(const std::vector<Event>& events, std::size_t step, const std::
                 it->second.gaps++;
             }
             if (it->second.upstream != e.upstream) alerts.push_back("UPSTREAM_CHANGED:"+e.venue);
+            // A changed declared dependency requires an external review. A subsequent
+            // healthy fixture label alone cannot restore source eligibility.
         }
-        Venue v{e.venue,e.upstream,e.health,e.id,e.price_cents,e.sequence,e.event_ms,e.receive_ms,it!=venues.end()?it->second.gaps:0};
+        const bool dependency_changed = it != venues.end() &&
+            (it->second.dependency_changed || it->second.upstream != e.upstream);
+        Venue v{e.venue,e.upstream,e.health,e.id,e.price_cents,e.sequence,e.event_ms,e.receive_ms,
+                it!=venues.end()?it->second.gaps:0,dependency_changed};
         venues[e.venue]=v;
         if (e.health != "OK") alerts.push_back("DEGRADED_SOURCE:"+e.venue+":"+e.id);
     }
@@ -124,7 +130,7 @@ std::string json(const std::vector<Event>& events, std::size_t step, const std::
         low_all=std::min(low_all,v.price); high_all=std::max(high_all,v.price);
         const bool is_stale=(knowledge_ms-v.receive_ms > 2500);
         if (is_stale) {stale++; alerts.push_back("STALE_SOURCE:"+name);}
-        if (v.health=="OK" && !is_stale && v.gaps==0) {
+        if (v.health=="OK" && !is_stale && v.gaps==0 && !v.dependency_changed) {
             const auto [source, inserted] = reference_sources.emplace(v.upstream, &v);
             if (!inserted) {
                 alerts.push_back("SHARED_UPSTREAM:"+v.upstream);
@@ -181,7 +187,7 @@ std::string json(const std::vector<Event>& events, std::size_t step, const std::
         if(!first) j<<",";
         first=false;
         const bool is_stale=knowledge_ms-v.receive_ms>2500;
-        const bool valid=v.health=="OK" && !is_stale && v.gaps==0;
+        const bool valid=v.health=="OK" && !is_stale && v.gaps==0 && !v.dependency_changed;
         const auto representative=reference_sources.find(v.upstream);
         const bool selected=valid && representative!=reference_sources.end() &&
                             representative->second->name==name;
@@ -189,6 +195,7 @@ std::string json(const std::vector<Event>& events, std::size_t step, const std::
          <<",\"health\":"<<escape(is_stale?"STALE":v.health)<<",\"price\":"<<static_cast<long double>(v.price)/100.0L
          <<",\"sequence\":"<<v.sequence<<",\"receive_ms\":"<<v.receive_ms
          <<",\"event_ms\":"<<v.event_ms<<",\"gaps\":"<<v.gaps<<",\"eligible\":"<<(valid?"true":"false")
+         <<",\"dependency_changed\":"<<(v.dependency_changed?"true":"false")
          <<",\"reference_selected\":"<<(selected?"true":"false")
          <<",\"evidence\":"<<escape(v.evidence)<<"}";
     }

@@ -1,4 +1,8 @@
-# Start with AXOVAR
+# AXOVAR
+
+VANCE BLACKWOOD CAPITAL / RESEARCH SYSTEMS
+
+A reproducible research program in market evidence, risk and decision assurance.
 
 AXOVAR is an independent financial systems research project. It asks a practical question: **what should a decision system do when the market evidence behind a proposed action is incomplete, delayed or dependent on the same source?**
 
@@ -9,7 +13,7 @@ It is not a trading platform, investment strategy or connected financial account
 | Research area | Working example | What it does not establish |
 | --- | --- | --- |
 | Market evidence | C++20 replay of healthy and degraded venue observations, including declared upstream dependencies | Authenticity of external data feeds or production market integrity |
-| Decision trace | Explicit policy results and a reproducible local SHA-256 audit receipt | Cryptographically signed attestations or permission to place trades |
+| Decision trace | Policy results, versioned audit receipt and independent G4 exact-rational verification | Cryptographically signed attestations, formal production proof or permission to trade |
 | Portfolio risk | Ordered synthetic USD journal, FIFO lots, accounting reconciliation, stress shocks and constructed one-period VaR / Expected Shortfall | Calibrated market forecasts, customer portfolio reporting or liquidity risk |
 | Settlement reconstruction | Local synthetic blockchain reorgs, counterparty holds, reversible confirmation policy and trace hashes | Valid blockchain consensus, real settlement, signed proof or payment authority |
 
@@ -58,4 +62,4 @@ This is a public research repository. It has **no declared open-source license a
 
 Technical feedback, independent reproduction and focused research conversations are welcome. For private inquiries, use [email](mailto:julianvanceblackwood@gmail.com).
 
-[Main README](../README.md) · [Market decision audit](DECISION_AUDIT.md) · [Portfolio calculations](PORTFOLIO_RISK.md) · [Settlement research](SETTLEMENT_RESEARCH.md) · [External evaluation](EXTERNAL_EVALUATION.md)
+[Main README](../README.md) · [Market decision audit](DECISION_AUDIT.md) · [Independent policy verification](G4_VERIFICATION.md) · [Portfolio calculations](PORTFOLIO_RISK.md) · [Settlement research](SETTLEMENT_RESEARCH.md) · [External evaluation](EXTERNAL_EVALUATION.md)

@@ -1,5 +1,7 @@
 # Product engineering gates
 
+VANCE BLACKWOOD CAPITAL / RESEARCH SYSTEMS
+
 AXOVAR is an evidence-constrained financial decision research system. The goal is to determine whether that research can support a reliable, defensible institutional workflow. Funding is not an engineering milestone. Credible technical results, user need and a lawful commercial structure come first.
 
 ## Product hypothesis
@@ -23,6 +25,12 @@ The G2 risk module and the original G0/G1 market replay use separate fixtures an
 A separate synthetic settlement experiment reconstructs transaction-intent records, canonical block inclusion, bounded reorganizations and counterparty interruptions. The state machine captures a confirmation-policy reversal and maintains a hash-linked local event trace. This addresses reproducibility and investigation *within the fixture's trust boundary only*.
 
 The G3 engine does not validate a real chain, operate an external node, possess keys, submit transactions or enforce institutional settlement decisions. Its synthetic execution references are not brokerage or custody orders. Actual cross-domain risk reconciliation, authenticated sources and formal finality policy remain outside the current capability. See [settlement research](SETTLEMENT_RESEARCH.md).
+
+## G4 independent policy reference
+
+The Generation Four work introduces a second implementation of the synthetic G1 market policy in exact rational arithmetic. It detects source-dependency changes that were previously warned about but not excluded from reference-price eligibility, validates the newer AXV-AUDIT-002 receipt and exercises finite adverse-state matrices. This is a measurable reduction in the possibility of an unjustified simulation allow decision.
+
+It does not make the fixture sources authentic, establish a mathematical proof of the whole C++ system, or satisfy signed receipts, client access controls or cross-platform reproducibility. See [G4 verification](G4_VERIFICATION.md).
 
 ## Engineering acceptance gates
 
