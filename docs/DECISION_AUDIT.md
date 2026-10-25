@@ -38,11 +38,11 @@ GET http://127.0.0.1:8765/api/audit/receipt
 
 The endpoint returns a `receipt` object and its SHA-256 hash. The canonical content contains:
 
-- schema identifier `AXV-AUDIT-001`
+- schema identifier `AXV-AUDIT-002`
 - exact SHA-256 hash of the synthetic fixture file bytes
 - scenario name, replay step, event count and knowledge-time boundary
-- per-venue source eligibility, reference selection and receipt identifier
-- policy identifier, outcome, explanatory reason and all check results
+- per-venue source eligibility, dependency-change quarantine, reference selection and receipt identifier
+- policy identifier, outcome, explanatory reason, configured limits and all check results
 - decision evidence IDs and selected derived metrics
 
 The digest is calculated over the UTF-8 bytes produced by:
@@ -53,6 +53,8 @@ json.dumps(receipt, sort_keys=True, separators=(",", ":"),
 ```
 
 An independent verifier should hash the canonical payload, compare the published SHA-256, then separately hash the original CSV fixture bytes and compare `fixture_sha256`. Receipt equality across identical replays and changes between different steps are covered by executable tests.
+
+**G4 compatibility note:** the receipt schema was upgraded from AXV-AUDIT-001. Version 2 adds a per-venue dependency-change flag and explicit policy thresholds. Existing consumers must check the schema before using the receipt. A standalone checker independently replays the fixture and validates both policy logic and digest, described in [G4 verification](G4_VERIFICATION.md).
 
 The receipt is **not signed**. The hash does not prove collection authenticity, tamper resistance against a hostile host, market truth, trading permission or regulatory compliance. The present representation includes derived decimal values, and bit-for-bit equivalence between different processor architectures or C++ implementations has not been established.
 
