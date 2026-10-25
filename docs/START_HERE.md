@@ -11,6 +11,7 @@ It is not a trading platform, investment strategy or connected financial account
 | Market evidence | C++20 replay of healthy and degraded venue observations, including declared upstream dependencies | Authenticity of external data feeds or production market integrity |
 | Decision trace | Explicit policy results and a reproducible local SHA-256 audit receipt | Cryptographically signed attestations or permission to place trades |
 | Portfolio risk | Ordered synthetic USD journal, FIFO lots, accounting reconciliation, stress shocks and constructed one-period VaR / Expected Shortfall | Calibrated market forecasts, customer portfolio reporting or liquidity risk |
+| Settlement reconstruction | Local synthetic blockchain reorgs, counterparty holds, reversible confirmation policy and trace hashes | Valid blockchain consensus, real settlement, signed proof or payment authority |
 
 ## Try it locally
 
@@ -36,7 +37,7 @@ ctest --test-dir build --output-on-failure
 
 The **normal** fixture ends in `ALLOW_SIMULATION`; the **degraded** fixture ends in `INSUFFICIENT_EVIDENCE`. These are synthetic policy results, not trade signals.
 
-In the dashboard, inspect **Evidence Lab** to see source selection, check status and the replay audit hash. Open **Portfolio Risk** for the separately constructed portfolio book, FIFO accounting and hypothetical shock results. The two workspaces do not share live state or a real trading account.
+In the dashboard, inspect **Evidence Lab** to see source selection, check status and the replay audit hash. Open **Portfolio Risk** for the separately constructed portfolio book, FIFO accounting and hypothetical shock results. Open **Settlement Research** to step through a fabricated confirmation reversal and counterparty interruption. These workspaces do not share live state or a real trading account.
 
 ## A useful technical challenge
 
@@ -47,6 +48,7 @@ Try to make the engine arrive at an unjustified conclusion using **synthetic inp
 - Does a failed or unevaluated risk check ever appear as a pass?
 - Does the portfolio's cash, FIFO cost and marked equity still reconcile after partial sales or fees?
 - Can a controlled change in the fixture be detected by its published digest?
+- Can a formerly confirmed simulated transaction become orphaned, and does the review gate immediately return to HOLD?
 
 When reporting a finding, include the commit SHA, operating system, compiler version, fixture, steps, expected outcome and observed outcome. The [source-dependency review issue](https://github.com/julianvanceblackwood/AXOVAR/issues/3) is a concrete starting point. For other reproducible issues, use [GitHub Issues](https://github.com/julianvanceblackwood/AXOVAR/issues). Do not publish credentials or confidential customer data.
 
@@ -56,4 +58,4 @@ This is a public research repository. It has **no declared open-source license a
 
 Technical feedback, independent reproduction and focused research conversations are welcome. For private inquiries, use [email](mailto:julianvanceblackwood@gmail.com).
 
-[Main README](../README.md) · [Market decision audit](DECISION_AUDIT.md) · [Portfolio calculations](PORTFOLIO_RISK.md) · [External evaluation](EXTERNAL_EVALUATION.md)
+[Main README](../README.md) · [Market decision audit](DECISION_AUDIT.md) · [Portfolio calculations](PORTFOLIO_RISK.md) · [Settlement research](SETTLEMENT_RESEARCH.md) · [External evaluation](EXTERNAL_EVALUATION.md)
