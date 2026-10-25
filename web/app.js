@@ -34,7 +34,7 @@ function render(s) {
  box.className='decision-status '+(d.result==='ALLOW_SIMULATION'?'allow':d.result==='DENY_SIMULATION'?'deny':'unknown');
  $('decision-reason').textContent=d.reason;
  $('receipt-evidence').innerHTML=d.evidence_ids.length?d.evidence_ids.map(x=>`<code>${esc(x)}</code>`).join(''):'No evidence';
- $('venue-table').innerHTML=s.venues.length?s.venues.map(v=>`<tr><td><b>${esc(v.name)}</b></td><td>${esc(fmtUSD(v.price))}</td><td>${esc(v.upstream)}</td><td><span class="status ${v.eligible?'ok':v.health==='STALE'?'warn':'bad'}">${esc(v.health)}${v.gaps?' / GAP':''}</span></td><td>${esc(v.evidence)}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">No observations yet</td></tr>';
+ $('venue-table').innerHTML=s.venues.length?s.venues.map(v=>`<tr><td><b>${esc(v.name)}</b></td><td>${esc(fmtUSD(v.price))}</td><td>${esc(v.upstream)}</td><td><span class="status ${v.eligible?'ok':v.health==='STALE'?'warn':'bad'}">${esc(v.dependency_changed?'DEPENDENCY CHANGED':v.health)}${v.gaps?' / GAP':''}</span></td><td>${esc(v.evidence)}</td></tr>`).join(''):'<tr><td colspan="5" class="empty">No observations yet</td></tr>';
  $('alert-count').textContent=`${s.alerts.length} ALERT${s.alerts.length===1?'':'S'}`;
  $('alerts').innerHTML=s.alerts.length?s.alerts.slice(-16).reverse().map(a=>`<div class="alert"><span class="alert-mark"></span><span>${esc(a.replaceAll('_',' '))}</span></div>`).join(''):'<div class="empty">No integrity warnings observed</div>';
  $('receipt-json').textContent=JSON.stringify({scenario:s.scenario,step:s.step,knowledge_ms:s.knowledge_ms,synthetic:true,decision:d,metrics:m,source_states:s.venues},null,2);
