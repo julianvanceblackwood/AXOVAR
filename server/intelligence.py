@@ -50,7 +50,7 @@ def status() -> dict[str, Any]:
 
 def evidence_snapshot(state: dict[str, Any]) -> dict[str, Any]:
     """Allowlisted, bounded derived state. Never send raw fixtures or local files to a model."""
-    venues = [{k: v.get(k) for k in ("name", "upstream", "health", "eligible", "gaps", "price", "evidence")}
+    venues = [{k: v.get(k) for k in ("name", "upstream", "health", "eligible", "dependency_changed", "gaps", "price", "evidence")}
               for v in state.get("venues", [])[:12]]
     decision = state.get("decision", {})
     metrics = state.get("metrics", {})
@@ -87,7 +87,7 @@ def explain(question: str, snapshot: dict[str, Any]) -> str:
                 "This is a simulated policy result, not a trading recommendation.")
     if any(x in q for x in ("independen", "upstream", "source", "venue", "feed", "kaynak", "bağım", "güven")):
         details = "; ".join(f"{v['name']}: {v['health']}, upstream {v['upstream']}, "
-                            f"eligible={v['eligible']}, gaps={v['gaps']}" for v in venues)
+                            f"eligible={v['eligible']}, dependency_changed={v['dependency_changed']}, gaps={v['gaps']}" for v in venues)
         return (f"Reported source state: {details}. "
                 f"The engine counts {m['independent_healthy_sources']} eligible upstreams. "
                 "Independence and health are fixture assertions, not independently verified external truth.")
