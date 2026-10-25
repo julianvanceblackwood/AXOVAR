@@ -1,5 +1,7 @@
 # Product engineering gates
 
+VANCE BLACKWOOD CAPITAL / RESEARCH SYSTEMS
+
 AXOVAR is an evidence-constrained financial decision research system. The goal is to determine whether that research can support a reliable, defensible institutional workflow. Funding is not an engineering milestone. Credible technical results, user need and a lawful commercial structure come first.
 
 ## Product hypothesis
