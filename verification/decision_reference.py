@@ -156,7 +156,7 @@ def verify(envelope: dict, fixture: bytes) -> dict:
         return {"valid": False, "errors": ["noncanonical receipt"]}
     if envelope.get("sha256") != calculated:
         errors.append("receipt digest does not match canonical content")
-    if payload.get("schema") != "AXV-AUDIT-001" or payload.get("synthetic") is not True:
+    if payload.get("schema") != "AXV-AUDIT-002" or payload.get("synthetic") is not True:
         errors.append("invalid contract or simulation flag")
     if payload.get("instrument") != "BTC/USD":
         errors.append("unsupported instrument")
@@ -209,9 +209,9 @@ def verify(envelope: dict, fixture: bytes) -> dict:
                   "Independent source and configured financial policy checks passed.")
         if policy.get("reason") != reason or policy.get("id") != "AXV-POLICY-001":
             errors.append("policy explanation mismatch")
-        if (policy.get("required_independent_sources", 2) != 2 or
-            policy.get("max_disagreement_bps", 150) != 150 or
-            policy.get("max_post_trade_exposure_pct", 75) != 75):
+        if (policy.get("required_independent_sources") != 2 or
+            policy.get("max_disagreement_bps") != 150 or
+            policy.get("max_post_trade_exposure_pct") != 75):
             errors.append("policy threshold metadata mismatch")
         metrics = payload["metrics"]
         if metrics.get("independent_healthy_sources") != expected["source_count"]:
