@@ -60,6 +60,19 @@ class APITests(unittest.TestCase):
         with self.assertRaises(HTTPError) as ctx:self.post('/api/replay/scenario',{'scenario':'../private'})
         self.assertEqual(ctx.exception.code,400)
 
+    def test_host_header_rebinding_rejected(self):
+        url=f'http://127.0.0.1:{self.port}'
+        for path,method,data in (('/api/state','GET',None),
+                                  ('/api/replay/step','POST',b'{}')):
+            for host in ('attacker.example', f'attacker.example:{self.port}',
+                         f'127.0.0.1:{self.port}@attacker.example'):
+                with self.subTest(path=path,host=host):
+                    request=Request(url+path,method=method,data=data,
+                                    headers={'Host':host,'Content-Type':'application/json'})
+                    with self.assertRaises(HTTPError) as ctx:
+                        urlopen(request,timeout=3)
+                    self.assertEqual(ctx.exception.code,403)
+
     def test_cross_origin_rejected(self):
         with self.assertRaises(HTTPError) as ctx:self.post('/api/replay/step',origin='https://untrusted.example')
         self.assertEqual(ctx.exception.code,403)
