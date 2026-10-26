@@ -19,3 +19,4 @@ add_test(NAME portfolio_tests COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DI
 add_test(NAME settlement_tests COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tests/test_settlement.py" "$<TARGET_FILE:axovar_core>" "${CMAKE_SOURCE_DIR}")
 add_test(NAME g4_verification_tests COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tests/test_g4.py" "$<TARGET_FILE:axovar_core>" "${CMAKE_SOURCE_DIR}")
 add_test(NAME bounded_policy_tests COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tests/test_bounded_model.py" "$<TARGET_FILE:axovar_core>" "${CMAKE_SOURCE_DIR}")
+add_test(NAME evidence_journal_tests COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tests/test_evidence_journal.py" "$<TARGET_FILE:axovar_core>" "${CMAKE_SOURCE_DIR}")
