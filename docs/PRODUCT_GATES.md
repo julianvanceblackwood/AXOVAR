@@ -32,6 +32,12 @@ The Generation Four work introduces a second implementation of the synthetic G1 
 
 It does not make the fixture sources authentic, establish a mathematical proof of the whole C++ system, or satisfy signed receipts, client access controls or cross-platform reproducibility. See [G4 verification](G4_VERIFICATION.md).
 
+## Verification and evidence hardening
+
+The bounded G4 explorer checks every state prefix in a declared finite test grammar against the compiled engine. GitHub Actions tests GCC and Clang separately and compares their Linux output bytes. A local optional evidence journal contains the underlying synthetic fixture and full receipt so that after-the-fact verification can be performed without a live server. Host-header restrictions and fixture bounds narrow local attack surface.
+
+These are reproducible engineering results, not external authenticity, signed legal evidence, custody assurance or independent certification. See [assurance status](ASSURANCE_STATUS.md) before describing the system to customers or investors.
+
 ## Engineering acceptance gates
 
 | Gate | Deliverable | Exit evidence |
