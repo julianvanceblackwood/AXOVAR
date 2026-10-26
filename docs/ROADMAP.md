@@ -30,7 +30,9 @@ The new shock samples are deliberately fabricated for regression testing and mus
 
 **First implemented research slice:** a separate, exact-rational Python reference reconstructs fixture-limited market-state selection and G1 policy outcomes without importing the production replay or receipt producer. The system rejects unauthenticated source dependency changes for the remainder of a replay, upgrades the audit contract to AXV-AUDIT-002 and verifies policy evidence, explicit thresholds, synthetic receipt digests and fail-closed decisions. CI explores deterministic bounded cases and rehashed forgeries. See [independent decision verification](G4_VERIFICATION.md).
 
-**Remaining G4:** a formal model checked against a published finite state space, verified durable evidence and key custody, cross-platform byte-for-byte float representation studies, more extensive mutation/property testing and empirical false-abstention analysis. The oracle and finite regression cases are not a general formal proof.
+**Additional implemented hardening:** exhaustive enumeration of a clearly bounded 408-trace / 1,608-prefix policy grammar against the compiled C++ core; exact Linux GCC/Clang replay-byte comparison; optional self-contained, hash-linked local evidence journal with fsync and corruption rejection; HTTP Host validation and finite input limits. See [assurance status](ASSURANCE_STATUS.md).
+
+**Remaining G4:** formal proof correspondence beyond the declared finite model, independently administered durable evidence and key custody, multi-architecture and multi-OS byte-for-byte reproduction, more extensive mutation/property testing and empirical false-abstention analysis. The oracle and finite regression cases are not a general formal proof.
 
 ## G5 — performance and hardware evaluation
 
