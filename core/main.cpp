@@ -64,7 +64,11 @@ std::vector<Event> load(const std::string& path) {
     int line_no=1;
     while (std::getline(file,line)) {
         ++line_no;
+        if (line.size() > 4096)
+            throw std::runtime_error("scenario line exceeds size limit");
         if (line.empty()) continue;
+        if (result.size() >= 256)
+            throw std::runtime_error("scenario event count exceeds limit");
         auto c=fields(line);
         if (c.size() != 8) throw std::runtime_error("bad columns on line "+std::to_string(line_no));
         Event e;
