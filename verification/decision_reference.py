@@ -15,7 +15,7 @@ HEADER = "id,event_ms,receive_ms,venue,upstream,sequence,price_cents,health"
 MAX_RECORDS = 256
 INT = re.compile(r"-?(0|[1-9][0-9]*)\Z")
 CHECK_IDS = ("INDEPENDENT_SOURCES", "VENUE_DIVERGENCE", "CONCENTRATION")
-IDENTIFIER = re.compile(r"[A-Za-z0-9_-]{1,64}\\Z")
+IDENTIFIER = re.compile(r"[A-Za-z0-9_-]{1,64}\Z")
 
 
 class VerificationError(ValueError):
