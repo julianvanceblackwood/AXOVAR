@@ -191,6 +191,32 @@ python3 -m verification.decision_reference --receipt receipt.json --fixture scen
 
 The command exits with an error on invalid evidence and prints an independent verification result. See [G4 verification contract](docs/G4_VERIFICATION.md) and [executable adversarial tests](tests/test_g4.py).
 
+### Assurance evidence
+
+The current hardening series adds a bounded state explorer, a compiler-output comparison and an optional offline evidence journal.
+
+| Verification | Executable boundary |
+| :--- | :--- |
+| **Finite model exploration** | 408 declared source-state sequences and 1,608 event-prefix states, cross-checked with the compiled core |
+| **Compiler comparison** | Exact replay output bytes compared between GCC and Clang on the Linux CI runner |
+| **Local evidence journal** | Self-contained fixture and audit envelope records with chained SHA-256 digests, `fsync`, and corruption rejection |
+| **Local request protection** | Strict loopback `Host` checks against DNS rebinding, plus existing origin and request-size limits |
+
+The journal is opt-in. With a matching locally captured `receipt.json` and `scenarios/NORMAL-001.csv`:
+
+```bash
+python3 -m verification.evidence_journal append \
+  --journal local-evidence.jsonl \
+  --receipt receipt.json \
+  --fixture scenarios/NORMAL-001.csv
+python3 -m verification.evidence_journal verify \
+  --journal local-evidence.jsonl
+```
+
+A missing, modified or truncated journal entry fails verification rather than being silently repaired. A host administrator can still replace the entire journal and recompute its hashes. The records are **not signed or externally timestamped**.
+
+See the [G4 verifier](docs/G4_VERIFICATION.md) for the finite model boundary and [assurance register](docs/ASSURANCE_STATUS.md) for what remains unproven, including external feed authenticity, independent key custody and actual customer validation.
+
 ## Generation Zero architecture
 
 ![Implemented AXOVAR Generation Zero architecture](assets/architecture.svg)
@@ -279,7 +305,7 @@ The current implementation proves a limited end-to-end behavior. Future research
 | **G1** | Reproducible source selection and decision audit | First slice implemented, broader numeric assurance pending |
 | **G2** | FIFO synthetic portfolio, shock stress testing and empirical tail risk | First slice implemented, systemic risk and real data pending |
 | **G3** | Synthetic chain reorgs, reversible confirmation policy and counterparty holds | First slice implemented, external adapters and real finality model pending |
-| **G4** | Independent reference, source drift quarantine and versioned receipt verification | First slice implemented; formal model checking and trusted attestations pending |
+| **G4** | Independent rational oracle, bounded model exploration, compiler parity and offline journal | Local hardening implemented; independent attestation and full formal proof pending |
 | **G5** | Low-latency profiling and independently verified FPGA-oriented experiments | Planned |
 
 Future research includes authenticated evidence, real network models, cross-domain settlement, systemic contagion, defensive cybersecurity and independently verified performance. These are **planned directions**, not demonstrated production capabilities. Full sequence: [ROADMAP](docs/ROADMAP.md).

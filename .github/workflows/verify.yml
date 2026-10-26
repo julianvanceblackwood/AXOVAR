@@ -2,9 +2,12 @@ name: AXOVAR verification
 on:
   push:
   pull_request:
+permissions:
+  contents: read
 jobs:
   build-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 12
     strategy:
       fail-fast: false
       matrix:
@@ -18,10 +21,25 @@ jobs:
       - name: Build
         run: cmake --build build --parallel
       - name: Python compile check
-        run: python3 -m compileall -q server tests
+        run: python3 -m compileall -q server tests verification
       - name: Browser script syntax
         run: |
           node --check web/app.js
           node --check web/intelligence.js
       - name: Engine and API integration tests
         run: ctest --test-dir build --output-on-failure
+  compiler-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build GCC
+        run: |
+          cmake -S . -B build-gcc -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=g++
+          cmake --build build-gcc --parallel
+      - name: Build Clang
+        run: |
+          cmake -S . -B build-clang -DCMAKE_BUILD_TYPE=Release -DCMAKE_CXX_COMPILER=clang++
+          cmake --build build-clang --parallel
+      - name: Compare replay bytes
+        run: python3 tests/check_compiler_parity.py build-gcc/axovar_core build-clang/axovar_core .

@@ -53,6 +53,14 @@ std::vector<std::string> fields(const std::string& line) {
     return result;
 }
 
+bool identifier(const std::string& value) {
+    if (value.empty() || value.size() > 64) return false;
+    return std::all_of(value.begin(),value.end(),[](unsigned char c){
+        return (c >= 'A' && c <= 'Z') || (c >= 'a' && c <= 'z') ||
+               (c >= '0' && c <= '9') || c == '-' || c == '_';
+    });
+}
+
 std::vector<Event> load(const std::string& path) {
     std::ifstream file(path);
     if (!file) throw std::runtime_error("scenario file could not be opened");
@@ -64,14 +72,18 @@ std::vector<Event> load(const std::string& path) {
     int line_no=1;
     while (std::getline(file,line)) {
         ++line_no;
+        if (line.size() > 4096)
+            throw std::runtime_error("scenario line exceeds size limit");
         if (line.empty()) continue;
+        if (result.size() >= 256)
+            throw std::runtime_error("scenario event count exceeds limit");
         auto c=fields(line);
         if (c.size() != 8) throw std::runtime_error("bad columns on line "+std::to_string(line_no));
         Event e;
         e.id=c[0]; e.event_ms=integer(c[1], "event_ms"); e.receive_ms=integer(c[2], "receive_ms");
         e.venue=c[3]; e.upstream=c[4]; e.sequence=integer(c[5], "sequence");
         e.price_cents=integer(c[6], "price_cents"); e.health=c[7]; e.raw=line;
-        if (e.id.empty() || e.venue.empty() || e.upstream.empty() ||
+        if (!identifier(e.id) || !identifier(e.venue) || !identifier(e.upstream) ||
             e.event_ms < 0 || e.receive_ms < 0 || e.sequence <= 0 || e.price_cents <= 0 ||
             (e.health != "OK" && e.health != "DEGRADED" && e.health != "UNTRUSTED"))
             throw std::runtime_error("invalid event on line "+std::to_string(line_no));

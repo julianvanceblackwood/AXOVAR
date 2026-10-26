@@ -43,6 +43,12 @@ The **normal** fixture ends in `ALLOW_SIMULATION`; the **degraded** fixture ends
 
 In the dashboard, inspect **Evidence Lab** to see source selection, check status and the replay audit hash. Open **Portfolio Risk** for the separately constructed portfolio book, FIFO accounting and hypothetical shock results. Open **Settlement Research** to step through a fabricated confirmation reversal and counterparty interruption. These workspaces do not share live state or a real trading account.
 
+## Check evidence independently
+
+A normal replay receipt can be downloaded from `/api/audit/receipt` and checked against its synthetic fixture using `python3 -m verification.decision_reference`. A local opt-in hash-linked evidence journal is available through `python3 -m verification.evidence_journal`. See [G4 verification](G4_VERIFICATION.md) for both commands and [assurance status](ASSURANCE_STATUS.md) for their trust limits.
+
+The CI also enumerates 408 bounded policy traces and compares GCC/Clang replay output bytes on Linux. None of these steps authenticates real-world prices or creates a signed legal record.
+
 ## A useful technical challenge
 
 Try to make the engine arrive at an unjustified conclusion using **synthetic input only**. In particular:

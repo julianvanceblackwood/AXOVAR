@@ -63,7 +63,17 @@ def create_handler(root: Path, binary: Path, session: Session):
                                     capture_output=True, text=True, timeout=5, check=True)
             return json.loads(result.stdout)
 
+        def local_host(self) -> bool:
+            # A browser may reach loopback through a hostile hostname (DNS rebinding).
+            # Require the actual request authority to be the known local listener.
+            host = self.headers.get("Host", "")
+            port = self.server.server_port
+            return host in (f"127.0.0.1:{port}", f"localhost:{port}")
+
         def do_GET(self):
+            if not self.local_host():
+                self.error(403, "local host required")
+                return
             path = urlsplit(self.path).path
             if path in FILES:
                 filename, mimetype = FILES[path]
@@ -128,6 +138,9 @@ def create_handler(root: Path, binary: Path, session: Session):
             self.error(404, "route not found")
 
         def do_POST(self):
+            if not self.local_host():
+                self.error(403, "local host required")
+                return
             path = urlsplit(self.path).path
             if path not in ("/api/replay/step", "/api/replay/reset", "/api/replay/end",
                             "/api/replay/scenario", "/api/intelligence/ask"):
@@ -135,7 +148,7 @@ def create_handler(root: Path, binary: Path, session: Session):
                 return
             origin = self.headers.get("Origin")
             host = self.headers.get("Host", "")
-            if origin and origin not in (f"http://{host}", f"https://{host}"):
+            if origin and origin != f"http://{host}":
                 self.error(403, "cross-origin mutations are not permitted")
                 return
             try:

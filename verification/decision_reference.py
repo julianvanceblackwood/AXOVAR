@@ -15,6 +15,7 @@ HEADER = "id,event_ms,receive_ms,venue,upstream,sequence,price_cents,health"
 MAX_RECORDS = 256
 INT = re.compile(r"-?(0|[1-9][0-9]*)\Z")
 CHECK_IDS = ("INDEPENDENT_SOURCES", "VENUE_DIVERGENCE", "CONCENTRATION")
+IDENTIFIER = re.compile(r"[A-Za-z0-9_-]{1,64}\Z")
 
 
 class VerificationError(ValueError):
@@ -50,7 +51,7 @@ def reference(fixture: bytes, step: int) -> dict:
             raise VerificationError("incorrect event columns")
         event_id, et, rt, venue, upstream, sequence, cents, health = cells
         event_ms, receive_ms, seq, price = map(_integer, (et, rt, sequence, cents))
-        if (not event_id or not venue or not upstream or
+        if (not all(IDENTIFIER.fullmatch(x) for x in (event_id, venue, upstream)) or
             event_ms < 0 or receive_ms < 0 or seq <= 0 or price <= 0 or
             health not in ("OK", "DEGRADED", "UNTRUSTED") or event_id in identifiers):
             raise VerificationError("invalid event")

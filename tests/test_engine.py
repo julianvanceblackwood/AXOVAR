@@ -72,6 +72,30 @@ class CoreTests(unittest.TestCase):
             proc=subprocess.run([str(BINARY),'--scenario',str(path),'2'],capture_output=True)
             self.assertNotEqual(proc.returncode,0)
 
+    def test_identifier_grammar_and_input_bounds(self):
+        header='id,event_ms,receive_ms,venue,upstream,sequence,price_cents,health\n'
+        rows=[
+            'X1,1,1,BAD:VENUE,U,1,100,OK\n',
+            'X1,1,1,A,UP/EVIL,1,100,OK\n',
+            'E'*65+',1,1,A,U,1,100,OK\n',
+        ]
+        with tempfile.TemporaryDirectory() as temp:
+            path=Path(temp)/'invalid.csv'
+            for row in rows:
+                with self.subTest(row=row[:25]):
+                    path.write_text(header+row)
+                    result=subprocess.run([str(BINARY),'--scenario',str(path),'1'],
+                                          capture_output=True)
+                    self.assertNotEqual(result.returncode,0)
+            long_row='X1,1,1,A,U,1,100,OK'+' '*4100+'\n'
+            path.write_text(header+long_row)
+            self.assertNotEqual(subprocess.run(
+                [str(BINARY),'--scenario',str(path),'1'],capture_output=True).returncode,0)
+            many=''.join(f'E{i},{i},{i},A,U,{i+1},100,OK\n' for i in range(257))
+            path.write_text(header+many)
+            self.assertNotEqual(subprocess.run(
+                [str(BINARY),'--scenario',str(path),'257'],capture_output=True).returncode,0)
+
     def test_shared_upstream_counts_once(self):
         with tempfile.TemporaryDirectory() as temp:
             path=Path(temp)/'shared.csv'
