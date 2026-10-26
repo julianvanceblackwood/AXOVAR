@@ -71,13 +71,25 @@ First select the normal scenario in the local dashboard. The command prints `{"e
 
 CI compiles the C++ core under both GCC and Clang, runs this suite alongside earlier CTest groups and checks the dashboard JavaScript syntax. Passing these tests establishes only the stated finite test coverage.
 
+## Expanded local assurance checks
+
+The finite model explorer in `verification/bounded_model.py` exhausts its **declared** two-venue, at-most-three-event grammar: shared versus distinct upstream, healthy versus degraded receipts, three price regimes, early versus stale receipt, and optional second observation with unchanged versus changed upstream and continuous versus gapped sequence. This yields 408 unique traces and 1,608 prefix evaluations. Each prefix is run through the compiled C++ binary and separately checked by the exact-rational policy reference. It rejects any simulated allow without all passing gates, duplicate selected upstreams, or recovery of quarantined sources.
+
+The Linux CI additionally compiles the same C++ engine with GCC and Clang in separate builds and compares the exact JSON bytes for every prefix of the two committed CSV fixtures. This establishes a particular Linux dual-compiler parity result, not universal floating-point portability.
+
+The optional `verification/evidence_journal.py` stores complete local fixture bytes and versioned audit responses in chained records. Each append first independently verifies its input, takes an exclusive local file lock, checks existing records, writes the next record, and calls `fsync`. Partial last records, bad links, mismatched fixtures and altered receipts are rejected without automatic repair. This works only under a cooperative-host threat model; a privileged adversary can replace the journal, and there is no signature, trusted timestamp, protected key or off-host anchor.
+
+The loopback HTTP server now rejects foreign `Host` authorities on reads and writes to mitigate DNS rebinding. Synthetic CSV inputs have event, row length and identifier limits aligned with the independent checker. Negative tests cover those boundaries.
+
+For a complete status by gate, see [assurance status](ASSURANCE_STATUS.md).
+
 ## Remaining G4 work
 
-- A machine-checkable formal state-machine specification and model checking over a clearly declared finite state space
-- Stronger event schema, ordering and gap-recovery semantics
-- Cross-compiler exact-byte receipt comparisons with controlled floating-point representation
-- Independent signing, key-custody and durable evidence retention under a documented threat model
-- Broader mutation testing, property-based generation and conservatism/false-abstention measurements
+- A separate formal state-machine specification and proof correspondence for more than the now-exhausted finite test grammar
+- Event clock uncertainty, explicit gap recovery and stronger versioned ingestion semantics
+- Exact-byte comparisons across operating systems, processors and floating-point implementation choices
+- Protected digital signing keys, external timestamping and separately administered immutable storage
+- Beyond-bounded property testing, mutation coverage and calibrated false-abstention measurement
 - Independent technical review and adversarial evaluation
 
 This release completes **the first verifiable-policy research slice**, not the full G4 gate.
