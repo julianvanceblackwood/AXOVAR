@@ -8,6 +8,7 @@ import argparse
 import json
 import math
 import platform
+import sys
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -31,6 +32,11 @@ def exercise(binary: Path, root: Path, concurrency: int = 4,
              requests_per_route: int = 15) -> dict:
     if not (1 <= concurrency <= 16 and 5 <= requests_per_route <= 100):
         raise ValueError("load experiment parameters outside controlled bounds")
+    # A direct script invocation has benchmarks/ on sys.path, not the repo root.
+    # Resolve the explicit local root before importing the local service package.
+    root = root.resolve()
+    if str(root) not in sys.path:
+        sys.path.insert(0, str(root))
     from server.app import Session, create_handler
     server = ThreadingHTTPServer(("127.0.0.1", 0),
                                  create_handler(root, binary, Session()))
