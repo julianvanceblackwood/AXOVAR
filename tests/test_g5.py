@@ -55,6 +55,19 @@ class PerformanceContractTests(unittest.TestCase):
             self.assertEqual(result["metrics"]["independent_healthy_sources"], 8)
             self.assertEqual(result["decision"]["result"], "ALLOW_SIMULATION")
 
+    def test_bounded_concurrent_api_load_preserves_read_only_contract(self):
+        from benchmarks.service_load import exercise
+        report = exercise(CORE, ROOT, concurrency=3, requests_per_route=5)
+        self.assertEqual(report["schema"], "AXV-LOAD-001")
+        self.assertEqual(report["total_requests"], 20)
+        self.assertEqual(report["successful"], 20)
+        self.assertEqual(report["failed"], 0)
+        for result in report["endpoints"]:
+            self.assertEqual(result["samples"], 5)
+            self.assertTrue(result["same_response_bytes"])
+            self.assertLessEqual(result["p50_ms"], result["p95_ms"])
+            self.assertLessEqual(result["p95_ms"], result["p99_ms"])
+
     def test_invalid_mode_and_sample_bounds_fail(self):
         scenario = ROOT / "scenarios" / "NORMAL-001.csv"
         for mode, warmups, samples in (
