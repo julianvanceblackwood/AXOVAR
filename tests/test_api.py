@@ -38,7 +38,9 @@ class APITests(unittest.TestCase):
         with urlopen(req,timeout=3) as r:return json.loads(r.read())
 
     def test_health_and_scenarios(self):
-        self.assertTrue(self.get('/api/health')['simulation_only'])
+        health = self.get('/api/health')
+        self.assertTrue(health['simulation_only'])
+        self.assertEqual(health['stage'], 'G0-G5 research')
         self.assertEqual(len(self.get('/api/scenarios')['scenarios']),2)
 
     def test_replay_sequence(self):
@@ -72,6 +74,52 @@ class APITests(unittest.TestCase):
                     with self.assertRaises(HTTPError) as ctx:
                         urlopen(request,timeout=3)
                     self.assertEqual(ctx.exception.code,403)
+
+    def test_failed_replay_is_atomic(self):
+        import subprocess
+        handler = create_handler(ROOT, BINARY, session := Session())
+        original = handler.data
+
+        def fault(self, scenario, step):
+            if step > 0 or scenario == 'DEGRADED-001':
+                raise subprocess.SubprocessError('injected engine fault')
+            return original(self, scenario, step)
+
+        handler.data = fault
+        service = ThreadingHTTPServer(('127.0.0.1', 0), handler)
+        worker = threading.Thread(target=service.serve_forever, daemon=True)
+        worker.start()
+        base = f'http://127.0.0.1:{service.server_port}'
+        try:
+            for route, body in (
+                ('/api/replay/step', {}),
+                ('/api/replay/scenario', {'scenario': 'DEGRADED-001'})
+            ):
+                with self.subTest(route=route):
+                    request = Request(base + route, data=json.dumps(body).encode(),
+                                      headers={'Content-Type': 'application/json'},
+                                      method='POST')
+                    with self.assertRaises(HTTPError) as ctx:
+                        urlopen(request, timeout=3)
+                    self.assertEqual(ctx.exception.code, 500)
+                    self.assertEqual((session.scenario, session.step),
+                                     ('NORMAL-001', 0))
+            with urlopen(base + '/api/state', timeout=3) as response:
+                self.assertEqual(json.loads(response.read())['step'], 0)
+        finally:
+            service.shutdown()
+            worker.join(timeout=5)
+            service.server_close()
+
+    def test_invalid_engine_json_is_server_error(self):
+        from types import SimpleNamespace
+        from unittest.mock import patch
+        with patch('server.app.subprocess.run',
+                   return_value=SimpleNamespace(stdout='invalid json')):
+            request = Request(f'http://127.0.0.1:{self.port}/api/state')
+            with self.assertRaises(HTTPError) as ctx:
+                urlopen(request, timeout=3)
+            self.assertEqual(ctx.exception.code, 500)
 
     def test_cross_origin_rejected(self):
         with self.assertRaises(HTTPError) as ctx:self.post('/api/replay/step',origin='https://untrusted.example')
