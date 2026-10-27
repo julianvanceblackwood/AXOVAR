@@ -111,6 +111,31 @@ class APITests(unittest.TestCase):
             worker.join(timeout=5)
             service.server_close()
 
+    def test_missing_or_invalid_raw_evidence_returns_500(self):
+        from tempfile import TemporaryDirectory
+        for raw in (None, b'\xff'):
+            with self.subTest(raw=raw), TemporaryDirectory() as folder:
+                root = Path(folder)
+                scenario_dir = root / 'scenarios'
+                scenario_dir.mkdir()
+                if raw is not None:
+                    (scenario_dir / 'NORMAL-001.csv').write_bytes(raw)
+                service = ThreadingHTTPServer(
+                    ('127.0.0.1', 0), create_handler(root, BINARY, Session()))
+                worker = threading.Thread(target=service.serve_forever, daemon=True)
+                worker.start()
+                base = f'http://127.0.0.1:{service.server_port}'
+                try:
+                    with self.assertRaises(HTTPError) as ctx:
+                        urlopen(base + '/api/raw', timeout=3)
+                    self.assertEqual(ctx.exception.code, 500)
+                    with urlopen(base + '/api/health', timeout=3) as response:
+                        self.assertEqual(json.loads(response.read())['status'], 'OK')
+                finally:
+                    service.shutdown()
+                    worker.join(timeout=5)
+                    service.server_close()
+
     def test_invalid_engine_json_is_server_error(self):
         from types import SimpleNamespace
         from unittest.mock import patch
