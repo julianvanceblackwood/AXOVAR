@@ -38,6 +38,12 @@ The bounded G4 explorer checks every state prefix in a declared finite test gram
 
 These are reproducible engineering results, not external authenticity, signed legal evidence, custody assurance or independent certification. See [assurance status](ASSURANCE_STATUS.md) before describing the system to customers or investors.
 
+## G5 measured engineering status
+
+The G5 research suite measures C++ fixture ingest and decision reconstruction independently from local HTTP requests, records p50/p95/p99 and workload provenance, and exercises read-only endpoints under bounded concurrency. The CI suite additionally runs instrumented Clang undefined-behavior checks and preserves the original JSON measurement reports. A controlled missing-executable fault verifies that independently evaluated portfolio risk does not require the market replay process to be available.
+
+These tests improve engineering evidence but do not establish an institutional operational service-level objective, a verified hardware speedup, performance on real datasets or a successful customer pilot. See [G5 performance methodology](G5_PERFORMANCE.md) and [assurance status](ASSURANCE_STATUS.md).
+
 ## Engineering acceptance gates
 
 | Gate | Deliverable | Exit evidence |
