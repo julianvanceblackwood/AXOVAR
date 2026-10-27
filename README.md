@@ -1,281 +1,30 @@
-<div align="center">
-
-<sub>VANCE BLACKWOOD CAPITAL / RESEARCH SYSTEMS</sub>
-
-<img src="assets/research-hero.svg" width="100%" alt="AXOVAR: market observation, verification, risk policy and simulated decision research schematic." />
-
 # AXOVAR
 
-**MARKET EVIDENCE / PORTFOLIO RISK / SETTLEMENT ASSURANCE**
+**VANCE BLACKWOOD CAPITAL / RESEARCH SYSTEMS**
 
-*An executable research system for understanding financial decisions when evidence, risk and settlement state can change.*
+*Build decisions that can withstand the failure of their own evidence.*
 
-[![AXOVAR verification](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml/badge.svg)](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml)
-![C++20](https://img.shields.io/badge/core-C%2B%2B20-253545?style=flat-square)
-![Research stage](https://img.shields.io/badge/stage-G0%20to%20G4%20research-253545?style=flat-square)
-![Simulation only](https://img.shields.io/badge/data-synthetic%20only-51412D?style=flat-square)
+[![Build and test](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml/badge.svg)](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml)
 
-[**Run Locally**](#run-locally) · [**Portfolio Risk**](#portfolio-risk-laboratory) · [**Settlement Research**](#settlement-and-incident-reconstruction) · [**Decision Audit**](docs/DECISION_AUDIT.md) · [**Independent Verification**](#independent-policy-verification) · [**G5 Performance**](#g5-measured-performance) · [**Technical Roadmap**](#research-direction)
+![AXOVAR research architecture](assets/research-hero.svg)
 
-</div>
+AXOVAR is a local research system for reconstructing financial decisions from incomplete or unreliable evidence. The C++20 engine replays synthetic market observations, evaluates source integrity and risk constraints, and produces an auditable decision record. Separate modules examine portfolio accounting, settlement uncertainty and performance.
 
-**First visit?** [Run the research demo](docs/START_HERE.md) · [Review the evidence](docs/EXTERNAL_EVALUATION.md) · [Examine the tests](https://github.com/julianvanceblackwood/AXOVAR/actions/workflows/verify.yml) · [Discuss a reproducible issue](https://github.com/julianvanceblackwood/AXOVAR/issues/3)
+The software uses synthetic fixtures. It does not connect to exchanges, hold funds, place orders or establish production-grade market or settlement finality.
 
-AXOVAR is a locally executable research platform for **market-data reliability, explainable decision constraints, portfolio risk and reversible settlement state**. Its current boundaries are a C++20 market replay, a deterministic decision audit, exact-cent synthetic portfolio accounting and a separate synthetic blockchain-reorganization experiment. Everything runs without an exchange account, wallet or financial credentials. There is no live trading, authenticated blockchain feed or production settlement capability.
+## Run
 
-| Research boundary | Implemented and verified | Not yet established |
-| :--- | :--- | :--- |
-| **Market evidence** | C++20 receipt-time replay, declared-upstream checks and fail-closed synthetic policy | Authenticated market feeds and external source independence |
-| **Decision assurance** | Versioned audit records, structured policy checks, reproducible local receipt hashing | Signed independent attestation and production access control |
-| **Portfolio risk** | FIFO ledger replay, integer-cent accounting, synthetic stress valuation and empirical shock-tail risk | Live positions, calibrated forecasts, liquidity or margin risk engines |
-| **Settlement research** | Synthetic confirmation-depth replay, fork replacement, counterparty holds and hash-linked event trace | Node consensus verification, irreversible finality, live custody or broadcasts |
-
----
-
-## The problem
-
-**What happens to a financial decision when the information supporting it can no longer be trusted?**
-
-A price is not a market state. Two matching feeds are not necessarily two independent observations. A content hash does not prove the truth of a source. And a valid quantitative signal is not, by itself, authorization to act.
-
-Financial decision systems must contend with conflicting venues, incomplete event sequences, delayed observations, correlated upstream dependencies, uncertain source health and constraints on portfolio exposure. Under these conditions, choosing a plausible number is not the same as establishing a defensible conclusion.
-
-![The independent evidence problem: correlated sources may manufacture false confidence](assets/problem-map.svg)
-
-> **AXOVAR's central principle:** a financial decision must not inherit more certainty than its supporting evidence permits.
-
-## Visual research walkthrough
-
-<details>
-<summary><strong>Research pipeline animation (conceptual)</strong></summary>
-
-![AXOVAR conceptual market evidence and policy-flow animation](assets/research-flow.gif)
-
-The animation is an explanation of the model, not live market telemetry. The actual current demonstration is shown below.
-
-</details>
-
-## Recorded demonstration
-
-![Recorded AXOVAR Generation Zero dashboard replay: normal and degraded synthetic markets](assets/dashboard-replay.gif)
-
-<sub>Actual AXOVAR G0 dashboard rendering successive outputs from the compiled C++ research engine. This is a recorded replay of synthetic fixtures, **not** a live market feed or production trading terminal.</sub>
-
-The same candidate action is evaluated under two deliberately different information conditions:
-
-| Scenario | Evidence conditions | Final simulated decision |
-| :--- | :--- | :--- |
-| `NORMAL-001` | Three eligible, healthy, independently labelled upstreams; limited price disagreement | `ALLOW_SIMULATION` |
-| `DEGRADED-001` | Shared upstream dependency, degraded feeds, sequence gap and delayed observations | `INSUFFICIENT_EVIDENCE` |
-
-The change in outcome is not a trading strategy. It demonstrates that evidence sufficiency and financial constraints can be evaluated separately from the attractiveness of a hypothetical action.
-
-<details>
-<summary><strong>Static dashboard views</strong></summary>
-
-**Normal market**
-
-![Normal synthetic market decision](assets/dashboard-normal.png)
-
-**Degraded market**
-
-![Degraded synthetic market decision](assets/dashboard-degraded.png)
-
-</details>
-
-## Portfolio risk laboratory
-
-AXOVAR now includes a separate **Generation Two research slice** for synthetic portfolio accounting and risk. It is available inside the local dashboard under **Portfolio Risk** and as a read-only [portfolio report endpoint](#local-api).
-
-The module replays an ordered ledger with USD cash flows, BTC and ETH purchases, sales and fees. It maintains FIFO acquisition lots, calculates realized and unrealized P&L in integer cents, marks current positions and enforces a strict accounting reconciliation.
-
-It then calculates deterministic price-shock P&L and a 95% empirical VaR and Expected Shortfall using **60 constructed, one-period shock observations**. These numbers are mathematical demonstrations, not forecasts of market losses or regulatory risk capital.
-
-| Independent check | Synthetic fixture result |
-| :--- | ---: |
-| Cash after transactions and withdrawal | $137,632.50 |
-| Marked portfolio equity | $197,932.50 |
-| Net profit / loss relative to net deposits | +$2,932.50 |
-| Realized FIFO profit / loss | +$193.00 |
-| Accounting reconciliation difference | $0.00 |
-| BTC -30%, ETH -45% stress impact | -$19,260.00 |
-
-These values are expected test vectors from a *fabricated fixture*. They are not a client portfolio, market backtest, reported return or trading performance metric. The risk endpoint is independent from the separate G0/G1 market replay; values in the two workspaces must not be interpreted as one live portfolio.
-
-**Technical reference:** [portfolio accounting and risk contract](docs/PORTFOLIO_RISK.md) · [implementation gates](docs/PRODUCT_GATES.md) · [executable tests](tests/test_portfolio.py).
-
-## Settlement and incident reconstruction
-
-Generation Three adds a **separate read-only settlement experiment** that reconstructs the history of simulated blockchain transaction intents, canonical blocks, reorganizations and counterparty interruptions. It is accessible through the **Settlement Research** dashboard tab and the `GET /api/settlement` endpoint.
-
-The included ten-event scenario deliberately crosses a critical boundary: a simulated BTC transaction reaches three confirmations, then a later fork removes its inclusion. The system records the loss of its previously confirmed status, rather than presenting the earlier decision as irreversible. The experiment also demonstrates a counterparty halt that overrides otherwise sufficient confirmations.
-
-| Observation | Reconstructed conclusion |
-| :--- | :--- |
-| 3 canonical confirmations | `POLICY_CONFIRMED`, an explicitly reversible depth rule |
-| Confirmed transaction with counterparty `HALT` | `HOLD`, no review eligibility |
-| Reorganization removes previously confirmed inclusion | `REORGED_OUT` and `CONFIRMATION_REVOKED` incident |
-| Confirmed inclusion and counterparty `CLEAR` | `REVIEW_ELIGIBLE`, not transfer authorization |
-
-Each synthetic event has an ordered receipt, linked evidence digest and optional simulated execution reference. The complete report has a reproducible SHA-256 fingerprint. Neither hash authenticates a block producer, verifies network consensus or proves economic settlement.
-
-**Inspect:** [G3 settlement contract](docs/SETTLEMENT_RESEARCH.md) · [synthetic event fixture](scenarios/SETTLEMENT-001.json) · [G3 adversarial regression tests](tests/test_settlement.py).
-
-This module is independent from the G0/G1 market fixtures and G2 synthetic portfolio. No real trade order, wallet key, blockchain RPC call or money transfer is involved.
-
-## Research thesis
-
-AXOVAR investigates **evidence-constrained market state reconstruction and decision assurance**: how to preserve the relationship between observations, derived financial state, assumptions and policy outcomes when sources are imperfect.
-
-Three distinctions govern the architecture:
-
-| Observation | What it establishes | What it does not establish |
-| :--- | :--- | :--- |
-| Multiple matching prices | Reported agreement among observations | Independence or economic truth |
-| SHA-256 fixture digest | Byte identity of the recorded fixture | Source authenticity or completeness |
-| Passing risk policy | The declared checks passed on eligible inputs | A safe or profitable real-world trade |
-
-**Unknown is a legitimate result.** If required observations are stale, incomplete or not independent, the engine may refuse to justify a simulated decision rather than silently substitute certainty.
-
-## What is implemented
-
-The following are implemented research components, not a completed institutional risk or settlement platform.
-
-| System | Executable scope |
-| :--- | :--- |
-| **C++20 event core** | Strict synthetic CSV parsing, typed integer inputs and receipt-time ordering |
-| **Market reconstruction** | Latest per-venue observations and a baseline reference-price estimate |
-| **Source integrity** | Sequence gaps, staleness, upstream deduplication and persistent identity-drift quarantine |
-| **Quantitative policy** | Simulated 0.1 BTC purchase, 75% concentration ceiling and 150 bps divergence rule |
-| **Decision engine** | `ALLOW_SIMULATION`, `DENY_SIMULATION`, `INSUFFICIENT_EVIDENCE` |
-| **Evidence view** | Event IDs, original fixture bytes and API-computed SHA-256 fingerprints |
-| **Local research API** | Python standard-library HTTP service bound to `127.0.0.1` |
-| **Research dashboard** | Replay controls, market chart, venue health, integrity alerts and decision inspection |
-| **AXOVAR Intelligence** | Read-only evidence explanations, grounded scenario context and optional local Gemma 3 model Q&A |
-| **Portfolio risk research** | Exact-cent synthetic ledger, FIFO accounting, shock P&L, empirical tail risk and reconciliation |
-| **Settlement replay** | Synthetic block depth, bounded reorg validation, counterparty hold, causally linked evidence trace |
-| **Independent policy verifier** | Exact-rational G4 reference, receipt v2 checks, adversarial bounded regressions |
-| **Verification** | G0–G5 CTest suites, GCC/Clang parity, UBSan and saved synthetic benchmark evidence |
-
-The reference price is an **arithmetic mean of one eligible price per declared upstream**. This is a controlled baseline, not a production-grade market price oracle. The upstream identity and health fields come from fixtures and are **not** independently authenticated.
-
-## Verifiable capability map
-
-![AXOVAR capability-scoped technical architecture with implemented synthetic research and unimplemented production boundaries](assets/technical-map.svg)
-
-*Research architecture schematic. Implemented, external and future capabilities are labeled; it is not a production-system certification.*
-
-## Decision audit
-
-The Generation One decision audit provides reproducible local policy traces. The synthetic core now reports each policy check as `PASS`, `FAIL` or `NOT_EVALUATED` and shows which eligible venue was selected to represent each declared upstream dependency.
-
-A read-only `/api/audit/receipt` endpoint returns a versioned policy snapshot with its fixture SHA-256, selected evidence identifiers and a canonical SHA-256 digest. The audit record is reproducible on the tested runtime, but it is neither signed nor a guarantee of financial or external data correctness.
-
-The Evidence Lab shows the current audit digest and policy checks. See [decision audit contract](docs/DECISION_AUDIT.md) for the canonical representation, source selection rules, exact limits, regression cases and unresolved assurance work.
-
-The technical steps required before any institution-facing product or financing claim are tracked separately in [product engineering gates](docs/PRODUCT_GATES.md).
-
-## Independent policy verification
-
-Generation Four introduces an independent reference check for the synthetic market policy. It reads the original CSV fixture, reconstructs received events and eligible upstreams using exact rational arithmetic, and checks the decision against the engine's `AXV-AUDIT-002` receipt. The verifier does not import the replay engine or the receipt producer.
-
-A reported change to a venue's declared upstream is now an explicit source-identity failure. The affected venue remains ineligible for the remainder of the replay, even if later fixture records again claim healthy status. This addresses an earlier gap between an integrity warning and the decision gate.
-
-The local checker also tests source selection, missing evidence, the 150 bps divergence boundary, the 75% concentration boundary and configured policy metadata. It rejects altered decisions or source classifications even when someone recomputes the receipt hash. That establishes consistency *with the supplied synthetic fixture*, not authenticity of an exchange or a mathematical proof of all possible executions.
+Requirements: macOS or Linux, CMake 3.20 or later, a C++20 compiler and Python 3.10 or later.
 
 ```bash
-# With the local dashboard running on the normal scenario
-curl --fail --silent http://127.0.0.1:8765/api/audit/receipt > receipt.json
-python3 -m verification.decision_reference --receipt receipt.json --fixture scenarios/NORMAL-001.csv
-```
-
-The command exits with an error on invalid evidence and prints an independent verification result. See [G4 verification contract](docs/G4_VERIFICATION.md) and [executable adversarial tests](tests/test_g4.py).
-
-### Assurance evidence
-
-The current hardening series adds a bounded state explorer, a compiler-output comparison and an optional offline evidence journal.
-
-| Verification | Executable boundary |
-| :--- | :--- |
-| **Finite model exploration** | 408 declared source-state sequences and 1,608 event-prefix states, cross-checked with the compiled core |
-| **Compiler comparison** | Exact replay output bytes compared between GCC and Clang on the Linux CI runner |
-| **Local evidence journal** | Self-contained fixture and audit envelope records with chained SHA-256 digests, `fsync`, and corruption rejection |
-| **Local request protection** | Strict loopback `Host` checks against DNS rebinding, plus existing origin and request-size limits |
-
-The journal is opt-in. With a matching locally captured `receipt.json` and `scenarios/NORMAL-001.csv`:
-
-```bash
-python3 -m verification.evidence_journal append \
-  --journal local-evidence.jsonl \
-  --receipt receipt.json \
-  --fixture scenarios/NORMAL-001.csv
-python3 -m verification.evidence_journal verify \
-  --journal local-evidence.jsonl
-```
-
-A missing, modified or truncated journal entry fails verification rather than being silently repaired. A host administrator can still replace the entire journal and recompute its hashes. The records are **not signed or externally timestamped**.
-
-See the [G4 verifier](docs/G4_VERIFICATION.md) for the finite model boundary and [assurance register](docs/ASSURANCE_STATUS.md) for what remains unproven, including external feed authenticity, independent key custody and actual customer validation.
-
-## G5 measured performance
-
-G5 introduces a separate **in-process C++ benchmark** for actual fixture parsing and the existing risk-policy replay/JSON path. It records warmup counts, p50/p95/p99 latency, synthetic workload hashes and runtime details. A second, bounded **HTTP load experiment** verifies consistency across four read-only endpoints under concurrent requests. Neither test places orders or connects to live markets.
-
-`AXV-PERF-001` reports the engine's measured work excluding process startup; `AXV-LOAD-001` reports the loopback service including Python/HTTP and child-process overhead. These measurements **must not be compared as equivalent latency figures**. The CI workflow saves JSON results as downloadable artifacts from the G5 measurement job and runs an additional Clang UndefinedBehaviorSanitizer test matrix.
-
-```bash
-python3 benchmarks/run.py --binary build/axovar_bench --samples 200 --warmups 20 --output reports/core-performance.json
-python3 benchmarks/service_load.py --binary build/axovar_core --concurrency 4 --requests-per-route 15 --output reports/service-load.json
-```
-
-Results from shared CI runners are exploratory and do not establish production capacity or a customer SLO. See [G5 measurement methodology](docs/G5_PERFORMANCE.md) and the [assurance register](docs/ASSURANCE_STATUS.md). No FPGA acceleration or hardware performance claim is made.
-
-## Generation Zero architecture
-
-![Implemented AXOVAR Generation Zero architecture](assets/architecture.svg)
-
-The executable path is intentionally compact. A C++20 core processes synthetic scenarios and emits derived JSON state. A loopback Python adapter exposes that state to the local dashboard. Tests exercise the core and API behavior.
-
-**The principal trust boundary:** source assertions and fixture-defined independence must never be mistaken for independently established economic truth. See [architecture and limitations](docs/ARCHITECTURE.md).
-
-## AXOVAR Intelligence
-
-**Research assistant for market evidence and technical questions.** The dashboard now includes an Intelligence workspace. It uses two deliberately separate components.
-
-- **Evidence-only mode** runs without downloads or external APIs. It explains the current synthetic scenario, policy decision, venue health, source independence assumptions and the limits of observed evidence using deterministic Python code. This is not a trained AI model.
-- **Local model mode** connects to an independently installed [Ollama](https://ollama.com/) server at `127.0.0.1:11434` and uses the open-weight `gemma3:4b` model for broader natural-language answers and explanations. This is an integrated third-party model, not a model trained by Vance Blackwood. The model is optional and is not included in this repository.
-
-To enable local model answers on your Mac, install Ollama using its official instructions, then run:
-
-```bash
-ollama pull gemma3:4b
-ollama serve   # only if the Ollama app or daemon is not already running
-./run.sh       # run separately from the AXOVAR project directory
-```
-
-Open `http://127.0.0.1:8765`, enter **Intelligence**, select the synthetic scenario and choose a question. If Ollama is unavailable, AXOVAR falls back to evidence-only explanations. It does not automatically download model weights or send scenario data to an internet-based model API.
-
-**Security and epistemic boundary:** a fixed local model endpoint, bounded question size, curated derived snapshot, no raw fixture transfer, no model tools, no shell access, no autonomous orders and no authority to change C++ risk-policy decisions. Model prose is unverified analysis. References to event IDs identify the underlying engine receipts but do not prove the model's interpretation. Prompt injection and hallucinations remain possible; the deterministic gate is authoritative. See [Intelligence design](docs/INTELLIGENCE.md).
-
-This release adds **research question answering**, not trained proprietary AI, learned market prediction, true causal inference, calibrated confidence or production-grade retrieval. Questions about external or current market conditions are not supported by the synthetic data. Some general technical questions require the optional local model.
-
-## Run locally
-
-**Requirements:** macOS or Linux, CMake 3.20+, C++20 compiler and Python 3.10+. No exchange keys, package installation, account connection or internet access are required for the application.
-
-```bash
-# Clone the independent research repository
 git clone https://github.com/julianvanceblackwood/AXOVAR.git
 cd AXOVAR
-
-# Build, verify and launch the loopback dashboard
-chmod +x run.sh
 ./run.sh
 ```
 
-Open **http://127.0.0.1:8765** in your browser.
+The script builds the core, runs the tests and starts the dashboard at [http://127.0.0.1:8765](http://127.0.0.1:8765). No financial credentials are required.
 
-For separate verification:
+To run the engine without the dashboard:
 
 ```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
@@ -286,65 +35,119 @@ ctest --test-dir build --output-on-failure
 ./build/axovar_core --scenario scenarios/DEGRADED-001.csv 9
 ```
 
-The last argument is the number of received events available at that replay step. Neither event time nor a later observation is allowed to grant knowledge retroactively.
+The normal fixture produces `ALLOW_SIMULATION`. The degraded fixture produces `INSUFFICIENT_EVIDENCE`. These are policy outputs for constructed inputs, not investment signals.
 
-### Local API
+<details>
+<summary>Recorded local demonstration</summary>
 
-| Method | Route | Purpose |
-| :--- | :--- | :--- |
-| GET | `/api/health` | Local service status |
-| GET | `/api/scenarios` | Available fixtures |
-| GET | `/api/state` | Current engine state and decision |
-| GET | `/api/raw` | Recorded fixture lines and hashes |
-| GET | `/api/audit/receipt` | G1 synthetic decision audit record |
-| GET | `/api/risk/portfolio` | Read-only G2 synthetic portfolio and risk report |
-| GET | `/api/settlement` | G3 synthetic chain, incident and finality timeline |
-| GET | `/api/intelligence/status` | Local model availability and suggested research questions |
-| POST | `/api/intelligence/ask` | Read-only question with current derived replay state |
-| POST | `/api/replay/scenario` | Select an allowlisted scenario |
-| POST | `/api/replay/step` | Advance one received event |
-| POST | `/api/replay/reset` | Restart current scenario |
-| POST | `/api/replay/end` | Replay all received events |
+![Recorded replay of synthetic market evidence](assets/dashboard-replay.gif)
 
-**Security boundary:** the service is for local research use only. It is loopback-bound, process-local and has no production multi-user authentication. Do not expose it to an untrusted network or connect real trading accounts.
+The recording shows the local application processing prepared fixtures. It is not live market telemetry.
 
-## Research direction
+</details>
 
-The current implementation proves a limited end-to-end behavior. Future research is organized into independent engineering gates, each requiring tests or measurement before its status advances.
+## System components
 
-| Gate | Research boundary | State |
-| :--- | :--- | :--- |
-| **G0** | Deterministic market fixtures → integrity and concentration policy → explainable simulation receipt | **Implemented / tested** |
-| **G1** | Reproducible source selection and decision audit | First slice implemented, broader numeric assurance pending |
-| **G2** | FIFO synthetic portfolio, shock stress testing and empirical tail risk | First slice implemented, systemic risk and real data pending |
-| **G3** | Synthetic chain reorgs, reversible confirmation policy and counterparty holds | First slice implemented, external adapters and real finality model pending |
-| **G4** | Independent rational oracle, bounded model exploration, compiler parity and offline journal | Local hardening implemented; independent attestation and full formal proof pending |
-| **G5** | Reproducible in-process/HTTP latency measurement, output integrity and UBSan CI | Initial measurement suite implemented; real SLOs and hardware evaluation pending |
+| Component | Implemented scope |
+| --- | --- |
+| Market replay | Receipt-time ordering, sequence-gap detection, source staleness and upstream dependency checks |
+| Decision policy | At least two eligible upstreams, a 150 bps disagreement threshold and a 75% synthetic BTC exposure limit |
+| Audit receipts | Versioned `AXV-AUDIT-002` record, evidence references and canonical SHA-256 digest |
+| Independent verification | Exact-rational reference checks, bounded state enumeration and local evidence-journal validation |
+| Portfolio risk | USD-cent accounting, FIFO cost basis, reconciled P&L, synthetic stress scenarios and descriptive VaR / expected shortfall |
+| Settlement research | Synthetic transaction inclusion, chain reorganization, confirmation reversal and counterparty holds |
+| Performance | Separate C++ ingest/replay timings, bounded HTTP load measurements and compiler/sanitizer checks |
 
-Future research includes authenticated evidence, real network models, cross-domain settlement, systemic contagion, defensive cybersecurity and independently verified performance. These are **planned directions**, not demonstrated production capabilities. Full sequence: [ROADMAP](docs/ROADMAP.md).
+The market engine has three outcomes: `ALLOW_SIMULATION`, `DENY_SIMULATION` and `INSUFFICIENT_EVIDENCE`. An allow result means only that the declared checks passed on the supplied evidence.
 
-## Assurance boundaries
+A venue that changes its declared upstream is excluded for the rest of that replay. Matching observations from a shared upstream count as one source. These checks are deterministic but cannot authenticate fixture authors or prove that quoted prices are true.
 
-AXOVAR does not implement production service-level guarantees, independently validated latency budgets, FPGA acceleration, live trading, production exchange connectivity, authenticated external feeds, real blockchain settlement, a persistent evidence database, calibrated uncertainty sets, formal verification proofs, production portfolio custody or accounting, a proprietary trained language model or an FPGA accelerator. The G2 module uses fixed synthetic positions and engineered shock vectors. The G3 module uses invented transaction IDs, asserted chain branches and simulated counterparty notices. Confirmation thresholds are reversible and do not prove settlement finality.
+The portfolio and settlement modules are independent experiments. They do not share a live account, market feed or settlement ledger.
 
-The G0/G1 market replay uses integer price inputs and `long double` for derived exposure, while the separate G2 synthetic portfolio uses integer-cent money and decimal rounding for notional valuations. **Neither constitutes an integrated production accounting system.** The decision receipt is not digitally signed, and bounded differential tests are not a formal proof. The simulated market evidence may be wrong even when its file hash is correct.
+## Evidence and verification
 
-Financial decisions remain research-only. **No real orders are submitted.**
+The audit endpoint returns the replay step, selected sources, policy checks and a receipt digest. The standalone verifier recomputes the decision from the fixture and checks the receipt without importing the engine or receipt generator.
 
-## Engineering and governance references
+```bash
+# In another terminal, with the normal scenario selected in the dashboard
+curl --fail --silent http://127.0.0.1:8765/api/audit/receipt > receipt.json
+python3 -m verification.decision_reference \
+  --receipt receipt.json \
+  --fixture scenarios/NORMAL-001.csv
+```
 
-- [CPMI-IOSCO Principles for Financial Market Infrastructures](https://www.bis.org/committees/cpmi/pfmi/overview)
-- [Monetary Authority of Singapore](https://www.mas.gov.sg/) — financial technology and operational resilience reference material
-- [NIST AI Risk Management Framework](https://airc.nist.gov/) — relevant future model governance research
+An optional local journal can retain fixtures and audit responses in hash-linked records:
 
-These references are research context, not institutional affiliation, regulatory approval or compliance claims.
+```bash
+python3 -m verification.evidence_journal append \
+  --journal local-evidence.jsonl \
+  --receipt receipt.json \
+  --fixture scenarios/NORMAL-001.csv
+python3 -m verification.evidence_journal verify \
+  --journal local-evidence.jsonl
+```
+
+The journal is not digitally signed or independently anchored. Anyone controlling the host could replace it and recalculate its hashes.
+
+The automated verification workflow covers GCC and Clang builds, the bounded policy model, audit and API regressions, synthetic portfolio and settlement cases, compiler-output comparison, and Clang UndefinedBehaviorSanitizer. Tests establish their stated input and environment boundaries rather than full formal correctness.
+
+## Performance measurements
+
+G5 separates the cost of C++ fixture ingestion and policy replay from the cost of local HTTP requests. Reports include synthetic workload information, repeat counts, latency percentiles and machine metadata.
+
+```bash
+python3 benchmarks/run.py \
+  --binary build/axovar_bench \
+  --samples 200 --warmups 20 \
+  --output reports/core-performance.json
+
+python3 benchmarks/service_load.py \
+  --binary build/axovar_core \
+  --concurrency 4 --requests-per-route 15 \
+  --output reports/service-load.json
+```
+
+GitHub Actions also retains the JSON measurement reports as short-lived workflow artifacts. Values from shared CI runners are not service-level guarantees or evidence of a production speedup. See [G5 measurement methodology](docs/G5_PERFORMANCE.md).
+
+## Local API
+
+The service listens on `127.0.0.1` and is intended for one local research session.
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| GET | `/api/health`, `/api/scenarios` | Service status and prepared scenarios |
+| GET | `/api/state`, `/api/raw` | Replay state and underlying fixture evidence |
+| GET | `/api/audit/receipt` | Versioned decision receipt |
+| GET | `/api/risk/portfolio` | Independent synthetic portfolio analysis |
+| GET | `/api/settlement` | Synthetic chain and counterparty timeline |
+| POST | `/api/replay/scenario`, `/api/replay/step`, `/api/replay/reset`, `/api/replay/end` | Local replay controls |
+
+The dashboard also has a read-only Intelligence workspace. Evidence explanations run locally without a model. Optional natural-language questions use a separately installed Ollama/Gemma 3 model. Model responses cannot approve decisions or alter policy. See [Intelligence design](docs/INTELLIGENCE.md).
+
+This API has no institutional identity, authorization or multi-tenant controls. Do not expose it to untrusted networks or connect customer financial accounts.
+
+## Technical documentation
+
+| Document | Scope |
+| --- | --- |
+| [Start here](docs/START_HERE.md) | Local evaluation and expected outcomes |
+| [Architecture](docs/ARCHITECTURE.md) | Components and trust boundaries |
+| [Decision audit](docs/DECISION_AUDIT.md) | Receipt format and source-selection semantics |
+| [Independent verification](docs/G4_VERIFICATION.md) | Policy reference, finite-state tests and limits |
+| [Portfolio risk](docs/PORTFOLIO_RISK.md) | Accounting identities and stress methodology |
+| [Settlement research](docs/SETTLEMENT_RESEARCH.md) | Reorganizations, confirmation policy and incidents |
+| [G5 performance](docs/G5_PERFORMANCE.md) | Measurement definitions and limitations |
+| [Assurance status](docs/ASSURANCE_STATUS.md) | Current evidence and unresolved acceptance gates |
+| [Roadmap](docs/ROADMAP.md) | Research stages and pending engineering work |
+
+## Status and limitations
+
+AXOVAR is a tested research implementation, not an investor-ready or production financial platform. Authorized market-data integration, independent evidence attestation, real settlement verification, production security, operational service levels and customer validation are still open. The current C++ policy also uses floating-point derived values; the independent verifier checks its fixed synthetic contract, not every possible real-world numerical condition.
+
+The repository does not currently declare an open-source license. Public visibility alone does not grant reuse or redistribution rights. Reproducible technical reports are welcome through [GitHub Issues](https://github.com/julianvanceblackwood/AXOVAR/issues).
 
 ---
-
-<div align="center">
 
 **VANCE BLACKWOOD CAPITAL / RESEARCH SYSTEMS**
 
 *Build decisions that can withstand the failure of their own evidence.*
-
-</div>
