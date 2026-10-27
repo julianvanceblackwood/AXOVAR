@@ -61,7 +61,10 @@ def create_handler(root: Path, binary: Path, session: Session):
                 raise ValueError("unknown scenario")
             result = subprocess.run([str(binary), "--scenario", str(f), str(step)],
                                     capture_output=True, text=True, timeout=5, check=True)
-            return json.loads(result.stdout)
+            try:
+                return json.loads(result.stdout)
+            except json.JSONDecodeError as exc:
+                raise subprocess.SubprocessError("invalid engine response") from exc
 
         def local_host(self) -> bool:
             # A browser may reach loopback through a hostile hostname (DNS rebinding).
@@ -80,7 +83,7 @@ def create_handler(root: Path, binary: Path, session: Session):
                 self.respond(200, (root / "web" / filename).read_bytes(), mimetype)
                 return
             if path == "/api/health":
-                self.output({"service": "AXOVAR", "stage": "Generation Zero", "status": "OK", "simulation_only": True})
+                self.output({"service": "AXOVAR", "stage": "G0-G5 research", "status": "OK", "simulation_only": True})
                 return
             if path == "/api/intelligence/status":
                 self.output({**intelligence.status(), "examples": list(intelligence.EXAMPLES),
@@ -178,19 +181,22 @@ def create_handler(root: Path, binary: Path, session: Session):
                     self.output(intelligence.ask(question, snapshot, payload.get("use_model", True)))
                     return
                 with session.lock:
-                    if path == "/api/replay/scenario":
-                        requested = payload.get("scenario")
-                        if requested not in ALLOWED:
-                            raise ValueError("unsupported scenario")
-                        session.scenario = requested
-                        session.step = 0
-                    elif path == "/api/replay/reset":
-                        session.step = 0
-                    else:
-                        total = self.data(session.scenario, 0)["total"]
-                        session.step = min(total, session.step + 1) if path.endswith("step") else total
                     scenario, step = session.scenario, session.step
-                self.output(self.data(scenario, step))
+                    if path == "/api/replay/scenario":
+                        scenario = payload.get("scenario")
+                        if scenario not in ALLOWED:
+                            raise ValueError("unsupported scenario")
+                        step = 0
+                    elif path == "/api/replay/reset":
+                        step = 0
+                    else:
+                        total = self.data(scenario, 0)["total"]
+                        step = min(total, step + 1) if path.endswith("step") else total
+                    # Compute the candidate response before updating shared replay state.
+                    # A failed subprocess must not commit an unseen transition.
+                    snapshot = self.data(scenario, step)
+                    session.scenario, session.step = scenario, step
+                self.output(snapshot)
             except (ValueError, json.JSONDecodeError) as exc:
                 self.error(400, str(exc))
             except (subprocess.SubprocessError, OSError):
@@ -210,7 +216,7 @@ def main():
         parser.error(f"core binary does not exist: {binary}; run cmake first")
     host = "127.0.0.1"
     server = ThreadingHTTPServer((host, args.port), create_handler(root, binary, Session()))
-    print(f"AXOVAR Generation Zero: http://{host}:{args.port}", flush=True)
+    print(f"AXOVAR research: http://{host}:{args.port}", flush=True)
     try:
         server.serve_forever()
     except KeyboardInterrupt:
