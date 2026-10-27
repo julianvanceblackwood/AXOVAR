@@ -1,4 +1,4 @@
-"""AXOVAR Generation Zero: loopback-only deterministic research dashboard API."""
+"""Loopback-only API for AXOVAR replay and research fixtures."""
 from __future__ import annotations
 
 import argparse
@@ -131,8 +131,12 @@ def create_handler(root: Path, binary: Path, session: Session):
             if path == "/api/raw":
                 with session.lock:
                     scenario = session.scenario
-                payload = (root / "scenarios" / (scenario + ".csv")).read_bytes()
-                lines = payload.decode("utf-8").splitlines()
+                try:
+                    payload = (root / "scenarios" / (scenario + ".csv")).read_bytes()
+                    lines = payload.decode("utf-8").splitlines()
+                except (OSError, UnicodeError):
+                    self.error(500, "fixture evidence unavailable")
+                    return
                 self.output({"scenario": scenario, "fixture_sha256": hashlib.sha256(payload).hexdigest(),
                              "records": [{"line": i + 1, "raw": line,
                                           "sha256": hashlib.sha256((line + "\n").encode()).hexdigest()}
