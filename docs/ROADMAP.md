@@ -36,7 +36,9 @@ The new shock samples are deliberately fabricated for regression testing and mus
 
 ## G5 — performance and hardware evaluation
 
-Benchmark event pipeline tail latency, state updates and replay; identify actual bottlenecks; isolate and verify FPGA-compatible interfaces. Do not claim acceleration before measurement.
+**Implemented first research slice:** a C++ in-process measurement harness exercises the existing fixture ingestion and reconstructed decision/JSON path with warmups, repeated samples, output fingerprints and p50/p95/p99 distributions. A separate bounded, concurrent loopback API experiment checks repeatability and error-free responses for market state, audit, portfolio and settlement. GitHub Actions now builds with Clang UndefinedBehaviorSanitizer, records both machine-readable G5 reports, and preserves the existing GCC/Clang decision parity checks. A simulated unavailable engine is fault-injected to verify independent read-only risk-route isolation. See [G5 measurement methodology](G5_PERFORMANCE.md).
+
+**Remaining G5 gates:** statistically defensible before/after comparisons on dedicated stable hardware, real representative workloads, CPU/heap profiling, sustained capacity and saturation experiments, documented operational SLOs, recovery under failures, resource isolation, and an independently reviewed hardware acceleration experiment only if profiling justifies one. No FPGA acceleration, customer-load performance or production SLO is claimed.
 
 ## G6 — scientific evaluation
 

@@ -43,3 +43,35 @@ jobs:
           cmake --build build-clang --parallel
       - name: Compare replay bytes
         run: python3 tests/check_compiler_parity.py build-gcc/axovar_core build-clang/axovar_core .
+  sanitizer-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure undefined-behavior sanitizer
+        run: |
+          cmake -S . -B build-ubsan -DCMAKE_BUILD_TYPE=Debug -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_CXX_FLAGS="-fsanitize=undefined -fno-sanitize-recover=all" -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=undefined"
+      - name: Build instrumented engine and benchmark
+        run: cmake --build build-ubsan --parallel
+      - name: Run instrumented regression suite
+        run: ctest --test-dir build-ubsan --output-on-failure
+  g5-measurement:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build measurement targets
+        run: |
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build --parallel
+      - name: Collect synthetic in-process latency report
+        run: python3 benchmarks/run.py --binary build/axovar_bench --samples 80 --warmups 10 --output reports/core-performance.json
+      - name: Collect bounded read-only service report
+        run: python3 benchmarks/service_load.py --binary build/axovar_core --concurrency 4 --requests-per-route 12 --output reports/service-load.json
+      - name: Preserve original benchmark evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: axovar-g5-measurements
+          path: reports/*.json
+          if-no-files-found: error
+          retention-days: 14

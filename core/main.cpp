@@ -241,6 +241,7 @@ std::string json(const std::vector<Event>& events, std::size_t step, const std::
 }
 } // namespace axovar
 
+#ifndef AXOVAR_NO_MAIN
 int main(int argc,char** argv) {
     try {
         if(argc!=4 || std::string(argv[1])!="--scenario") {
@@ -257,3 +258,5 @@ int main(int argc,char** argv) {
         std::cerr<<"AXOVAR input error: "<<e.what()<<'\n'; return 1;
     }
 }
+
+#endif // AXOVAR_NO_MAIN

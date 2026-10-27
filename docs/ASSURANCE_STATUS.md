@@ -17,6 +17,8 @@ This record separates repeatable repository evidence from operational or commerc
 | Portfolio experiment | Synthetic integer-cent FIFO book, stress analysis and finite-shock tail statistics | No production accounting, authenticated prices or calibrated VaR |
 | Settlement experiment | Synthetic chain and counterparty reconstruction with reversible confirmation states | No node validation, custody, real finality or settlement |
 | Regression process | CTest under GCC and Clang, browser syntax validation and compiler parity job | CI does not replace independent security review or end-to-end customer testing |
+| G5 performance measurement | Warmed in-process C++ ingest/replay timings, read-only concurrent HTTP reports and machine-readable CI evidence | Synthetic shared-runner observations, not a real deployment SLO |
+| Runtime fault checks | Clang UndefinedBehaviorSanitizer regressions and missing-engine fault injection | Execution coverage is bounded and UBSan cannot establish memory safety or uptime |
 
 ## Controls requiring external dependencies
 

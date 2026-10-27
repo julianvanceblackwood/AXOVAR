@@ -15,7 +15,7 @@
 ![Research stage](https://img.shields.io/badge/stage-G0%20to%20G4%20research-253545?style=flat-square)
 ![Simulation only](https://img.shields.io/badge/data-synthetic%20only-51412D?style=flat-square)
 
-[**Run Locally**](#run-locally) · [**Portfolio Risk**](#portfolio-risk-laboratory) · [**Settlement Research**](#settlement-and-incident-reconstruction) · [**Decision Audit**](docs/DECISION_AUDIT.md) · [**Independent Verification**](#independent-policy-verification) · [**Technical Roadmap**](#research-direction)
+[**Run Locally**](#run-locally) · [**Portfolio Risk**](#portfolio-risk-laboratory) · [**Settlement Research**](#settlement-and-incident-reconstruction) · [**Decision Audit**](docs/DECISION_AUDIT.md) · [**Independent Verification**](#independent-policy-verification) · [**G5 Performance**](#g5-measured-performance) · [**Technical Roadmap**](#research-direction)
 
 </div>
 
@@ -155,7 +155,7 @@ The following are implemented research components, not a completed institutional
 | **Portfolio risk research** | Exact-cent synthetic ledger, FIFO accounting, shock P&L, empirical tail risk and reconciliation |
 | **Settlement replay** | Synthetic block depth, bounded reorg validation, counterparty hold, causally linked evidence trace |
 | **Independent policy verifier** | Exact-rational G4 reference, receipt v2 checks, adversarial bounded regressions |
-| **Verification** | Engine, API, Intelligence, audit, portfolio, settlement and G4 verification tests through CTest and GitHub Actions |
+| **Verification** | G0–G5 CTest suites, GCC/Clang parity, UBSan and saved synthetic benchmark evidence |
 
 The reference price is an **arithmetic mean of one eligible price per declared upstream**. This is a controlled baseline, not a production-grade market price oracle. The upstream identity and health fields come from fixtures and are **not** independently authenticated.
 
@@ -216,6 +216,19 @@ python3 -m verification.evidence_journal verify \
 A missing, modified or truncated journal entry fails verification rather than being silently repaired. A host administrator can still replace the entire journal and recompute its hashes. The records are **not signed or externally timestamped**.
 
 See the [G4 verifier](docs/G4_VERIFICATION.md) for the finite model boundary and [assurance register](docs/ASSURANCE_STATUS.md) for what remains unproven, including external feed authenticity, independent key custody and actual customer validation.
+
+## G5 measured performance
+
+G5 introduces a separate **in-process C++ benchmark** for actual fixture parsing and the existing risk-policy replay/JSON path. It records warmup counts, p50/p95/p99 latency, synthetic workload hashes and runtime details. A second, bounded **HTTP load experiment** verifies consistency across four read-only endpoints under concurrent requests. Neither test places orders or connects to live markets.
+
+`AXV-PERF-001` reports the engine's measured work excluding process startup; `AXV-LOAD-001` reports the loopback service including Python/HTTP and child-process overhead. These measurements **must not be compared as equivalent latency figures**. The CI workflow saves JSON results as downloadable artifacts from the G5 measurement job and runs an additional Clang UndefinedBehaviorSanitizer test matrix.
+
+```bash
+python3 benchmarks/run.py --binary build/axovar_bench --samples 200 --warmups 20 --output reports/core-performance.json
+python3 benchmarks/service_load.py --binary build/axovar_core --concurrency 4 --requests-per-route 15 --output reports/service-load.json
+```
+
+Results from shared CI runners are exploratory and do not establish production capacity or a customer SLO. See [G5 measurement methodology](docs/G5_PERFORMANCE.md) and the [assurance register](docs/ASSURANCE_STATUS.md). No FPGA acceleration or hardware performance claim is made.
 
 ## Generation Zero architecture
 
@@ -306,13 +319,13 @@ The current implementation proves a limited end-to-end behavior. Future research
 | **G2** | FIFO synthetic portfolio, shock stress testing and empirical tail risk | First slice implemented, systemic risk and real data pending |
 | **G3** | Synthetic chain reorgs, reversible confirmation policy and counterparty holds | First slice implemented, external adapters and real finality model pending |
 | **G4** | Independent rational oracle, bounded model exploration, compiler parity and offline journal | Local hardening implemented; independent attestation and full formal proof pending |
-| **G5** | Low-latency profiling and independently verified FPGA-oriented experiments | Planned |
+| **G5** | Reproducible in-process/HTTP latency measurement, output integrity and UBSan CI | Initial measurement suite implemented; real SLOs and hardware evaluation pending |
 
 Future research includes authenticated evidence, real network models, cross-domain settlement, systemic contagion, defensive cybersecurity and independently verified performance. These are **planned directions**, not demonstrated production capabilities. Full sequence: [ROADMAP](docs/ROADMAP.md).
 
 ## Assurance boundaries
 
-AXOVAR does not implement live trading, production exchange connectivity, authenticated external feeds, real blockchain settlement, a persistent evidence database, calibrated uncertainty sets, formal verification proofs, production portfolio custody or accounting, a proprietary trained language model or an FPGA accelerator. The G2 module uses fixed synthetic positions and engineered shock vectors. The G3 module uses invented transaction IDs, asserted chain branches and simulated counterparty notices. Confirmation thresholds are reversible and do not prove settlement finality.
+AXOVAR does not implement production service-level guarantees, independently validated latency budgets, FPGA acceleration, live trading, production exchange connectivity, authenticated external feeds, real blockchain settlement, a persistent evidence database, calibrated uncertainty sets, formal verification proofs, production portfolio custody or accounting, a proprietary trained language model or an FPGA accelerator. The G2 module uses fixed synthetic positions and engineered shock vectors. The G3 module uses invented transaction IDs, asserted chain branches and simulated counterparty notices. Confirmation thresholds are reversible and do not prove settlement finality.
 
 The G0/G1 market replay uses integer price inputs and `long double` for derived exposure, while the separate G2 synthetic portfolio uses integer-cent money and decimal rounding for notional valuations. **Neither constitutes an integrated production accounting system.** The decision receipt is not digitally signed, and bounded differential tests are not a formal proof. The simulated market evidence may be wrong even when its file hash is correct.
 
