@@ -68,6 +68,33 @@ class PerformanceContractTests(unittest.TestCase):
             self.assertLessEqual(result["p50_ms"], result["p95_ms"])
             self.assertLessEqual(result["p95_ms"], result["p99_ms"])
 
+    def test_broken_engine_isolates_failures_from_independent_risk_route(self):
+        from http.server import ThreadingHTTPServer
+        from threading import Thread
+        from urllib.error import HTTPError
+        from urllib.request import urlopen
+        from server.app import Session, create_handler
+        missing = ROOT / "build" / "engine-does-not-exist"
+        server = ThreadingHTTPServer(
+            ("127.0.0.1", 0), create_handler(ROOT, missing, Session()))
+        worker = Thread(target=server.serve_forever, daemon=True)
+        worker.start()
+        base = f"http://127.0.0.1:{server.server_port}"
+        try:
+            for endpoint in ("/api/state", "/api/audit/receipt"):
+                with self.subTest(endpoint=endpoint):
+                    with self.assertRaises(HTTPError) as failure:
+                        urlopen(base + endpoint, timeout=5)
+                    self.assertEqual(failure.exception.code, 500)
+            with urlopen(base + "/api/risk/portfolio", timeout=5) as response:
+                portfolio = json.loads(response.read())
+            self.assertEqual(portfolio["accounting"]["reconciliation_delta_cents"], 0)
+            self.assertTrue(portfolio["synthetic"])
+        finally:
+            server.shutdown()
+            worker.join(timeout=5)
+            server.server_close()
+
     def test_invalid_mode_and_sample_bounds_fail(self):
         scenario = ROOT / "scenarios" / "NORMAL-001.csv"
         for mode, warmups, samples in (
