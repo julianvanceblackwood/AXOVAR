@@ -49,6 +49,10 @@ A normal replay receipt can be downloaded from `/api/audit/receipt` and checked 
 
 The CI also enumerates 408 bounded policy traces and compares GCC/Clang replay output bytes on Linux. None of these steps authenticates real-world prices or creates a signed legal record.
 
+## Measure the system
+
+G5 adds real synthetic performance experiments with separate C++ and HTTP timing boundaries. After building, run `python3 benchmarks/run.py --binary build/axovar_bench --samples 200 --warmups 20` and `python3 benchmarks/service_load.py --binary build/axovar_core`. Neither measures real trading latency or market execution. See [G5 performance](G5_PERFORMANCE.md) for reproducibility, accuracy checks and benchmark limitations.
+
 ## A useful technical challenge
 
 Try to make the engine arrive at an unjustified conclusion using **synthetic input only**. In particular:
