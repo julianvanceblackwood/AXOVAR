@@ -2,9 +2,7 @@
 
 VANCE BLACKWOOD CAPITAL / RESEARCH SYSTEMS
 
-A reproducible research program in market evidence, risk and decision assurance.
-
-AXOVAR is an independent financial systems research project. It asks a practical question: **what should a decision system do when the market evidence behind a proposed action is incomplete, delayed or dependent on the same source?**
+AXOVAR studies how financial policy decisions can be reconstructed when source data is incomplete, delayed or internally dependent.
 
 It is not a trading platform, investment strategy or connected financial account. The current software runs locally against deliberately synthetic fixtures.
 
@@ -53,9 +51,9 @@ The CI also enumerates 408 bounded policy traces and compares GCC/Clang replay o
 
 G5 adds real synthetic performance experiments with separate C++ and HTTP timing boundaries. After building, run `python3 benchmarks/run.py --binary build/axovar_bench --samples 200 --warmups 20` and `python3 benchmarks/service_load.py --binary build/axovar_core`. Neither measures real trading latency or market execution. See [G5 performance](G5_PERFORMANCE.md) for reproducibility, accuracy checks and benchmark limitations.
 
-## A useful technical challenge
+## Reproduction checklist
 
-Try to make the engine arrive at an unjustified conclusion using **synthetic input only**. In particular:
+Use the bundled fixtures or new synthetic cases to test these conditions:
 
 - Can two venues that declare the same upstream be mistaken for independent sources?
 - Can delayed input or a sequence gap influence a decision before it was observed?
@@ -66,10 +64,10 @@ Try to make the engine arrive at an unjustified conclusion using **synthetic inp
 
 When reporting a finding, include the commit SHA, operating system, compiler version, fixture, steps, expected outcome and observed outcome. The [source-dependency review issue](https://github.com/julianvanceblackwood/AXOVAR/issues/3) is a concrete starting point. For other reproducible issues, use [GitHub Issues](https://github.com/julianvanceblackwood/AXOVAR/issues). Do not publish credentials or confidential customer data.
 
-## Boundaries and collaboration
+## Scope and contact
 
 This is a public research repository. It has **no declared open-source license at present**; access to the source does not automatically grant permission to copy, modify, redistribute or commercially reuse it.
 
-Technical feedback, independent reproduction and focused research conversations are welcome. For private inquiries, use [email](mailto:julianvanceblackwood@gmail.com).
+Report reproducible defects through [GitHub Issues](https://github.com/julianvanceblackwood/AXOVAR/issues). For private technical inquiries, use [email](mailto:julianvanceblackwood@gmail.com).
 
-[Main README](../README.md) · [Market decision audit](DECISION_AUDIT.md) · [Independent policy verification](G4_VERIFICATION.md) · [Portfolio calculations](PORTFOLIO_RISK.md) · [Settlement research](SETTLEMENT_RESEARCH.md) · [External evaluation](EXTERNAL_EVALUATION.md)
+[Main README](../README.md) | [Decision audit](DECISION_AUDIT.md) | [Independent verification](G4_VERIFICATION.md) | [Portfolio risk](PORTFOLIO_RISK.md) | [Settlement](SETTLEMENT_RESEARCH.md) | [G5 performance](G5_PERFORMANCE.md) | [External evaluation](EXTERNAL_EVALUATION.md)
